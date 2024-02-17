@@ -29,17 +29,23 @@ const doNothing = async () => { };
 let execRemote: Function = doNothing;
 
 function remoteCall(data: string) {
-    execRemote(`Vencord.Plugins.plugins.VoiceStatusSocket.callCommand(${JSON.stringify(data)});`);
+    execRemote(`Vencord.Plugins.plugins.VoiceStatusSocket.callCommand(${JSON.stringify(data)}, true);`);
+}
+
+function unregisterSocket(s: Socket) {
+    const i = connections.indexOf(s);
+    if (i > -1) {
+        connections.splice(i, 1);
+    }
 }
 
 function socketHandler(s: Socket) {
     connections.push(s);
-    s.on("close", () => {
-        const i = connections.indexOf(s);
-        if (i > -1) {
-            connections.splice(i, 1);
-        }
+    s.on("error", () => {
+        s.destroy();
+        unregisterSocket(s);
     });
+    s.on("close", () => unregisterSocket(s));
     let lastData = "";
     s.on("data", b => {
         const bufStr = lastData + b.toString("utf8");
@@ -50,6 +56,7 @@ function socketHandler(s: Socket) {
         }
         lastData = bufCommands[bufCommands.length - 1];
     });
+    remoteCall("broadcastState");
 }
 
 export function init(ipce: IpcMainInvokeEvent) {

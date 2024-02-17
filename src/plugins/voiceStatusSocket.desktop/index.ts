@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
+import { addSettingsListener, definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
@@ -37,9 +37,14 @@ const enum SpeakingFlagsMask {
 }
 
 const settings = definePluginSettings({
-    writeState: {
+    muteAndDeafen: {
         type: OptionType.BOOLEAN,
         description: "Allow apps to mute and deafen you",
+        default: true
+    },
+    disconnect: {
+        type: OptionType.BOOLEAN,
+        description: "Allow apps to disconnect you from voice channels",
         default: true
     },
 });
@@ -81,6 +86,12 @@ export default definePlugin({
                 soundshare: s.speakingFlags & SpeakingFlagsMask.SOUNDSHARE,
                 priority: s.speakingFlags & SpeakingFlagsMask.PRIORITY
             });
+        },
+        AUDIO_TOGGLE_SELF_MUTE() {
+            callCommand("isSelfMute");
+        },
+        AUDIO_TOGGLE_SELF_DEAF() {
+            callCommand("isSelfDeaf");
         }
     },
     start() {
@@ -92,6 +103,68 @@ export default definePlugin({
     callCommand
 });
 
-export function callCommand(command: string) {
-    logger.log("Command", command);
+addSettingsListener("plugins.VoiceStatusSocket.writeState", async v => {
+    broadcast({
+        command: "permission",
+        write: v
+    });
+});
+
+export function callCommand(command: string, remote?: boolean) {
+    if (remote) logger.log("Command", command);
+    let name = "";
+    let args = { command: name };
+    try {
+        args = JSON.parse(command);
+        if ("command" in args) {
+            name = args.command;
+        }
+    } catch (e) {
+        name = command;
+    }
+    if (name in commands) {
+        const response = commands[name](name, args);
+        if (response !== undefined) broadcast(response);
+    }
 }
+
+export const commands = {
+    broadcastState() {
+        callCommand("canMuteAndDeafen");
+        callCommand("canDisconnect");
+        callCommand("isSelfMute");
+        callCommand("isSelfDeaf");
+    },
+    canMuteAndDeafen(n) {
+        return {
+            command: n,
+            value: Vencord.Settings.plugins.VoiceStatusSocket.muteAndDeafen
+        };
+    },
+    canDisconnect(n) {
+        return {
+            command: n,
+            value: Vencord.Settings.plugins.VoiceStatusSocket.disconnect
+        };
+    },
+    getClientUser() {
+        return {
+            command: "clientUser",
+        };
+    },
+    isSelfMute(n) {
+        return {
+            command: n,
+            value: Vencord.Webpack.findByProps("isSelfMute").isSelfMute()
+        };
+    },
+    isSelfDeaf(n) {
+        return {
+            command: n,
+            value: Vencord.Webpack.findByProps("isSelfDeaf").isSelfDeaf()
+        };
+    },
+    selfMute(n, a) {
+
+    }
+};
