@@ -26,7 +26,8 @@ import { Margins } from "@utils/margins";
 import { isPluginDev } from "@utils/misc";
 import { closeModal, Modals, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { Forms, Toasts } from "@webpack/common";
+import { Forms, Toasts, UserStore } from "@webpack/common";
+
 
 const CONTRIBUTOR_BADGE = "https://vencord.dev/assets/favicon.png";
 
@@ -41,7 +42,8 @@ const ContributorBadge: ProfileBadge = {
         }
     },
     shouldShow: ({ user }) => isPluginDev(user.id),
-    link: "https://github.com/Vendicated/Vencord"
+    onClick() { }, // replaced later
+    // link: "https://github.com/Vendicated/Vencord"
 };
 
 let DonorBadges = {} as Record<string, Array<Record<"tooltip" | "badge", string>>>;
@@ -103,7 +105,7 @@ export default definePlugin({
     },
 
     async start() {
-        Vencord.Api.Badges.addBadge(ContributorBadge);
+        // Vencord.Api.Badges.addBadge(ContributorBadge);
         await loadBadges();
     },
 
@@ -111,6 +113,19 @@ export default definePlugin({
         const Component = badge.component!;
         return <Component {...badge} />;
     }, { noop: true }),
+
+    getContributorBadge(userId: string) {
+        if (isPluginDev(userId)) {
+            return Object.assign(ContributorBadge, {
+                async onClick() {
+                    const user = UserStore.getUser(userId);
+                    import("@components/PluginSettings/ContributorModal").then(ContributorModal => {
+                        ContributorModal.openContributorModal(user);
+                    });
+                }
+            });
+        }
+    },
 
 
     getDonorBadges(userId: string) {
