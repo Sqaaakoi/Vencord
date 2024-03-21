@@ -1,0 +1,31 @@
+.vc-homepage-header {
+    height: 256px;
+    margin: 32px;
+    background: url("https://cdn.discordapp.com/banners/259558259491340288/7a3dbd014f4707f23e3631f805ed7e0e.png?size=2048");
+    background-size: cover;
+    border-radius: 32px;
+
+    /* var(--vc-homepage-user-avatar); */
+}
+
+.vc-homepage-header-body {
+    padding: 32px;
+    background: linear-gradient(90deg, transparent -50%, var(--background-primary) 150%);
+    border-radius: 32px;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+.vc-homepage-avatar {
+    border-radius: 50%;
+    width: 192px;
+    height: 192px;
+}
+
+.vc-homepage-header-text {
+    margin: 8px 0;
+    font-size: 48px;
+    color: var(--white-500);
+    font-family: var(--font-headline);
+}
