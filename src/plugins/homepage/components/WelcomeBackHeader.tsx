@@ -7,9 +7,10 @@
 import "./WelcomeBackHeader.css";
 
 import { findByPropsLazy } from "@webpack";
-import { UserStore, useStateFromStores } from "@webpack/common";
+import { Button, UserStore, useStateFromStores } from "@webpack/common";
 
 import { cl } from "./common";
+import { OnlineFriendsCount } from "./OnlineFriendsCount";
 
 const DisplayProfile = findByPropsLazy("getDisplayProfile");
 
@@ -39,7 +40,13 @@ export default function WelcomeBackHeader(props: {}) {
                 src={user.getAvatarURL(undefined, 256)}
             />
             <div className={cl("header-text")}>
-                <h1>{greeting((user as unknown as { globalName: string; }).globalName)}</h1>
+                <h1 className={cl("header-greeting")}>{greeting((user as unknown as { globalName: string; }).globalName)}</h1>
+                <OnlineFriendsCount />
+            </div>
+            <div className={cl("header-buttons")}>
+                <Button>
+                    sex
+                </Button>
             </div>
         </div>
     </div>;

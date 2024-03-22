@@ -12,5 +12,8 @@ import WelcomeBackHeader from "./WelcomeBackHeader";
 export default function Homepage(props?: any) {
     return <div className={cl("root")}>
         <WelcomeBackHeader />
+        <div className={cl("body")}>
+
+        </div>
     </div>;
 }

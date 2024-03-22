@@ -5,26 +5,11 @@
  */
 
 import { Devs } from "@utils/constants";
-import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
-import { findByPropsLazy, findExportedComponentLazy } from "@webpack";
+import { findByProps, findByPropsLazy, findExportedComponentLazy, LazyComponentWebpack } from "@webpack";
+import { React } from "@webpack/common";
 
 import Homepage from "./components/Homepage";
-
-
-const logger = new Logger("CustomRoutesExample", "#f765bb");
-logger.log("Starting");
-
-const nav: {
-    /** Transition to a route */
-    transitionTo: (path: string) => unknown,
-    getHistory: () => {
-        location: {
-            /** The current route */
-            pathname: string;
-        };
-    },
-} = findByPropsLazy("transitionTo", "transitionToGuild", "getHistory");
 
 const LinkButton: React.ComponentType<React.HTMLAttributes<HTMLButtonElement> & {
     selected: boolean,
@@ -34,42 +19,32 @@ const LinkButton: React.ComponentType<React.HTMLAttributes<HTMLButtonElement> & 
     locationState?: object,
 }> = findExportedComponentLazy("LinkButton", "CloseButton");
 
-const homeLinkModule = findByPropsLazy("setHomeLink");
+const { getHomeLink } = findByPropsLazy("getHomeLink");
+const { setHomeLink } = findByPropsLazy("setHomeLink");
 
-const HomeIcon = findByPropsLazy("HomeIcon");
+const HomeIcon = LazyComponentWebpack(() => {
+    const component = findByProps("HomeIcon").HomeIcon;
+    return React.memo(component);
+});
 
 /** Path for our custom route, to navigate to it for testing you'd use `nav.transitionTo(path)` on console */
 const path = "/channels/@home";
-
-function onBeforeUnload(event: BeforeUnloadEvent) {
-    // Necessary to prevent Discord from trying to fetch the route (which would take to a 404)
-    if (nav.getHistory().location.pathname === path) {
-        event.preventDefault();
-        nav.transitionTo("/channels/@me");
-        logger.log("Patched reload!");
-        setTimeout(() => window.location.reload(), 0);
-    }
-}
-
 
 export default definePlugin({
     name: "Homepage",
     description: "A new modern overview page of all your Discord activity.",
     authors: [Devs.Sqaaakoi],
 
-    /*
-        Both of these patches below are necessary for the custom route to work.
-        The first patch defines the route and component to render when transitioning to it
-        I think the second patch has to do with how the route's page is rendered, like threads can be split view with channels or something alike
-    */
     patches: [
+        // Inject button
         {
             find: "friends_tab_no_track",
             replacement: {
-                match: /("nav",\{.{0,30}\.privateChannels,.{0,100}children:)(\[.{0,5000}\}\)\])/,
-                replace: "$1$self.patchChildren($2)"
+                match: /(children:\[)(\(0,\i\.jsx\)\(\i,\{selected:.{0,30}\i\.Routes\.FRIENDS)/,
+                replace: "$1$self.homePageButton(),$2"
             }
         },
+        // Register route
         {
             find: 'Routes.ACTIVITY_DETAILS(":applicationId")',
             replacement: {
@@ -121,18 +96,12 @@ export default definePlugin({
                 replace: ":!([null,\"@home\"].includes($1))?",
             }
         },
-        // {
-        //     find: "props.privateChannelIds.indexOf",
-        //     replacement: {
-        //         match: /(innerAriaLabel:)(\i\.default\.Messages\.DIRECT_MESSAGES)/,
-        //         replace: "$1(()=>{debugger;return $2})()",
-        //     }
-        // },
+        // Default page
         {
             find: "get fallbackRoute",
             replacement: {
-                match: /([fallbackRoute|defaultRoute]\(\){return \i\.Routes\.)HOME/g,
-                replace: "$1ME",
+                match: /([fallbackRoute|defaultRoute]\(\){return \i\.Routes\.)ME/g,
+                replace: "$1HOME",
             }
         },
 
@@ -143,22 +112,16 @@ export default definePlugin({
         render: Homepage,
         disableTrack: true
     },
-    patchChildren(children: any[]) {
-        logger.log("Got children!", children);
-        const c = [...children];
-        const { homeLink } = c[1].props;
-        c[1]?.props?.children?.push(
-            <LinkButton
-                key="homepage"
-                selected={homeLink === path}
-                route={path}
-                onClick={() => homeLinkModule.setHomeLink(path)}
-                icon={HomeIcon}
-                text="Home"
-                role="listitem"
-                tabIndex={- 1}
-            />
-        );
-        return c;
+    homePageButton() {
+        return <LinkButton
+            key="homepage"
+            selected={getHomeLink() === path}
+            route={path}
+            onClick={() => setHomeLink(path)}
+            icon={HomeIcon}
+            text="Home"
+            role="listitem"
+            tabIndex={- 1}
+        />;
     }
 });

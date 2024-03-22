@@ -24,8 +24,15 @@
 }
 
 .vc-homepage-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.vc-homepage-header-greeting {
     margin: 8px 0;
     font-size: 48px;
-    color: var(--white-500);
     font-family: var(--font-headline);
+    color: var(--white-500);
 }
