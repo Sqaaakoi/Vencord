@@ -36,3 +36,9 @@
     font-family: var(--font-headline);
     color: var(--white-500);
 }
+
+.vc-homepage-header-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

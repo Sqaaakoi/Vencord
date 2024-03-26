@@ -7,11 +7,12 @@
 import "./WelcomeBackHeader.css";
 
 import { findByPropsLazy } from "@webpack";
-import { Button, UserStore, useStateFromStores } from "@webpack/common";
+import { Button, i18n, NavigationRouter, UserStore, useStateFromStores } from "@webpack/common";
 
 import { cl } from "./common";
 import { OnlineFriendsCount } from "./OnlineFriendsCount";
 
+const { Routes } = findByPropsLazy("Routes");
 const DisplayProfile = findByPropsLazy("getDisplayProfile");
 
 export function greeting(name: string) {
@@ -44,8 +45,11 @@ export default function WelcomeBackHeader(props: {}) {
                 <OnlineFriendsCount />
             </div>
             <div className={cl("header-buttons")}>
-                <Button>
-                    sex
+                <Button
+                    color={Button.Colors.PRIMARY}
+                    onClick={() => NavigationRouter.transitionTo(Routes.ME)}
+                >
+                    {i18n.Messages.DIRECT_MESSAGES}
                 </Button>
             </div>
         </div>

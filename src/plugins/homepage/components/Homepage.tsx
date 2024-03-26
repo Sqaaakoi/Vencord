@@ -6,14 +6,25 @@
 
 import "./Homepage.css";
 
+import { findByPropsLazy } from "@webpack";
+import { ScrollerThin } from "@webpack/common";
+
 import { cl } from "./common";
+import Feed from "./Feed";
 import WelcomeBackHeader from "./WelcomeBackHeader";
+
+const ProfileListClasses = findByPropsLazy("emptyIconFriends", "emptyIconGuilds");
 
 export default function Homepage(props?: any) {
     return <div className={cl("root")}>
-        <WelcomeBackHeader />
-        <div className={cl("body")}>
-
-        </div>
-    </div>;
+        <ScrollerThin
+            className={ProfileListClasses.listScroller}
+            fade={true}
+        >
+            <WelcomeBackHeader />
+            <div className={cl("body")}>
+                <Feed />
+            </div>
+        </ScrollerThin >
+    </div >;
 }

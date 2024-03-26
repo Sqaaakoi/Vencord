@@ -1,0 +1,21 @@
+.vc-homepage-feed {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 96px);
+    max-width: calc(100% - 96px);
+    overflow: hidden;
+    padding: 0 48px;
+    flex-basis: auto;
+}
+
+.vc-homepage-card-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+    flex-grow: 1;
+}
+
+.vc-homepage-message {
+    overflow-x: hidden;
+}
