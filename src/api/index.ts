@@ -21,6 +21,7 @@ import * as $ChatButtons from "./ChatButtons";
 import * as $Commands from "./Commands";
 import * as $ContextMenu from "./ContextMenu";
 import * as $DataStore from "./DataStore";
+import * as $ExpressionPicker from "./ExpressionPicker";
 import * as $MemberListDecorators from "./MemberListDecorators";
 import * as $MessageAccessories from "./MessageAccessories";
 import * as $MessageDecorations from "./MessageDecorations";
@@ -110,3 +111,8 @@ export const ContextMenu = $ContextMenu;
  * An API allowing you to add buttons to the chat input
  */
 export const ChatButtons = $ChatButtons;
+
+/**
+ * An API allowing you to add tabs to the expression picker
+*/
+export const ExpressionPicker = $ExpressionPicker;
