@@ -29,6 +29,7 @@ import { Guild, User } from "discord-types/general";
 
 import { Auth, initAuth, updateAuth } from "./auth";
 import { openReviewsModal } from "./components/ReviewModal";
+import { ReviewsTab } from "./components/ReviewsTab";
 import ReviewsView from "./components/ReviewsView";
 import { NotificationType } from "./entities";
 import { getCurrentUserInfo, readNotification } from "./reviewDbApi";
@@ -79,7 +80,21 @@ export default definePlugin({
                 match: /user:(\i),setNote:\i,canDM.+?\}\)/,
                 replace: "$&,$self.getReviewsComponent($1)"
             }
-        }
+        },
+        {
+            find: "Messages.USER_PROFILE_MUTUAL_GUILDS_PLACEHOLDER).with",
+            group: true,
+            replacement: [
+                {
+                    match: /(?<=(\i\.push)\(\{section:\i\.UserProfileSections\.ACTIVITY,text:.{0,250}\}\))/,
+                    replace: ',$1({section:"REVIEWDB",text:"User Reviews"})'
+                },
+                {
+                    match: /(?<=(\i)===\i\.UserProfileSections\.ACTIVITY?.{0,70}\}\):)/,
+                    replace: '$1==="REVIEWDB"?$self.ReviewsTab(arguments[0]):'
+                },
+            ]
+        },
     ],
 
     flux: {
@@ -135,6 +150,8 @@ export default definePlugin({
             }
         }, 4000);
     },
+
+    ReviewsTab,
 
     getReviewsComponent: ErrorBoundary.wrap((user: User) => {
         const [reviewCount, setReviewCount] = useState<number>();
