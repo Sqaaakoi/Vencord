@@ -35,7 +35,7 @@ const settings = definePluginSettings({
     keepForSeconds: {
         description: "Unread DMs will stay in the sidebar for this many seconds after being marked as read",
         type: OptionType.NUMBER,
-        default: 15
+        default: 60
     },
     keepRecentDMCount: {
         description: "Number of recent DMs to always keep in the sidebar",
@@ -48,7 +48,7 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     const { channelIDList } = settings.use(["channelIDList"]);
     if (!props) return;
     const { user }: { user: User; } = props;
-    const group = findGroupChildrenByChildId("mute-channel", children);
+    const group = findGroupChildrenByChildId("close-dm", children);
     const cachedChannelId = ChannelStore.getDMFromUserId(user.id);
     const enabled = !!cachedChannelId && channelIDList.split(",").map(id => id.trim()).includes(cachedChannelId);
     if (group)
@@ -87,6 +87,7 @@ export default definePlugin({
     ],
     contextMenus: {
         "user-context": contextMenuPatch,
+        "gdm-context": contextMenuPatch,
     },
     flux: {
         TYPING_START({ channelId }: { channelId: string; }) {
