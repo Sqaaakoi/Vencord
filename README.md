@@ -1,57 +1,104 @@
-# Vencord
+# Vencord (Sqaaakoi's personal fork)
 
-[![Codeberg Mirror](https://img.shields.io/static/v1?style=for-the-badge&label=Codeberg%20Mirror&message=codeberg.org/Vee/cord&color=2185D0&logo=data:image/png;base64,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)](https://codeberg.org/Vee/cord)
+The cutest Discord client mod, now with extra silly stuff
 
-The cutest Discord client mod
-
-| ![image](https://github.com/Vendicated/Vencord/assets/45497981/706722b1-32de-4d99-bee9-93993b504334) |
-| :--------------------------------------------------------------------------------------------------: |
-|   A screenshot of vencord showcasing the [vencord-theme](https://github.com/synqat/vencord-theme)    |
+For more information and to support the Vencord project, see the **[upstream README](https://github.com/Vendicated/Vencord/blob/main/README.md)**
 
 ## Features
 
--   Super easy to install (Download Installer, open, click install button, done)
--   100+ plugins built in: [See a list](https://vencord.dev/plugins)
-    -   Some highlights: SpotifyControls, MessageLogger, Experiments, GameActivityToggle, Translate, NoTrack, QuickReply, Free Emotes/Stickers, PermissionsViewer, CustomCommands, ShowHiddenChannels, PronounDB
--   Fairly lightweight despite the many inbuilt plugins
--   Excellent Browser Support: Run Vencord in your Browser via extension or UserScript
--   Works on any Discord branch: Stable, Canary or PTB all work (though for the best experience I recommend stable!)
--   Custom CSS and Themes: Inbuilt css editor with support to import any css files (including BetterDiscord themes)
--   Privacy friendly, blocks Discord analytics & crash reporting out of the box and has no telemetry
--   Maintained very actively, broken plugins are usually fixed within 12 hours
--   Settings sync: Keep your plugins and their settings synchronised between devices / apps (optional)
+This is a list of features in this fork.
 
+## My plugins
+-   AutoMute
+    -   Automatically mute yourself if you're silent for too long
+-   BetterQuickReact (PR submitted to upstream)
+    -   Customise the emoji grid size visible in the message context menu
+    -   Sort by frequently used instead of favourites first (originally developed by Vee)
+-   ContextMenuSelectFix
+    -   Allows you to hold right click to open a context menu and then drag your mouse to the item and release to click it
+-   ReactCommandReplyFix
+    -   Fixes the +:emoji: built-in command to add the emoji to the message you are replying to
+-   MoreJumboEmoji
+    -   Customise the limit of jumbo emojis!
+-   MoreGuildDiscoveryCategories
+    -   Adds the non-primary categories to the guild discovery sidebar
+-   CSS Snippets
+    -   Core feature; similar to Quick CSS but easier to manage multiple snippets of CSS
+-   NoDraftLengthLimit
+    -   Removes the ~4500 character limit for saved draft messages.
+-   ResizableSidebar
+    -   Resize the sidebar on the left of your screen.
+    -   Right click the invisible handle to reset it.
+## My unmaintained plugins
+-   VoiceChannelLog (work in progress)
+    -   Adds a log for voice channel join/leave/move events.
+-   VoiceJoinMessages (work in progress)
+    -   Sends you notifications from your friends' DMs when they join a voice channel.
+    -   Helpful if you forget to check in and see if your friends are all online in VC.
+    -   Useful in case someone wants to talk to you in person and you forgot to mute.
+-   ModViewBypass
+    -   Allows you to view the experimental Guild Member Mod View sidebar menu without moderator permissions
+    -   Useful for telling if someone is a troll who joined and forgot about the guild for months.
+    -   A PR was submitted to upstream, however it was closed as functionality was added to the ShowHiddenThings plugin. You should probably use that instead.
+## Modified plugins
+-   WebKeybinds
+    -   Compatibility with BetterChannelTabs
+-   TypingIndicator
+    -   Adds avatars for users who are typing, enabled by default (PR merged into dev)
+-   SupportHelper
+    -   Add a mental health disclaimer. [Certified approved funny™️ by at least 25 Vencord users](https://canary.discord.com/channels/1015060230222131221/1032200195582197831/1226274249472348212)
+-   MessageTags
+    -   Rewrite a lot of the plugin
+    -   Add an editor
+    -   Add submenu to attachments + menu
+    -   Add multiple tags with the same name
+-   FriendInvites
+    -   Add UI (can be buggy and crash due to webpack jank)
+    -   Renames commands to /friend-invites create|list|delete
+    -   Adds argument to send invite to chat when creating an invite using the create command
+-   MessageClickActions
+    -   When editing messages is off, double clicking will reply to your own message
+-   VencordToolbox
+    -   Add CSS snippets support
+## Other non-mainline plugins
+-   (Better)ChannelTabs (modified)
+    -   Custom fork of ChannelTabs that replaces the stock Discord titlebar
+    -   Upstream: https://github.com/sunnniee/Vencord/tree/channeltabs
+    -   Contains highly opinionated changes!
+    -   Adds keybinds
+    -   Adds a home logo button with a mention counter
+    -   Fixes tab hitbox size
+-   ValidReply
+    -   Fixes "Message could not be loaded" upon hovering over the reply
+    -   Developed by waresnew
+    -   Upstream: https://github.com/waresnew/Vencord/tree/validReply
+-   ChineseWhispers
+    -   "Translate plugin but 20x more funny"
+    -   Developed by Samwich
+    -   Upstream: https://github.com/cheesesamwich/Tobleronecord/blob/main/src/tobleroneplugins/ChineseWhispers.ts
+    -   Includes a context menu toggle option and append original text setting that isn't included in upstream
+-   GifRoulette
+    -   Adds a command to send 1-5 random gifs from your favourites, and a one in ten chance to ping the owner of the server
+    -   Originally developed by Samwich as a joke from my suggestion; I've made it funnier (worse)
+    -   Upstream: https://github.com/cheesesamwich/Tobleronecord/blob/main/src/tobleroneplugins/GifRoulette.tsx
 
-## Installing / Uninstalling
+## Installing
 
-Visit https://vencord.dev/download
+See the [developer installation guide](./docs/1_INSTALLING.md).
 
-## Join our Support/Community Server
+Please DO NOT ask upstream Vencord for support with installing this.
 
-https://discord.gg/D9uwnFnqmd
+## Support
 
-## Sponsors
+There is no formal support for this fork, as I do upstream most features.
 
-|     **Thanks a lot to all Vencord [sponsors](https://github.com/sponsors/Vendicated)!!**     |
-| :------------------------------------------------------------------------------------------: |
-|   [![](https://meow.vendicated.dev/sponsors.png)](https://github.com/sponsors/Vendicated)    |
-| *generated using [github-sponsor-graph](https://github.com/Vendicated/github-sponsor-graph)* |
-
-
-## Star History
-
-<a href="https://star-history.com/#Vendicated/Vencord&Timeline">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Vendicated/Vencord&type=Timeline&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Vendicated/Vencord&type=Timeline" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Vendicated/Vencord&type=Timeline" />
-  </picture>
-</a>
+Some support is informally offered to friends. Friends may DM me on Discord for this.
 
 ## Disclaimer
 
-Discord is trademark of Discord Inc. and solely mentioned for the sake of descriptivity.
-Mention of it does not imply any affiliation with or endorsement by Discord Inc.
+### THIS FORK IS NOT SUPPORTED BY THE UPSTREAM VENCORD PROJECT.<br>THE DAYCARE CHANNEL IS NOT GOING TO HELP YOU WITH THIS FORK.
+
+Explode.
 
 <details>
 <summary>Using Vencord violates Discord's terms of service</summary>
