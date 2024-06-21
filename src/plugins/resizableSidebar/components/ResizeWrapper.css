@@ -1,0 +1,4 @@
+.vc-resizable-sidebar-wrapper {
+    display: flex;
+    flex-direction: row;
+}

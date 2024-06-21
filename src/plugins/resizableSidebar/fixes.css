@@ -1,0 +1,16 @@
+/* Fixes to stock Discord CSS to make this work properly */
+
+/* DM Channels */
+.vc-resizable-sidebar-wrapper [class*="channel_"] {
+    max-width: none;
+}
+
+/* Panel button alignment */
+.vc-resizable-sidebar-wrapper [class*="panels_"] [class*="container_"] [class*="noWrap_"] {
+    margin-left: auto;
+}
+
+/* Server banner */
+.vc-resizable-sidebar-wrapper :is([class*="bannerImage_"], [class*="bannerImg_"]) {
+    width: 100%;
+}
