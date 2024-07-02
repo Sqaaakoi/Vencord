@@ -32,7 +32,7 @@ import * as $Notifications from "./Notifications";
 import * as $ServerList from "./ServerList";
 import * as $Settings from "./Settings";
 import * as $Styles from "./Styles";
-import * as $UserSettings from "./UserSettings";
+import * as $UserSettingDefinitions from "./UserSettingDefinitions";
 
 /**
  * An API allowing you to listen to Message Clicks or run your own logic
@@ -119,6 +119,6 @@ export const ChatButtons = $ChatButtons;
 export const MessageUpdater = $MessageUpdater;
 
 /**
- * An API allowing you to get an user setting
+ * An API allowing you to get the definition for an user setting
  */
-export const UserSettings = $UserSettings;
+export const UserSettingDefinitions = $UserSettingDefinitions;
