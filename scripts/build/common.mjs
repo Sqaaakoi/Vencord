@@ -112,7 +112,7 @@ export const globPlugins = kind => ({
         });
 
         build.onLoad({ filter, namespace: "import-plugins" }, async () => {
-            const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "userplugins"];
+            const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "userplugins", "thirdpartyplugins"];
             let code = "";
             let pluginsCode = "\n";
             let metaCode = "\n";
@@ -120,6 +120,7 @@ export const globPlugins = kind => ({
             let i = 0;
             for (const dir of pluginDirs) {
                 const userPlugin = dir === "userplugins";
+                const thirdPartyPlugin = dir === "thirdpartyplugins";
 
                 const fullDir = `./src/${dir}`;
                 if (!await exists(fullDir)) continue;
@@ -128,6 +129,7 @@ export const globPlugins = kind => ({
                     const fileName = file.name;
                     if (fileName.startsWith("_") || fileName.startsWith(".")) continue;
                     if (fileName === "index.ts") continue;
+                    if (fileName === "README.md") continue;
 
                     const target = getPluginTarget(fileName);
 
@@ -151,7 +153,7 @@ export const globPlugins = kind => ({
                     const mod = `p${i}`;
                     code += `import ${mod} from "./${dir}/${fileName.replace(/\.tsx?$/, "")}";\n`;
                     pluginsCode += `[${mod}.name]:${mod},\n`;
-                    metaCode += `[${mod}.name]:${JSON.stringify({ folderName, userPlugin })},\n`; // TODO: add excluded plugins to display in the UI?
+                    metaCode += `[${mod}.name]:${JSON.stringify({ folderName, userPlugin, thirdPartyPlugin })},\n`; // TODO: add excluded plugins to display in the UI?
                     i++;
                 }
             }
