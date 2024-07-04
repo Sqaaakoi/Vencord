@@ -1,0 +1,21 @@
+[submodule "src/thirdpartyplugins/betterPlusReacts"]
+	path = src/thirdpartyplugins/betterPlusReacts
+	url = https://github.com/Masterjoona/vc-betterplusreacts
+[submodule "src/thirdpartyplugins/triggerWarning"]
+	path = src/thirdpartyplugins/triggerWarning
+	url = https://github.com/Masterjoona/vc-triggerwarning
+[submodule "src/thirdpartyplugins/themeLibrary"]
+	path = src/thirdpartyplugins/themeLibrary
+	url = https://github.com/Faf4a/ThemeLibrary
+[submodule "src/thirdpartyplugins/vcNarrator-custom"]
+	path = src/thirdpartyplugins/vcNarrator-custom
+	url = https://github.com/nyakowint/vcNarrator-custom
+[submodule "src/thirdpartyplugins/replaceActivityTypes"]
+	path = src/thirdpartyplugins/replaceActivityTypes
+	url = https://github.com/nyakowint/replaceActivityTypes
+[submodule "src/thirdpartyplugins/timelessClips"]
+	path = src/thirdpartyplugins/timelessClips
+	url = https://github.com/Masterjoona/vc-timelessclips
+[submodule "src/thirdpartyplugins/goodPerson"]
+	path = src/thirdpartyplugins/goodPerson
+	url = https://git.nin0.dev/nin0/vc-goodperson
