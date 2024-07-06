@@ -16,3 +16,6 @@
 [submodule "src/thirdpartyplugins/timelessClips"]
 	path = src/thirdpartyplugins/timelessClips
 	url = https://github.com/Masterjoona/vc-timelessclips
+[submodule "src/thirdpartyplugins/goodPerson"]
+	path = src/thirdpartyplugins/goodPerson
+	url = https://github.com/nin0-dev/vc-goodperson
