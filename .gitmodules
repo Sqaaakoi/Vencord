@@ -18,4 +18,4 @@
 	url = https://github.com/Masterjoona/vc-timelessclips
 [submodule "src/thirdpartyplugins/goodPerson"]
 	path = src/thirdpartyplugins/goodPerson
-	url = https://git.nin0.dev/nin0/vc-goodperson
+	url = https://github.com/nin0-dev/vc-goodperson
