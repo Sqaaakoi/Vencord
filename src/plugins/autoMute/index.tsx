@@ -5,15 +5,13 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { Notices } from "@api/index";
-import { popNotice } from "@api/Notices";
 import { definePluginSettings } from "@api/Settings";
 import { makeRange } from "@components/PluginSettings/components";
 import { clearableDebounce, debounce } from "@shared/debounce";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { Menu, SelectedChannelStore, UserStore } from "@webpack/common";
+import { Menu, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 import { User } from "discord-types/general";
 
 const { toggleSelfMute } = findByPropsLazy("toggleSelfMute");
@@ -132,9 +130,14 @@ function updateAutoMute() {
 function autoMute() {
     if (!MediaEngineStore.isSelfMute()) {
         toggleSelfMute();
-        Notices.showNotice("You have been silent for a while, so your mic has been automatically muted.", "Unmute", () => {
-            popNotice();
-            if (MediaEngineStore.isSelfMute()) toggleSelfMute();
+        Toasts.show({
+            message: "You have been silent for a while, so your mic has been automatically muted.",
+            type: Toasts.Type.MESSAGE,
+            id: Toasts.genId(),
+            options: {
+                duration: 5000,
+                position: Toasts.Position.TOP
+            }
         });
     }
 }
@@ -170,11 +173,9 @@ export default definePlugin({
                 }
 
                 if (!oldChannelId && channelId) {
-                    console.log("join");
                     updateAutoMute();
                 }
                 if (oldChannelId && !channelId) {
-                    console.log("dc");
                     cancelAutoMute();
                     isSpeaking = false;
                 }
