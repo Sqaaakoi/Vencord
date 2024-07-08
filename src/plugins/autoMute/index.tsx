@@ -11,13 +11,15 @@ import { clearableDebounce, debounce } from "@shared/debounce";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { Menu, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
+import { Menu, RelationshipStore, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 import { User } from "discord-types/general";
 
 const { toggleSelfMute } = findByPropsLazy("toggleSelfMute");
 
 // We cannot destructure isSelfMute as it depends on isEnabled
 const MediaEngineStore = findStoreLazy("MediaEngineStore");
+
+const VoiceStateStore = findStoreLazy("VoiceStateStore");
 
 
 interface SpeakingState {
@@ -40,18 +42,23 @@ interface VoiceState {
     userId: string;
 }
 
+const enum AutoMuteReasons {
+    Inactivity = "You have been silent for a while, so your mic has been automatically muted.",
+    NonFriend = "A user who isn't your friend has joined your voice channel, so your mic has been automatically muted."
+}
+
 let [setAutoMute, cancelAutoMute] = [() => { }, () => { }];
 
 function updateTimeout(seconds: number) {
     cancelAutoMute();
-    [setAutoMute, cancelAutoMute] = clearableDebounce(autoMute, seconds * 1000);
+    [setAutoMute, cancelAutoMute] = clearableDebounce(() => autoMute(AutoMuteReasons.Inactivity), seconds * 1000);
     updateAutoMute();
 }
 
 const settings = definePluginSettings({
     isEnabled: {
         type: OptionType.BOOLEAN,
-        description: "Whether the plugin will automatically mute you or not",
+        description: "Whether the plugin will automatically mute you after being silent for too long or not",
         default: true,
         onChange() {
             updateAutoMute();
@@ -66,12 +73,17 @@ const settings = definePluginSettings({
         onChange(value) {
             updateTimeout(value);
         },
-    }
+    },
+    nonFriendJoinsChannel: {
+        type: OptionType.BOOLEAN,
+        description: "Whether the plugin will automatically mute you when someone who isn't you friend joins your voice channel",
+        default: true
+    },
 });
 
 
 const AudioDeviceContextMenuPatch: NavContextMenuPatchCallback = (children, props: { renderInputVolume?: boolean; }) => {
-    const { isEnabled, timeout } = settings.use(["isEnabled", "timeout"]);
+    const { isEnabled, timeout, nonFriendJoinsChannel } = settings.use(["isEnabled", "timeout", "nonFriendJoinsChannel"]);
 
     if ("renderInputVolume" in props) {
         children.splice(children.length - 1, 0,
@@ -81,7 +93,7 @@ const AudioDeviceContextMenuPatch: NavContextMenuPatchCallback = (children, prop
                 <Menu.MenuCheckboxItem
                     checked={isEnabled}
                     id="vc-auto-mute-toggle"
-                    label="Enable Auto Mute"
+                    label="Mute after inactivity"
                     action={() => {
                         settings.store.isEnabled = !isEnabled;
                         updateAutoMute();
@@ -113,6 +125,15 @@ const AudioDeviceContextMenuPatch: NavContextMenuPatchCallback = (children, prop
                         />
                     )}
                 />
+                <Menu.MenuCheckboxItem
+                    checked={isEnabled}
+                    id="vc-auto-mute-non-friends"
+                    label="Mute when non-friend joins"
+                    action={() => {
+                        settings.store.nonFriendJoinsChannel = !nonFriendJoinsChannel;
+                        updateAutoMute();
+                    }}
+                />
             </Menu.MenuGroup>
         );
     }
@@ -127,11 +148,11 @@ function updateAutoMute() {
     isSpeaking ? cancelAutoMute() : setAutoMute();
 }
 
-function autoMute() {
+function autoMute(reason: string) {
     if (!MediaEngineStore.isSelfMute()) {
         toggleSelfMute();
         Toasts.show({
-            message: "You have been silent for a while, so your mic has been automatically muted.",
+            message: reason,
             type: Toasts.Type.MESSAGE,
             id: Toasts.genId(),
             options: {
@@ -149,9 +170,23 @@ function autoMute() {
 // for some ungodly reason
 let clientOldChannelId: string | undefined;
 
+const trustedUsers = new Set<string>();
+function isTrusted(userId: string) {
+    return trustedUsers.has(userId) ||
+        RelationshipStore.isFriend(userId) ||
+        UserStore.getCurrentUser().id === userId ||
+        UserStore.getUser(userId).bot;
+}
+function trustEveryone() {
+    const allVoiceStates: VoiceState[] = Object.values(VoiceStateStore.getVoiceStatesForChannel(SelectedChannelStore.getVoiceChannelId()));
+    allVoiceStates.forEach(({ userId }) => {
+        trustedUsers.add(userId);
+    });
+}
+
 export default definePlugin({
     name: "AutoMute",
-    description: "Automatically mute yourself in voice channels if you're not speaking for too long.",
+    description: "Automatically mute yourself in voice channels if you're not speaking for too long, or if someone who isn't a friend joins.",
     authors: [Devs.Sqaaakoi],
     settings,
     flux: {
@@ -163,6 +198,10 @@ export default definePlugin({
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             // Blatantly stolen from my other unfinished plugin
             if (!voiceStates) return;
+            // flags for non friend mute
+            let movingChannel = false;
+            let clearTrustedUsers = false;
+
             voiceStates.forEach(state => {
                 if (state.userId !== UserStore.getCurrentUser().id) return;
                 const { channelId } = state;
@@ -170,25 +209,42 @@ export default definePlugin({
                 if (channelId !== clientOldChannelId) {
                     oldChannelId = clientOldChannelId;
                     clientOldChannelId = channelId;
+                    movingChannel = true;
                 }
 
                 if (!oldChannelId && channelId) {
                     updateAutoMute();
+                    movingChannel = true;
                 }
                 if (oldChannelId && !channelId) {
                     cancelAutoMute();
                     isSpeaking = false;
+                    trustedUsers.clear();
+                    clearTrustedUsers = false;
                 }
             });
+
+            const allVoiceStates: VoiceState[] = Object.values(VoiceStateStore.getVoiceStatesForChannel(SelectedChannelStore.getVoiceChannelId()));
+            let willMute = false;
+            if (!clearTrustedUsers) allVoiceStates.forEach(({ userId }) => {
+                if (movingChannel) {
+                    if (!MediaEngineStore.isSelfMute()) trustedUsers.add(userId);
+                } else {
+                    if (!isTrusted(userId)) willMute = true;
+                }
+            });
+            if (willMute && settings.store.nonFriendJoinsChannel) autoMute(AutoMuteReasons.NonFriend);
         },
         AUDIO_TOGGLE_SELF_MUTE() {
             updateAutoMute();
+            if (!MediaEngineStore.isSelfMute()) trustEveryone();
         },
         AUDIO_TOGGLE_SELF_DEAF() {
             updateAutoMute();
         },
         AUDIO_TOGGLE_SET_MUTE() {
             updateAutoMute();
+            if (!MediaEngineStore.isSelfMute()) trustEveryone();
         },
         AUDIO_TOGGLE_SET_DEAF() {
             updateAutoMute();
@@ -202,6 +258,7 @@ export default definePlugin({
     },
     stop() {
         cancelAutoMute();
-    }
+    },
+    trustedUsers
 });
 
