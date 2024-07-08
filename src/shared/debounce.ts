@@ -30,3 +30,22 @@ export function debounce<T extends Function>(func: T, delay = 300): T {
         timeout = setTimeout(() => { func(...args); }, delay);
     } as any;
 }
+
+/**
+ * Returns an array of 2 functions. The first function will call the wrapped
+ * function after the specified delay. If that first function is called again
+ * within the delay, the timer will be reset. The second function will stop
+ * the wrapped function from being called after the delay. The first function
+ * may continue the delay after the second cancel function.
+ * @param func The function to wrap
+ * @param delay The delay in milliseconds
+ */
+export function clearableDebounce<T extends Function>(func: T, delay = 300): T[] {
+    let timeout: NodeJS.Timeout;
+    return [function (...args: any[]) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => { func(...args); }, delay);
+    } as any, function () {
+        clearTimeout(timeout);
+    }];
+}
