@@ -19,3 +19,21 @@
 [submodule "src/thirdpartyplugins/goodPerson"]
 	path = src/thirdpartyplugins/goodPerson
 	url = https://github.com/nin0-dev/vc-goodperson
+[submodule "src/thirdpartyplugins/betterActivities"]
+	path = src/thirdpartyplugins/betterActivities
+	url = https://github.com/D3SOX/vc-betterActivities
+[submodule "src/thirdpartyplugins/mediaPlaybackSpeed"]
+	path = src/thirdpartyplugins/mediaPlaybackSpeed
+	url = https://github.com/D3SOX/vc-mediaPlaybackSpeed
+[submodule "src/thirdpartyplugins/notifyUserChanges"]
+	path = src/thirdpartyplugins/notifyUserChanges
+	url = https://github.com/D3SOX/vc-notifyUserChanges
+[submodule "src/thirdpartyplugins/blockKrisp"]
+	path = src/thirdpartyplugins/blockKrisp
+	url = https://github.com/D3SOX/vc-blockKrisp
+[submodule "src/thirdpartyplugins/serverProfilesToolbox"]
+	path = src/thirdpartyplugins/serverProfilesToolbox
+	url = https://github.com/D3SOX/vc-serverProfilesToolbox
+[submodule "src/thirdpartyplugins/silentTypingEnhanced"]
+	path = src/thirdpartyplugins/silentTypingEnhanced
+	url = https://github.com/D3SOX/vc-silentTypingEnhanced
