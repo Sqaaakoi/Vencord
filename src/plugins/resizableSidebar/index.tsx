@@ -31,16 +31,17 @@ export default definePlugin({
         {
             find: "app view user trigger debugging",
             replacement: {
-                match: /\(0,\i.jsxs\)(?=\("div",{className:\i\(\)\(\i\.sidebar)/,
-                replace: "($self.wrapSidebar($&))"
+                match: /\(0,\i\.jsxs\)(?=\("div",{className:\i\(\)\(\i\.sidebar.{0,200}?\.hidden\]:(\i))/,
+                replace: "($self.wrapSidebar($1,$&))"
             }
         }
     ],
-    wrapSidebar(jsxs) {
+    wrapSidebar(hidden: boolean, jsxs: (name: string, props: React.PropsWithChildren) => ReactNode) {
         return (name: string, data: any) => {
             const ref = useRef(null);
             const width = settings.store.width > 0 ? settings.store.width + "px" : "";
             const component: ReactNode = jsxs(name, Object.assign(data, { ref, style: { width } }));
+            if (hidden) return null;
             return <ResizeWrapper childRef={ref} children={component} />;
         };
     }
