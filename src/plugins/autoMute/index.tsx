@@ -149,7 +149,7 @@ function updateAutoMute() {
 }
 
 function autoMute(reason: string) {
-    if (!MediaEngineStore.isSelfMute()) {
+    if (!MediaEngineStore.isSelfMute() && SelectedChannelStore.getVoiceChannelId()) {
         toggleSelfMute();
         Toasts.show({
             message: reason,
