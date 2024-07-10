@@ -7,7 +7,7 @@
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { PermissionsBits, PermissionStore, UserStore } from "@webpack/common";
+import { PermissionsBits, PermissionStore, SelectedChannelStore, UserStore } from "@webpack/common";
 
 const { toggleSelfMute } = findByPropsLazy("toggleSelfMute");
 const { setServerMute } = findByPropsLazy("setServerMute");
@@ -30,10 +30,12 @@ export default definePlugin({
             if (!voiceStates) return;
             voiceStates.forEach(state => {
                 if (state.userId !== UserStore.getCurrentUser().id) return;
+                if (SelectedChannelStore.getVoiceChannelId() !== state.channelId) return;
                 if (!state.guildId) return;
                 if (!(state.mute && !state.selfMute)) return;
+                if (!PermissionStore.canWithPartialContext(PermissionsBits.MUTE_MEMBERS, { channelId: state.channelId })) return;
                 toggleSelfMute({ playSoundEffect: false });
-                if (PermissionStore.canWithPartialContext(PermissionsBits.MUTE_MEMBERS, { channelId: state.channelId })) setServerMute(state.guildId, state.userId, false);
+                setServerMute(state.guildId, state.userId, false);
             });
         }
     }
