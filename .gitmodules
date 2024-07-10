@@ -37,3 +37,9 @@
 [submodule "src/thirdpartyplugins/silentTypingEnhanced"]
 	path = src/thirdpartyplugins/silentTypingEnhanced
 	url = https://github.com/D3SOX/vc-silentTypingEnhanced
+[submodule "src/thirdpartyplugins/followUser"]
+	path = src/thirdpartyplugins/followUser
+	url = https://github.com/D3SOX/vc-followUser
+[submodule "src/thirdpartyplugins/voiceChatUtilities"]
+	path = src/thirdpartyplugins/voiceChatUtilities
+	url = https://github.com/D3SOX/vc-voiceChatUtilities
