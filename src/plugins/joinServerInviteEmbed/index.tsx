@@ -4,18 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 
-// type InviteEmbedProps = {
-//     af;
-// };
 const InviteEmbed = findComponentByCodeLazy("getAcceptInviteContext", "resolveInvite");
 
 function InviteEmbedWrapper({ code }: { code: string; }) {
     if (!code) return null;
-    return <InviteEmbed code={code} author={{ id: 0 }} />;
+    return <div className="vc-join-server-invite-embed-invite">
+        <InviteEmbed code={code.split("/").toReversed()[0]} author={{ id: 0 }} />
+    </div>;
 }
 
 export default definePlugin({
