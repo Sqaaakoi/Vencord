@@ -4,6 +4,6 @@ These plugins are developed by other Vencord users, curated from the [#unofficia
 
 # Installation
 
-To install these, run `git submodule update --init --recursive --remote`
+To install these, run `git submodule init --recursive`
 
-You can use the same command to update these plugins later.
+To manually update, run `git submodule update --init --recursive --remote`
