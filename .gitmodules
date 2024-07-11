@@ -46,3 +46,6 @@
 [submodule "src/thirdpartyplugins/multistickers"]
 	path = src/thirdpartyplugins/multistickers
 	url = https://github.com/voidfill/multistickers
+[submodule "src/thirdpartyplugins/newPluginsManager"]
+	path = src/thirdpartyplugins/newPluginsManager
+	url = https://github.com/Sqaaakoi/vc-newPluginsManager
