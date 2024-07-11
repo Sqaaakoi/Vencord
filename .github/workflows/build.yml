@@ -64,4 +64,4 @@ jobs:
                   BRANCH_NAME: ${{ env.branch_name }}
                   COMMIT_REF: ${{ env.commit_ref }}
                   BUILD_TIMESTAMP: ${{ env.build_timestamp }}
-                  RELEASE_TYPE: ${{ github.ref == 'refs/heads/sqaaakoi-stable' && '--latest' || '--prerelease' }}
+                  RELEASE_TYPE: ${{ github.ref == 'refs/heads/sqaaakoi-stable-v2' && '--latest' || '--prerelease' }}
