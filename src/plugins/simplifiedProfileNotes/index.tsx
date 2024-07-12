@@ -8,7 +8,8 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { i18n, useEffect, useRef, useState } from "@webpack/common";
+import { i18n, useEffect, useState } from "@webpack/common";
+import { User } from "discord-types/general";
 
 const useNote = findByCodeLazy(".getNote(");
 const NoteEditor = findComponentByCodeLazy("hideNote:", ".userId);return");
@@ -25,25 +26,38 @@ const settings = definePluginSettings({
     }
 });
 
-function useNoteBox(userId: string) {
+type NoteHook = {
+    visible: boolean;
+    loading: boolean;
+    autoFocus: boolean;
+    note: string;
+    activate: () => void;
+};
+
+type NotesSectionProps = {
+    user: User;
+    headingColor?: string;
+};
+
+function useNoteBox(userId: string): NoteHook {
     const { note, loading } = useNote(userId);
-    const [forced, setForced] = useState(!settings.store.hideWhenEmpty);
+    const hasNote = !loading && (typeof note === "string" && note?.length > 0);
+    const [forced, setForced] = useState(!settings.store.hideWhenEmpty || hasNote);
     const [autoFocus, setAutoFocus] = useState(false);
-    const editorRef = useRef<HTMLTextAreaElement>(null);
+    if (hasNote && !forced) setForced(true);
     return {
-        visible: forced || (!loading && note !== undefined),
+        visible: forced || hasNote,
+        loading,
         autoFocus,
         note,
-        editorRef,
         activate() {
             setForced(true);
             setAutoFocus(true);
-            editorRef.current?.focus();
         }
     };
 }
 
-function NotesSection(props: any) {
+function NotesSection(props: NoteHook & NotesSectionProps) {
     const [loaded, setLoaded] = useState(false);
     useEffect(() => {
         requireClasses().then(() => setLoaded(true)).catch(() => { });
@@ -71,7 +85,8 @@ export default definePlugin({
     patches: [
         {
             // Popout
-            find: /\.BITE_SIZE,onOpenProfile:\i,usernameIcon:/,
+            find: /\.BITE_SIZE,onOpenProfile:\i,/,
+            all: true,
             replacement: {
                 match: /currentUser:\i,guild:\i,onOpenProfile:.+?}\)(?=])(?<=user:(\i),bio:null==(\i)\?.+?)/,
                 replace: "$&,$self.NotesSection({ user: $1, ...vencordNotesHook })"
@@ -79,10 +94,10 @@ export default definePlugin({
         },
         {
             // DM Sidebar
-            find: /getRelationshipType.+?\.Overlay.{0,200}Messages\.USER_POPOUT_ABOUT_ME/,
+            find: /getRelationshipType.{0,800}\.Overlay.{0,200}Messages\.USER_POPOUT_ABOUT_ME/,
             replacement: {
-                match: /(\(0,.+?Messages\.USER_PROFILE_MEMBER_SINCE.+?userId:(\i)\.id}\)\}\))]/,
-                replace: "$1,$self.NotesSection({ headingColor: 'header-primary' ,user: $2, ...vencordNotesHook })]"
+                match: /(\(0,.{0,50}?Messages\.USER_PROFILE_MEMBER_SINCE.{0,100}?userId:(\i)\.id}\)\}\))/,
+                replace: "$1,$self.NotesSection({ headingColor: 'header-primary', user: $2, ...vencordNotesHook })"
             }
         }
     ].map(p => ({
@@ -90,12 +105,12 @@ export default definePlugin({
         group: true,
         replacement: [
             {
-                match: /getRelationshipType\((\i.id)\)\)/,
-                replace: "$&,vencordNotesHook=$self.useNoteBox($1)"
+                match: /hidePersonalInformation\)/,
+                replace: "$&,vencordNotesHook=$self.useNoteBox(arguments[0].user.id)"
             },
             {
-                match: /(!\i)(&&\(0,\i\.jsx\)\(\i\.\i,{user:\i,isHovering:\i,onOpenProfile:\(\)=>).+?\({subsection:\i\.\i\.NOTE}\)/,
-                replace: "($1&&!vencordNotesHook.visible)$2vencordNotesHook.activate()"
+                match: /(!\i)(&&\(0,\i\.jsx\)\(\i\.\i,{userId:\i\.id,isHovering:\i,onOpenProfile:)\i/,
+                replace: "($1&&!vencordNotesHook.visible&&!vencordNotesHook.loading)$2()=>vencordNotesHook.activate()"
             },
             p.replacement
         ]
