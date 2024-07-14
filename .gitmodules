@@ -49,3 +49,6 @@
 [submodule "src/thirdpartyplugins/newPluginsManager"]
 	path = src/thirdpartyplugins/newPluginsManager
 	url = https://github.com/Sqaaakoi/vc-newPluginsManager
+[submodule "src/thirdpartyplugins/steamStatusSync"]
+	path = src/thirdpartyplugins/steamStatusSync
+	url = https://github.com/hauntii/vencord-steamStatusSync
