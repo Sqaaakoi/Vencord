@@ -17,8 +17,6 @@ export default function ResizeWrapper({ name: Sidebar, data, hidden }: { name: R
     if (hidden) return null;
     return <div className="vc-resizable-sidebar-wrapper">
         <Sidebar {...{ ...data, ref, style: { width } }} />
-        <ResizeHandle
-            node={ref}
-        />
+        <ResizeHandle node={ref} />
     </div>;
 }
