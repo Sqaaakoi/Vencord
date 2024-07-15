@@ -35,7 +35,7 @@ export default definePlugin({
         }
     ],
     wrapSidebar(hidden: boolean) {
-        return (name: string, data: any) => {
+        return (name: React.ElementType<any>, data: any) => {
             return <ResizeWrapper name={name} data={data} hidden={hidden} />;
         };
     }

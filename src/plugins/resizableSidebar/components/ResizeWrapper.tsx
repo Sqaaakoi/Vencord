@@ -13,7 +13,7 @@ import ResizeHandle from "./ResizeHandle";
 
 export default function ResizeWrapper({ name: Sidebar, data, hidden }: { name: React.ElementType<any>; data: any; hidden: boolean; }) {
     const ref = useRef(null);
-    const width = settings.store.width > 0 ? settings.store.width + "px" : "";
+    const width = settings.store.width >= 0 ? settings.store.width + "px" : "";
     if (hidden) return null;
     return <div className="vc-resizable-sidebar-wrapper">
         <Sidebar {...{ ...data, ref, style: { width } }} />
