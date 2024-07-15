@@ -13,6 +13,8 @@ import { settings } from "..";
 
 const createResizeHandler = findByCodeLazy("initialElementDimension:", "removeEventListener");
 
+const ResizeDirection = findByPropsLazy("HORIZONTAL_RIGHT");
+
 const styles = findByPropsLazy("resizeHandle", "chatLayerWrapper");
 
 const saveWidth = (width: number) => { settings.store.width = width; };
@@ -24,7 +26,7 @@ export default function ResizeHandle({ node }: { node: React.MutableRefObject<an
         resizableDomNodeRef: node,
         onElementResize: saveWidth,
         onElementResizeEnd: () => { },
-        orientation: 3 // ugly horrible hard-coded value
+        orientation: ResizeDirection.HORIZONTAL_RIGHT
     });
     return <div className="vc-resizable-sidebar-handle-wrapper">
         <div
