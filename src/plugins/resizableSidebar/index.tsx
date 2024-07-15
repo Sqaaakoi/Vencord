@@ -9,8 +9,6 @@ import "./fixes.css";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { useRef } from "@webpack/common";
-import { ReactNode } from "react";
 
 import ResizeWrapper from "./components/ResizeWrapper";
 
@@ -32,17 +30,13 @@ export default definePlugin({
             find: "app view user trigger debugging",
             replacement: {
                 match: /\(0,\i\.jsxs\)(?=\("div",{className:\i\(\)\(\i\.sidebar.{0,200}?\.hidden\]:(\i))/,
-                replace: "($self.wrapSidebar($1,$&))"
+                replace: "($self.wrapSidebar($1))"
             }
         }
     ],
-    wrapSidebar(hidden: boolean, jsxs: (name: string, props: React.PropsWithChildren) => ReactNode) {
+    wrapSidebar(hidden: boolean) {
         return (name: string, data: any) => {
-            const ref = useRef(null);
-            const width = settings.store.width > 0 ? settings.store.width + "px" : "";
-            const component: ReactNode = jsxs(name, Object.assign(data, { ref, style: { width } }));
-            if (hidden) return null;
-            return <ResizeWrapper childRef={ref} children={component} />;
+            return <ResizeWrapper name={name} data={data} hidden={hidden} />;
         };
     }
 });
