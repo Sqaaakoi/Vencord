@@ -52,3 +52,6 @@
 [submodule "src/thirdpartyplugins/steamStatusSync"]
 	path = src/thirdpartyplugins/steamStatusSync
 	url = https://github.com/hauntii/vencord-steamStatusSync
+[submodule "src/thirdpartyplugins/loginWithQR"]
+	path = src/thirdpartyplugins/loginWithQR
+	url = https://github.com/nexpid/LoginWithQR
