@@ -20,7 +20,7 @@ export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, 
     const [unlocked, setUnlocked] = useState(force);
     const [closing, setClosing] = useState(false);
     useEffect(() => {
-        setTimeout(() => setUnlocked(true), (isFriend ? 5000 : 15000) + ((Math.random() - 0.5) * 5));
+        setTimeout(() => setUnlocked(true), (isFriend ? 1000 : 15000) + ((Math.random() - 0.5) * 5));
     });
 
     if (closing && unlocked) {
@@ -43,7 +43,10 @@ export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, 
                 <Button
                     color={Button.Colors.GREEN}
                     submitting={closing && !unlocked}
-                    onClick={() => setClosing(true)}
+                    onClick={() => {
+                        setClosing(true);
+                        setTimeout(() => setUnlocked(true), 1500 + ((Math.random() - 0.5) * 2));
+                    }}
                 >
                     Continue
                 </Button>
