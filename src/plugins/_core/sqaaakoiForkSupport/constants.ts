@@ -13,6 +13,8 @@ export const SQAAAKOI_USER_ID = Devs.Sqaaakoi.id + "";
 export const CURRENT_WELCOME_NOTICE_VERSION = 1;
 export const WELCOME_NOTICE_VERSION_KEY = "SqaaakoiForkSupport_StartupMessageVersion";
 
+export const LAST_UPDATED_AT = new Date("2024-07-22T22:49:24.746Z");
+
 // friends or not
 const F = (strings: TemplateStringsArray, ...args: any[]) => [true, String.raw(strings, ...args)] as [boolean, string];
 const N = (strings: TemplateStringsArray, ...args: any[]) => [false, String.raw(strings, ...args)] as [boolean, string];
