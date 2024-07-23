@@ -55,3 +55,15 @@
 [submodule "src/thirdpartyplugins/loginWithQR"]
 	path = src/thirdpartyplugins/loginWithQR
 	url = https://github.com/nexpid/LoginWithQR
+[submodule "src/thirdpartyplugins/discordColorways"]
+	path = src/thirdpartyplugins/discordColorways
+	url = https://github.com/DaBluLite/DiscordColorways-VencordUserplugin
+[submodule "src/thirdpartyplugins/musicTitleRPC"]
+	path = src/thirdpartyplugins/musicTitleRPC
+	url = https://github.com/Blackilykat/musicTitleRPC
+[submodule "src/thirdpartyplugins/wigglyText"]
+	path = src/thirdpartyplugins/wigglyText
+	url = https://github.com/nexpid/WigglyText
+[submodule "src/thirdpartyplugins/friendCodes"]
+	path = src/thirdpartyplugins/friendCodes
+	url = https://github.com/Domis-Vencord-Plugins/FriendCodes
