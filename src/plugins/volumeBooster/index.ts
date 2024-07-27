@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { makeRange } from "@components/PluginSettings/components";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { findByCodeLazy } from "@webpack";
 
 const settings = definePluginSettings({
     multiplier: {
@@ -30,10 +31,14 @@ const settings = definePluginSettings({
         stickToMarkers: true,
     }
 });
-
+// for some godforsaken reason, the volume is ran through this formula before its stored. pathcing it out does not work.
+export const VolumeEncoder = {
+    decode: findByCodeLazy("6+1:"),
+    encode: findByCodeLazy("50+50"),
+}
 export default definePlugin({
     name: "VolumeBooster",
-    authors: [Devs.Nuckyz],
+    authors: [Devs.Nuckyz, Devs.sadan],
     description: "Allows you to set the user and stream volume above the default maximum.",
     settings,
 
@@ -47,10 +52,33 @@ export default definePlugin({
             replacement: {
                 match: /(?<=maxValue:\i\.\i)\?(\d+?):(\d+?)(?=,)/,
                 replace: (_, higherMaxVolume, minorMaxVolume) => ""
-                    + `?${higherMaxVolume}*$self.settings.store.multiplier`
-                    + `:${minorMaxVolume}*$self.settings.store.multiplier`
+                      + `?${higherMaxVolume}*$self.settings.store.multiplier`
+                      + `:${minorMaxVolume}*$self.settings.store.multiplier`
             }
         })),
+        //PATCHES NEEDED FOR WEB/VESKTOP
+        {
+            find: "streamSourceNode",
+            predicate: () => IS_WEB || IS_VESKTOP,
+            group: true,
+            replacement: [
+                // to pervent the cap of 100
+                {
+                match: /Math.max.*?\)\)/,
+                replace: "Math.round(arguments[0])"
+                },
+                // to update the volume on user join
+                {
+                    match: /,this.stream.getTracks\(\).length/,
+                    replace: ",this.updateAudioElement()$&"
+                },
+                // to actually patch the volume
+                {
+                    match: /volume=t.*?;/,
+                    replace: "volume=0.00;$self.patchVolume.call(this);"
+                }
+            ]
+        },
         // Prevent Audio Context Settings sync from trying to sync with values above 200, changing them to 200 before we send to Discord
         {
             find: "AudioContextSettingsMigrated",
@@ -83,4 +111,18 @@ export default definePlugin({
             ]
         }
     ],
+    patchVolume(){
+        if(!this.streamSourceNode)
+            this.streamSourceNode = this.audioContext.createMediaStreamSource(this.stream);
+        //only create one per stream
+        if(this.gainNode) {
+            this.gainNode.gain.value = VolumeEncoder.decode(this._volume)/100;
+            return;
+        }
+        const source = this.streamSourceNode as MediaStreamAudioSourceNode;
+        const gn = (this.audioContext as AudioContext).createGain();
+        this.gainNode = gn;
+        source.connect(gn);
+        gn.connect(this.audioContext.destination);
+    }
 });
