@@ -18,7 +18,7 @@
 	url = https://github.com/Masterjoona/vc-timelessclips
 [submodule "src/thirdpartyplugins/goodPerson"]
 	path = src/thirdpartyplugins/goodPerson
-	url = https://github.com/nin0-dev/vc-goodperson
+	url = https://git.nin0.dev/userplugins/vc-goodperson/
 [submodule "src/thirdpartyplugins/betterActivities"]
 	path = src/thirdpartyplugins/betterActivities
 	url = https://github.com/D3SOX/vc-betterActivities
@@ -67,3 +67,6 @@
 [submodule "src/thirdpartyplugins/friendCodes"]
 	path = src/thirdpartyplugins/friendCodes
 	url = https://github.com/Domis-Vencord-Plugins/FriendCodes
+[submodule "src/thirdpartyplugins/inRole"]
+	path = src/thirdpartyplugins/inRole
+	url = https://git.nin0.dev/userplugins/in-role
