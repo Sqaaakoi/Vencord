@@ -9,10 +9,10 @@ import { Devs } from "@utils/constants";
 
 export const SQAAAKOI_USER_ID = Devs.Sqaaakoi.id + "";
 
-export const CURRENT_WELCOME_NOTICE_VERSION = 2;
+export const CURRENT_WELCOME_NOTICE_VERSION = 3;
 export const WELCOME_NOTICE_VERSION_KEY = "SqaaakoiForkSupport_StartupMessageVersion";
 
-export const LAST_UPDATED_AT = new Date("2024-07-23T00:25:16.210Z");
+export const LAST_UPDATED_AT = new Date("2024-07-28T14:28:07.117Z");
 
 // friends or not
 const F = (strings: TemplateStringsArray, ...args: any[]) => [true, String.raw(strings, ...args)] as [boolean, string];
@@ -41,12 +41,10 @@ function friendsOnlyFilter(_template: TemplateStringsArray, ..._substitutions: (
     };
 }
 
-export const WELCOME_HEADER = "Welcome!";
-export const WELCOME_BACK_HEADER = "What's New";
+export const WELCOME_HEADER = "## 👋 Welcome to Sqaaakoi's Vencord fork!";
+export const WELCOME_BACK_HEADER = "## 👋 What's new in Sqaaakoi's Vencord fork";
 
 export const WELCOME_MESSAGE = friendsOnlyFilter`
-**👋 Thanks for using Sqaaakoi's Vencord fork!**
-
 Many new plugins have been made and many existing plugins have been updated recently. Here's a showcase.
 
 **NewPluginsManager** shows a popup when plugins are added.
@@ -59,12 +57,14 @@ Additionally, **AskMeToMute** has been added so your admin friends can server mu
 
 For those people who often create servers, **ServerTemplatesList** inserts templates from all your servers into the server creation menu.
 
-Regardind plugins that haven't been added back, I either forgot about them, or didn't use them enough to bother fixing them.
+**ShakingText** allows you to make \$shaking\$ text.
+
+Regarding plugins that haven't been added back, I either forgot about them, or didn't use them enough to bother fixing them.
 Some of these will be remade soon:tm:
+-# ~~no they won't~~, or will they?
 
-That's all for now. Take a look at https://github.com/users/Sqaaakoi/projects/3/views/1 to see what plugins I am making.
+That's all for now. I have a [list of planned plugins](https://github.com/users/Sqaaakoi/projects/3/views/1) that I'd recommend taking a look at!
 
-If any of my plugins have an issue, please file the issue at https://github.com/Sqaaakoi/Vencord/issues
-
-${F`Thank you, friends! If you have feedback on these plugins, please DM me :)`}
+If any of my plugins have an issue, please file an issue on [GitHub](https://github.com/Sqaaakoi/Vencord/issues)
+${F`${"\n"}-# Thank you, friends! If you have feedback on these plugins, please DM me :)`}
 `;

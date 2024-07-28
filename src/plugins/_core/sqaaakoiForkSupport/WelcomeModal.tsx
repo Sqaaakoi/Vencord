@@ -5,17 +5,26 @@
  */
 
 import { DataStore } from "@api/index";
+import { Margins } from "@utils/margins";
+import { classes } from "@utils/misc";
 import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { extractAndLoadChunksLazy, findLazy } from "@webpack";
-import { Button, Flex, Parser, RelationshipStore, Text, useEffect, useState } from "@webpack/common";
+import { findByPropsLazy } from "@webpack";
+import { Button, Flex, Parser, RelationshipStore, Text, useEffect, UserStore, useState } from "@webpack/common";
 
 import gitHash from "~git-hash";
+import gitRemote from "~git-remote";
 
 import { CURRENT_WELCOME_NOTICE_VERSION, LAST_UPDATED_AT, SQAAAKOI_USER_ID, WELCOME_BACK_HEADER, WELCOME_HEADER, WELCOME_MESSAGE, WELCOME_NOTICE_VERSION_KEY } from "./constants";
 
-const contentClass = findLazy(m => m.modal && m.content && Object.keys(m).length === 2);
-// must be called before rendering
-export const requireContentClass = extractAndLoadChunksLazy(["hasAnyModalOpen)())&&(0,"]);
+const CodeContainerClasses = findByPropsLazy("markup", "codeContainer");
+const MiscClasses = findByPropsLazy("messageContent", "markupRtl");
+
+const parseMarkdown = (text: string) => Parser.parse(text, true, {
+    allowLinks: true,
+    allowHeading: true,
+    allowList: true,
+    allowEmojiLinks: true,
+});
 
 // First time run card
 export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, text, callbackConfirm }: { modalProps: ModalProps; close: () => void; isFriend: boolean; force: boolean; welcomeBack: boolean; text: string; callbackConfirm: (confirm: () => void) => void; }) {
@@ -38,12 +47,17 @@ export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, 
 
 
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM} >
-        <ModalHeader>
-            <Text variant="heading-lg/semibold" style={{ flexGrow: 1, textAlign: "center" }}>{welcomeBack ? WELCOME_BACK_HEADER : WELCOME_HEADER}</Text>
+        <ModalHeader >
+            <div
+                className={classes(CodeContainerClasses.markup, MiscClasses.messageContent)}
+                style={{ flexGrow: 1, textAlign: "center", margin: "-8px 0" }}
+            >
+                {parseMarkdown(welcomeBack ? WELCOME_BACK_HEADER : WELCOME_HEADER)}
+            </div>
         </ModalHeader>
-        <ModalContent>
-            <div className={contentClass.content}>
-                {Parser.parse(text, false)}
+        <ModalContent className={classes(Margins.top8, Margins.bottom8)}>
+            <div className={classes(CodeContainerClasses.markup, MiscClasses.messageContent)}>
+                {parseMarkdown(text)}
             </div>
         </ModalContent>
         <ModalFooter>
@@ -58,16 +72,14 @@ export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, 
                 <Flex direction={Flex.Direction.HORIZONTAL}>
                     <div style={{ margin: "auto 0", color: "var(--text-muted)" }}>
                         <Text variant="text-xs/normal" color="currentColor">
-                            Commit {gitHash}
-                        </Text>
-                        <Text variant="text-xs/normal" color="currentColor">
-                            Last updated {Parser.parse(`<t:${Math.floor(LAST_UPDATED_AT.getTime() / 1000)}:D>`, true)}
+                            {parseMarkdown(`Commit [${gitHash}](<https://github.com/${gitRemote}/commit/${gitHash}>)\
+                                \nLast updated <t:${Math.floor(LAST_UPDATED_AT.getTime() / 1000)}:D>`)}
                         </Text>
                     </div>
                 </Flex>
             </Flex>
         </ModalFooter>
-    </ModalRoot>;
+    </ModalRoot >;
 }
 
 export async function openWelcomeModal(force: boolean) {
@@ -77,8 +89,7 @@ export async function openWelcomeModal(force: boolean) {
         currentVersion ??= 0;
         if (currentVersion >= CURRENT_WELCOME_NOTICE_VERSION) return;
     }
-    await requireContentClass();
-    const isFriend = RelationshipStore.isFriend(SQAAAKOI_USER_ID);
+    const isFriend = RelationshipStore.isFriend(SQAAAKOI_USER_ID) || UserStore.getCurrentUser().id === SQAAAKOI_USER_ID;
     let confirm = () => { };
     const callbackConfirm = (fn: () => void) => confirm = fn;
     const key = openModal(modalProps => (
