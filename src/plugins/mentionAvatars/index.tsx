@@ -6,16 +6,25 @@
 
 import "./styles.css";
 
+import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { SelectedGuildStore, useState } from "@webpack/common";
 import { User } from "discord-types/general";
+
+const settings = definePluginSettings({
+    hideAtSymbol: {
+        type: OptionType.BOOLEAN,
+        description: "Whether the the @-symbol should be hidden.",
+        default: false
+    }
+});
 
 export default definePlugin({
     name: "MentionAvatars",
     description: "Shows user avatars inside mentions",
-    authors: [Devs.Ven],
+    authors: [Devs.Ven, Devs.Luna],
 
     patches: [{
         find: ".USER_MENTION)",
@@ -25,11 +34,13 @@ export default definePlugin({
         }
     }],
 
+    settings,
+
     renderUsername: ErrorBoundary.wrap((props: { user: User, username: string; }) => {
         const { user, username } = props;
         const [isHovering, setIsHovering] = useState(false);
 
-        if (!user) return <>@{username}</>;
+        if (!user) return <>{getUsernameString(username)}</>;
 
         return (
             <span
@@ -37,8 +48,14 @@ export default definePlugin({
                 onMouseLeave={() => setIsHovering(false)}
             >
                 <img src={user.getAvatarURL(SelectedGuildStore.getGuildId(), 16, isHovering)} className="vc-mentionAvatars-avatar" />
-                @{username}
+                {getUsernameString(username)}
             </span>
         );
     }, { noop: true })
+
 });
+
+function getUsernameString(username: string) {
+    if (settings.store.hideAtSymbol) return username;
+    return `@${username}`;
+}
