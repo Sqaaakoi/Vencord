@@ -8,10 +8,10 @@ import "./fixes.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
-import { useAwaiter } from "@utils/react";
+import { useAwaiter, useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { GuildStore, PermissionsBits, PermissionStore, UserStore } from "@webpack/common";
+import { GuildStore, PermissionsBits, PermissionStore, React, useEffect, UserStore } from "@webpack/common";
 import { ReactNode } from "react";
 
 enum TemplatePositions {
@@ -38,8 +38,15 @@ const settings = definePluginSettings({
         description: "Only show templates from servers you own",
         type: OptionType.BOOLEAN,
         default: false
+    },
+    skipCreationIntent: {
+        description: "Always skips the useless friends/community step when creating a guild",
+        type: OptionType.BOOLEAN,
+        default: true
     }
 });
+
+const templateSubscribers = new Set<() => void>();
 
 let fetchGuildTemplatesRatelimitedEnabled = true;
 
@@ -56,6 +63,7 @@ const utils = {
         if (!fetchGuildTemplatesRatelimitedEnabled) return false;
         fetchGuildTemplatesRatelimitedEnabled = false;
         await utils.fetchGuildTemplates(false);
+        templateSubscribers.forEach(cb => cb());
         setTimeout(() => {
             fetchGuildTemplatesRatelimitedEnabled = true;
         }, 60000);
@@ -111,6 +119,21 @@ export default definePlugin({
                     replace: "$1$5.vencordInjectedIcon===undefined?$2GUILDS:$2UNRESOLVED_GUILD_TEMPLATE($5.code)$3...($5.vencordInjectedIcon===undefined?{}:{$4})},"
                 }
             ]
+        },
+        {
+            find: "ImpressionNames.GUILD_ADD_INTENT_SELECTION",
+            predicate: () => settings.store.skipCreationIntent,
+            replacement: [
+                {
+                    // back navigation
+                    match: /\i===\i\.\i\.CUSTOMIZE_GUILD/,
+                    replace: "false"
+                },
+                {
+                    match: /CREATION_INTENT(?=.{0,30}GUILD_TEMPLATE_SELECTED)/,
+                    replace: "CUSTOMIZE_GUILD"
+                }
+            ]
         }
     ],
     start() {
@@ -124,6 +147,13 @@ export default definePlugin({
     },
     ...utils,
     injectTemplates(GuildTemplateButton: React.ComponentType<any>, clickHandler: React.PointerEventHandler, defaultTemplates: ReactNode[]) {
+        const update = useForceUpdater();
+        useEffect(() => {
+            templateSubscribers.add(update);
+            return () => {
+                templateSubscribers.delete(update);
+            };
+        }, []);
         useAwaiter(() => utils.fetchGuildTemplatesRatelimited());
         const templateList = [] as ReactNode[];
         if (settings.store.defaultTemplatePosition === TemplatePositions.Above) templateList.push(...defaultTemplates);
@@ -134,5 +164,4 @@ export default definePlugin({
         if (settings.store.defaultTemplatePosition === TemplatePositions.Below) templateList.push(...defaultTemplates);
         return templateList;
     }
-
 });
