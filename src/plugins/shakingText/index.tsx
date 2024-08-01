@@ -13,7 +13,7 @@ const { Shaker } = findByPropsLazy("Shaker");
 
 export default definePlugin({
     name: "ShakingText",
-    description: "Adds a new markdown formatting that makes text $shaky$, inspired by ",
+    description: "Adds a new markdown formatting that makes text $$shaky$$, inspired by the 3rd party WigglyText plugin",
     authors: [Devs.Sqaaakoi],
 
     patches: [
@@ -28,7 +28,7 @@ export default definePlugin({
 
     shakyRule: {
         order: 24,
-        match: (source: string) => source.match(/^\$([\s\S]+?)\$(?!_)/),
+        match: (source: string) => source.match(/^\$\$([\s\S]+?)\$\$(?!_)/),
         parse: (
             capture: RegExpMatchArray,
             transform: (...args: any[]) => any,
