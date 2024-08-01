@@ -14,6 +14,7 @@ import { Button, Flex, Parser, RelationshipStore, Text, useEffect, UserStore, us
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
 
+import { settings } from ".";
 import { CURRENT_WELCOME_NOTICE_VERSION, LAST_UPDATED_AT, SQAAAKOI_USER_ID, WELCOME_BACK_HEADER, WELCOME_HEADER, WELCOME_MESSAGE, WELCOME_NOTICE_VERSION_KEY } from "./constants";
 
 const CodeContainerClasses = findByPropsLazy("markup", "codeContainer");
@@ -85,6 +86,7 @@ export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, 
 export async function openWelcomeModal(force: boolean) {
     let currentVersion: number | undefined;
     if (!force) {
+        if (!settings.store.welcomeModalOnStartup) return;
         currentVersion = (await DataStore.get<number>(WELCOME_NOTICE_VERSION_KEY));
         currentVersion ??= 0;
         if (currentVersion >= CURRENT_WELCOME_NOTICE_VERSION) return;
