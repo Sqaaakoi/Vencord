@@ -158,7 +158,7 @@ export function removeClickListener(listener: ClickListener) {
 
 // Message pre-send warnings
 
-export type PreSendWarningCheck = (content: string, channel?: Channel, restrictMentions?: boolean) => PreSendWarningPopupContents | false;
+export type PreSendWarningCheck = (content: string, channel: Channel, restrictMentions: boolean) => PreSendWarningPopupContents | false;
 
 export type PreSendWarningPopupContents = {
     body: string;
