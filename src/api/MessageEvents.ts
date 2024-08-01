@@ -155,3 +155,38 @@ export function addClickListener(listener: ClickListener) {
 export function removeClickListener(listener: ClickListener) {
     return listeners.delete(listener);
 }
+
+// Message pre-send warnings
+
+export type PreSendWarningCheck = (content: string, channel?: Channel, restrictMentions?: boolean) => PreSendWarningPopupContents | false;
+
+export type PreSendWarningPopupContents = {
+    body: string;
+    footer?: string;
+};
+
+export type PreSendWarningEntry = {
+    check: PreSendWarningCheck;
+    analyticsType?: string; // description
+    animation?: {
+        dark: unknown; // Lottie animation, I'm not typing that
+        light: unknown; // Lottie animation, I'm not typing that
+    };
+};
+
+
+const preSendWarningEntries = new Set<PreSendWarningEntry>();
+
+export function _injectPreSendWarningEntries(defaultEntries: PreSendWarningEntry[]) {
+    return [...defaultEntries, ...preSendWarningEntries];
+}
+
+export function addPreSendWarningEntry(listener: PreSendWarningEntry | PreSendWarningCheck) {
+    if (typeof listener === "function") listener = { check: listener };
+    preSendWarningEntries.add(listener);
+    return listener;
+}
+
+export function removePreSendWarningEntry(listener: PreSendWarningEntry) {
+    return preSendWarningEntries.delete(listener);
+}
