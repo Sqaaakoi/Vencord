@@ -55,6 +55,14 @@ export default definePlugin({
                     // the message param is shadowed by the event param, so need to alias them
                     `const vcMsg=${message},vcChan=${channel};${m}Vencord.Api.MessageEvents._handleClick(vcMsg, vcChan, ${event});`
             }
+        },
+        {
+            find: "Messages.MESSAGE_TOO_LONG_BODY_TEXT",
+            replacement: {
+                match: /(for\(let\{check:\i.{0,30}\}of )(\i.\i)\)/,
+                replace: (_, behind, defaultEntries) =>
+                    `${behind}Vencord.Api.MessageEvents._injectPreSendWarningEntries(${defaultEntries}))`
+            }
         }
     ]
 });
