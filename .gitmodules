@@ -55,9 +55,6 @@
 [submodule "src/thirdpartyplugins/loginWithQR"]
 	path = src/thirdpartyplugins/loginWithQR
 	url = https://github.com/nexpid/LoginWithQR
-[submodule "src/thirdpartyplugins/discordColorways"]
-	path = src/thirdpartyplugins/discordColorways
-	url = https://github.com/DaBluLite/DiscordColorways-VencordUserplugin
 [submodule "src/thirdpartyplugins/musicTitleRPC"]
 	path = src/thirdpartyplugins/musicTitleRPC
 	url = https://github.com/Blackilykat/musicTitleRPC
@@ -70,3 +67,27 @@
 [submodule "src/thirdpartyplugins/inRole"]
 	path = src/thirdpartyplugins/inRole
 	url = https://git.nin0.dev/userplugins/in-role
+[submodule "src/thirdpartyplugins/atSomeone"]
+	path = src/thirdpartyplugins/atSomeone
+	url = https://github.com/Masterjoona/vc-atsomeone
+[submodule "src/thirdpartyplugins/globalBadges"]
+	path = src/thirdpartyplugins/globalBadges
+	url = https://github.com/Domis-Vencord-Plugins/GlobalBadges
+[submodule "src/thirdpartyplugins/keyboardSounds"]
+	path = src/thirdpartyplugins/keyboardSounds
+	url = https://github.com/Domis-Vencord-Plugins/KeyboardSounds
+[submodule "src/thirdpartyplugins/unreadCountBadge"]
+	path = src/thirdpartyplugins/unreadCountBadge
+	url = https://github.com/Masterjoona/vc-unreadcountbadge
+[submodule "src/thirdpartyplugins/jumpscare"]
+	path = src/thirdpartyplugins/jumpscare
+	url = https://github.com/surgedevs/VencordJumpscare
+[submodule "src/thirdpartyplugins/messageColors"]
+	path = src/thirdpartyplugins/messageColors
+	url = https://github.com/henmalib/vc-messageColors
+[submodule "src/thirdpartyplugins/encryptcord"]
+	path = src/thirdpartyplugins/encryptcord
+	url = https://github.com/Inbestigator/Encryptcord
+[submodule "src/thirdpartyplugins/emojiOnMouseUp"]
+	path = src/thirdpartyplugins/emojiOnMouseUp
+	url = https://github.com/sadan4/emojiOnMouseUp
