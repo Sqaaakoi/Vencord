@@ -63,7 +63,7 @@
 	url = https://github.com/nexpid/WigglyText
 [submodule "src/thirdpartyplugins/friendCodes"]
 	path = src/thirdpartyplugins/friendCodes
-	url = https://github.com/Domis-Vencord-Plugins/FriendCodes
+	url = https://github.com/Sqaaakoi/vc-FriendCodes
 [submodule "src/thirdpartyplugins/inRole"]
 	path = src/thirdpartyplugins/inRole
 	url = https://git.nin0.dev/userplugins/in-role
