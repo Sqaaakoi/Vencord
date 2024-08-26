@@ -38,7 +38,7 @@ export default definePlugin({
         const detectedWords = new Map<string, Set<string>>();
         for (const key in Filters) {
             const filter = Filters[key];
-            const detections = Object.values(filter()(content) as Record<any, { keyword: string; }>).map(i => i.keyword).filter(i => !settings.store.excludedKeywords.replaceAll(", ", ",").split(",").includes(i));
+            const detections = Object.values(filter(content) as Record<any, { keyword: string; }>).map(i => i.keyword).filter(i => !settings.store.excludedKeywords.replaceAll(", ", ",").split(",").includes(i));
             if (detections.length) detectedWords.set(key, new Set(detections));
         }
         if (detectedWords.size) return {
