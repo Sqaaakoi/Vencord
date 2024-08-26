@@ -6,37 +6,64 @@
 
 import "./fixes.css";
 
-import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-
-import ResizeWrapper from "./components/ResizeWrapper";
-
-export const settings = definePluginSettings({
-    width: {
-        type: OptionType.NUMBER,
-        description: "Current sidebar width (set to -1 to reset)",
-        default: -1,
-    }
-});
+import definePlugin from "@utils/types";
+import { MouseEvent, MutableRefObject } from "react";
 
 export default definePlugin({
     name: "ResizableSidebar",
-    description: "Adds a resize handle to the sidebar",
+    description: "Backports the resize handle from the visual refresh to the stable UI",
     authors: [Devs.Sqaaakoi],
-    settings,
     patches: [
         {
             find: "app view user trigger debugging",
-            replacement: {
-                match: /\(0,\i\.jsxs\)(?=\("div",{className:\i\(\)\(\i\.sidebar.{0,200}?\.hidden\]:(\i))/,
-                replace: "($self.wrapSidebar($1))"
-            }
+            group: true,
+            replacement: [
+                // Pretend the experiment is enabled
+                {
+                    match: /\(0,\i\.\i\)\("ChannelSidebar"\)/,
+                    replace: "true"
+                },
+                // Marker that plugin is enabled
+                {
+                    match: /\[\i\.hasNotice\]/,
+                    replace: '"vc-resizable-sidebar-wrapper":true,$&'
+                },
+                // Wrap the resize element in a div so we can easily steal stock styles
+                {
+                    match: /"div"(,{className:\i\.sidebarResizeHandle,)/,
+                    replace: "$self.WrapResizeBar$1"
+                },
+                // Make the width range larger
+                {
+                    match: /(minDimension):[0-9]+/,
+                    replace: "$1:120"
+                },
+                {
+                    match: /(maxDimension):[0-9]+/,
+                    replace: "$1:768"
+                },
+                // Reset width
+                {
+                    match: /(resizableDomNodeRef:)(\i)(.{0,50}?onElementResize:)(\i)(,.{0,600}onMouseDownCapture:)(\i)/,
+                    replace: "$1$2$3$4$5$self.onMouseDownCaptureWrapper($6,$4,$2),onMouseUp:$self.onMouseDownCaptureWrapper(null,$4,$2)"
+                }
+            ]
         }
     ],
-    wrapSidebar(hidden: boolean) {
-        return (name: React.ElementType<any>, data: any) => {
-            return <ResizeWrapper name={name} data={data} hidden={hidden} />;
+    WrapResizeBar(props: any) {
+        return <div className="vc-resizable-sidebar-stock-handle-wrapper visual-refresh">
+            <div {...props} />
+        </div>;
+    },
+    onMouseDownCaptureWrapper(action: (event: MouseEvent) => void | null, setWidth: (value: number) => void, domRef: MutableRefObject<HTMLDivElement>) {
+        return (event: MouseEvent) => {
+            console.warn(event, setWidth);
+            if (event.button !== 2) return action(event);
+            if (action !== null) return;
+            event.stopPropagation();
+            setWidth(240);
+            domRef.current.style.width = "";
         };
     }
 });
