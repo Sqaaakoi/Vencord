@@ -14,3 +14,19 @@
 .vc-resizable-sidebar-wrapper :is([class*="bannerImage_"], [class*="bannerImg_"]) {
     width: 100%;
 }
+
+.vc-resizable-sidebar-stock-handle-wrapper {
+    z-index: 5;
+}
+
+/* Backported some new styles */
+.vc-resizable-sidebar-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 0 0 auto;
+    overflow: hidden;
+    background: var(--background-secondary);
+    width: var(--custom-guild-sidebar-width);
+    position: relative;
+}
