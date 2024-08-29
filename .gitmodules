@@ -91,3 +91,12 @@
 [submodule "src/thirdpartyplugins/emojiOnMouseUp"]
 	path = src/thirdpartyplugins/emojiOnMouseUp
 	url = https://github.com/sadan4/emojiOnMouseUp
+[submodule "src/thirdpartyplugins/bigFileUpload"]
+	path = src/thirdpartyplugins/bigFileUpload
+	url = https://github.com/ScattrdBlade/bigFileUpload
+[submodule "src/thirdpartyplugins/ctrlEnterSave"]
+	path = src/thirdpartyplugins/ctrlEnterSave
+	url = https://github.com/sadan4/vc-ctrlEnterSave
+[submodule "src/thirdpartyplugins/keywordNotify"]
+	path = src/thirdpartyplugins/keywordNotify
+	url = https://github.com/x3rt/vencord-KeywordNotify
