@@ -55,6 +55,13 @@ export default definePlugin({
                 match: /(\i)\.MEMBER_SAFETY="member-safety"/,
                 replace: '$&,$1.AUDIT_LOG="audit-log"'
             }
+        },
+        {
+            find: "!this.props.showLoadMore&&this.props.logs.length",
+            replacement: {
+                match: /(\i)\.\i=\i\.\i\.connectStores\(.{0,600}?}}\)\((\i)/,
+                replace: "$1.vcAuditLogComponent=$2;$&"
+            }
         }
     ],
 
