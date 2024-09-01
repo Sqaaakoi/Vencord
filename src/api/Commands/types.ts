@@ -55,6 +55,10 @@ export interface Option {
     required?: boolean;
     options?: Option[];
     choices?: Array<ChoicesOption>;
+    minLength?: number;
+    maxLength?: number;
+    minValue?: number;
+    maxValue?: number;
 }
 
 export interface ChoicesOption {
