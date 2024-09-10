@@ -84,7 +84,7 @@ export default definePlugin({
         );
     },
 
-    patchPopout: ({ user }: UserProps) => {
+    patchProfilePopout: ({ user }: UserProps) => {
         const isSelfUser = user.id === UserStore.getCurrentUser().id;
         return (
             <div className={isSelfUser ? "vc-uvs-popout-margin-self" : ""}>
@@ -94,21 +94,7 @@ export default definePlugin({
     },
 
     patches: [
-        // above message box
-        {
-            find: ".popularApplicationCommandIds,",
-            replacement: {
-                match: /\(0,\i\.jsx\)\(\i\.\i,{user:\i,setNote/,
-                replace: "$self.patchPopout(arguments[0]),$&",
-            }
-        },
-        // below username
-        {
-            find: ".USER_PROFILE_MODAL",
-            replacement: {
-                match: /\.body.+?displayProfile:\i}\),/,
-                replace: "$&$self.patchModal(arguments[0]),",
-            }
-        }
+        // @TODO Maybe patch UserVoiceShow in simplified profile popout
+        // @TODO Patch new profile modal
     ],
 });
