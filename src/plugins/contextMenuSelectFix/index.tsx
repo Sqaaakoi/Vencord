@@ -34,6 +34,6 @@ export default definePlugin({
         document.body.addEventListener("pointerup", this.pointerUpEventHandler);
     },
     stop() {
-        document.body.addEventListener("pointerup", this.pointerUpEventHandler);
+        document.body.removeEventListener("pointerup", this.pointerUpEventHandler);
     }
 });
