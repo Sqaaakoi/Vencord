@@ -15,6 +15,11 @@
     width: 100%;
 }
 
+/* Hide in fullscreen */
+.vc-resizable-sidebar-wrapper[class*="hidden_"] {
+    width: 0 !important;
+}
+
 .vc-resizable-sidebar-stock-handle-wrapper {
     z-index: 5;
 }
