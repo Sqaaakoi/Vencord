@@ -33,6 +33,7 @@ const settings = definePluginSettings({
     showModView: opt("Show the member mod view context menu item in all servers."),
     disableDiscoveryFilters: opt("Disable filters in Server Discovery search that hide servers that don't meet discovery criteria."),
     disableDisallowedDiscoveryFilters: opt("Disable filters in Server Discovery search that hide NSFW & disallowed servers."),
+    bannerColorPicker: opt("Show the non-Nitro banner color picker in the profile editor when you have Nitro"),
 });
 
 migratePluginSettings("ShowHiddenThings", "ShowTimeouts");
@@ -119,7 +120,15 @@ export default definePlugin({
                 match: /\i\.\i\.get\(\{url:\i\.\i\.GUILD_DISCOVERY_VALID_TERM,query:\{term:\i\},oldFormErrors:!0\}\)/g,
                 replace: "Promise.resolve({ body: { valid: true } })"
             }
-        }
+        },
+        {
+            find: "DefaultCustomizationSections",
+            predicate: () => settings.store.bannerColorPicker,
+            replacement: {
+                match: /:(\(0,\i\.jsx\)\(\i\.\i,.{0,20}savedUserColor:)/,
+                replace: ":null,$1"
+            }
+        },
     ],
     settings,
 });
