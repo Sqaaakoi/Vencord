@@ -35,6 +35,7 @@ const settings = definePluginSettings({
     disableDisallowedDiscoveryFilters: opt("Disable filters in Server Discovery search that hide NSFW & disallowed servers."),
     showMembersPageInSettings: opt("Shows the member page in the settings of non-community servers even if Show Members in Channel List is enabled, and disable the redirect to the sidebar in community servers."),
     showMembersPageInSidebar: opt("Shows the member page in sidebar of non-community servers regardless of the Show Members in Channel List setting."),
+    bannerColorPicker: opt("Show the non-Nitro banner color picker in the profile editor when you have Nitro"),
 });
 
 migratePluginSettings("ShowHiddenThings", "ShowTimeouts");
@@ -154,6 +155,14 @@ export default definePlugin({
             replacement: {
                 match: /\i\.hasFeature\(\i\.\i\.ENABLED_MODERATION_EXPERIENCE_FOR_NON_COMMUNITY\)/,
                 replace: "true"
+            },
+        },
+        {
+            find: "DefaultCustomizationSections",
+            predicate: () => settings.store.bannerColorPicker,
+            replacement: {
+                match: /:(\(0,\i\.jsx\)\(\i\.\i,.{0,20}savedUserColor:)/,
+                replace: ":null,$1"
             }
         },
     ],
