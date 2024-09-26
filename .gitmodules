@@ -110,3 +110,9 @@
 [submodule "src/thirdpartyplugins/exitSounds"]
 	path = src/thirdpartyplugins/exitSounds
 	url = https://github.com/hauntii/vencord-ExitSounds
+[submodule "src/thirdpartyplugins/showMessageEmbeds"]
+	path = src/thirdpartyplugins/showMessageEmbeds
+	url = https://github.com/lolsuffocate/vc-showMessageEmbeds
+[submodule "src/thirdpartyplugins/junkCleanup"]
+	path = src/thirdpartyplugins/junkCleanup
+	url = https://github.com/Sqaaakoi/vc-junkCleanup
