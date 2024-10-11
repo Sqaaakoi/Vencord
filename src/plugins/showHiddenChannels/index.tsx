@@ -61,6 +61,10 @@ export const settings = definePluginSettings({
     }
 });
 
+function isUncategorized(objChannel: { channel: Channel; comparator: number; }) {
+    return objChannel.channel.id === "null" && objChannel.channel.name === "Uncategorized" && objChannel.comparator === -1;
+}
+
 export default definePlugin({
     name: "ShowHiddenChannels",
     description: "Show channels that you do not have access to view.",
@@ -257,7 +261,7 @@ export default definePlugin({
         {
             find: '"alt+shift+down"',
             replacement: {
-                match: /(?<=getChannel\(\i\);return null!=(\i))(?=.{0,150}?>0\)&&\(0,\i\.\i\)\(\i\))/,
+                match: /(?<=getChannel\(\i\);return null!=(\i))(?=.{0,200}?>0\)&&\(0,\i\.\i\)\(\i\))/,
                 replace: (_, channel) => `&&!$self.isHiddenChannel(${channel})`
             }
         },
@@ -265,8 +269,8 @@ export default definePlugin({
         {
             find: ".APPLICATION_STORE&&null!=",
             replacement: {
-                match: /(?<=getState\(\)\.channelId.{0,30}?\(0,\i\.\i\)\(\i\))(?=\.map\()/,
-                replace: ".filter(e=>!$self.isHiddenChannel(e))"
+                match: /getState\(\)\.channelId.+?(?=\.map\(\i=>\i\.id)/,
+                replace: "$&.filter(e=>!$self.isHiddenChannel(e))"
             }
         },
         {
@@ -307,11 +311,11 @@ export default definePlugin({
             ]
         },
         {
-            find: '+1]})},"overflow"))',
+            find: '})},"overflow"))',
             replacement: [
                 {
                     // Create a variable for the channel prop
-                    match: /maxUsers:\i,users:\i.+?}=(\i).*?;/,
+                    match: /users:\i,maxUsers:\i.+?}=(\i).*?;/,
                     replace: (m, props) => `${m}let{shcChannel}=${props};`
                 },
                 {
@@ -444,7 +448,7 @@ export default definePlugin({
             }
         },
         {
-            find: '="GuildChannelStore",',
+            find: '"GuildChannelStore"',
             replacement: [
                 {
                     // Make GuildChannelStore contain hidden channels
@@ -453,7 +457,7 @@ export default definePlugin({
                 },
                 {
                     // Filter hidden channels from GuildChannelStore.getChannels unless told otherwise
-                    match: /(?<=getChannels\(\i)(\){.+?)return (.+?)}/,
+                    match: /(?<=getChannels\(\i)(\){.*?)return (.+?)}/,
                     replace: (_, rest, channels) => `,shouldIncludeHidden${rest}return $self.resolveGuildChannels(${channels},shouldIncludeHidden??arguments[0]==="@favorites");}`
                 }
             ]
@@ -503,7 +507,7 @@ export default definePlugin({
             res[key] ??= [];
 
             for (const objChannel of maybeObjChannels) {
-                if (objChannel.channel.id === null || !this.isHiddenChannel(objChannel.channel)) res[key].push(objChannel);
+                if (isUncategorized(objChannel) || objChannel.channel.id === null || !this.isHiddenChannel(objChannel.channel)) res[key].push(objChannel);
             }
         }
 
