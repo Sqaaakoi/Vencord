@@ -10,9 +10,6 @@
 [submodule "src/thirdpartyplugins/vcNarrator-custom"]
 	path = src/thirdpartyplugins/vcNarrator-custom
 	url = https://github.com/nyakowint/vcNarrator-custom
-[submodule "src/thirdpartyplugins/replaceActivityTypes"]
-	path = src/thirdpartyplugins/replaceActivityTypes
-	url = https://github.com/nyakowint/replaceActivityTypes
 [submodule "src/thirdpartyplugins/timelessClips"]
 	path = src/thirdpartyplugins/timelessClips
 	url = https://github.com/Masterjoona/vc-timelessclips
@@ -116,3 +113,36 @@
 [submodule "src/thirdpartyplugins/junkCleanup"]
 	path = src/thirdpartyplugins/junkCleanup
 	url = https://github.com/Sqaaakoi/vc-junkCleanup
+[submodule "src/thirdpartyplugins/rpcEditor"]
+	path = src/thirdpartyplugins/rpcEditor
+	url = https://git.nin0.dev/userplugins/rpc-editor
+[submodule "src/thirdpartyplugins/fullUserInChatbox"]
+	path = src/thirdpartyplugins/fullUserInChatbox
+	url = https://github.com/sadan4/vc-fullUserInChatbox
+[submodule "src/thirdpartyplugins/copyStatusUrls"]
+	path = src/thirdpartyplugins/copyStatusUrls
+	url = https://github.com/sadan4/vc-copyStatusUrls
+[submodule "src/thirdpartyplugins/sortReactions"]
+	path = src/thirdpartyplugins/sortReactions
+	url = https://github.com/HAHALOSAH/SortReactions
+[submodule "src/thirdpartyplugins/holyNotes"]
+	path = src/thirdpartyplugins/holyNotes
+	url = https://github.com/WolfPlugs/HolyNotes-VC
+[submodule "src/thirdpartyplugins/writeUpperCase"]
+	path = src/thirdpartyplugins/writeUpperCase
+	url = https://github.com/KrstlSkll69/WriteUpperCase
+[submodule "src/thirdpartyplugins/moreReact"]
+	path = src/thirdpartyplugins/moreReact
+	url = https://github.com/coldcord/moreReact
+[submodule "src/thirdpartyplugins/antiRickroll"]
+	path = src/thirdpartyplugins/antiRickroll
+	url = https://github.com/rynmy/vencord-antirickroll
+[submodule "src/thirdpartyplugins/whosWatching"]
+	path = src/thirdpartyplugins/whosWatching
+	url = https://github.com/fres621/vencord-whos-watching
+[submodule "src/thirdpartyplugins/sidebarChat"]
+	path = src/thirdpartyplugins/sidebarChat
+	url = https://github.com/Masterjoona/vc-sidebarchat
+[submodule "src/thirdpartyplugins/iconViewer"]
+	path = src/thirdpartyplugins/iconViewer
+	url = https://github.com/coldcord/iconViewer
