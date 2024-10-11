@@ -86,7 +86,7 @@ const settings = definePluginSettings({
 const AudioDeviceContextMenuPatch: NavContextMenuPatchCallback = (children, props: { renderInputVolume?: boolean; }) => {
     const { isEnabled, timeout, nonFriendJoinsChannel } = settings.use(["isEnabled", "timeout", "nonFriendJoinsChannel"]);
 
-    if ("renderInputVolume" in props) {
+    if ("renderInputDevices" in props) {
         children.splice(children.length - 1, 0,
             <Menu.MenuGroup
                 label="Auto Mute"
