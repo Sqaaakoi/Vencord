@@ -143,3 +143,6 @@
 [submodule "src/thirdpartyplugins/iconViewer"]
 	path = src/thirdpartyplugins/iconViewer
 	url = https://github.com/coldcord/iconViewer
+[submodule "src/thirdpartyplugins/userFlags"]
+	path = src/thirdpartyplugins/userFlags
+	url = https://git.nin0.dev/userplugins/userflags
