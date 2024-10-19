@@ -17,7 +17,7 @@ const tooltipClasses = findByPropsLazy("tooltipBodyContainer", "tooltipRemovePad
 
 export default definePlugin({
     name: "AutomodIndicator",
-    description: "Adds an indicator in servers where AutoMod is enabled",
+    description: "Adds an indicator in servers where AutoMod or explicit image filtering is enabled",
     authors: [Devs.Sqaaakoi],
 
     patches: [
@@ -31,7 +31,19 @@ export default definePlugin({
     ],
 
     AutoModGuildIcon({ guild }: { guild: Guild; }) {
-        if (!guild.hasFeature("AUTO_MODERATION" as keyof Constants["GuildFeatures"])) return null;
+        const hasAutoMod = guild.hasFeature("AUTO_MODERATION" as keyof Constants["GuildFeatures"]);
+        const imageFilterDescriptions = ["", i18n.Messages.EXPLICIT_CONTENT_FILTER_MEDIUM_DESCRIPTION_V2, i18n.Messages.EXPLICIT_CONTENT_FILTER_HIGH_DESCRIPTION_V2];
+        const labels = [
+            hasAutoMod && {
+                label: i18n.Messages.GUILD_AUTOMOD_USERNAME,
+                description: i18n.Messages.GUILD_AUTOMOD_USERNAME + " has been configured in this server."
+            },
+            guild.explicitContentFilter > 0 && {
+                label: i18n.Messages.FORM_LABEL_EXPLICIT_CONTENT_FILTER_V2,
+                description: imageFilterDescriptions[guild.explicitContentFilter]
+            },
+        ].filter(Boolean) as { label: string; description: string; }[];
+        if (!labels.length) return null;
         return <div className={classes.guildIconV2Container}>
             <Tooltip
                 text={
@@ -40,14 +52,14 @@ export default definePlugin({
                             color="interactive-active"
                             variant="text-xs/bold"
                         >
-                            {i18n.Messages.GUILD_AUTOMOD_USERNAME}
+                            {labels.map(l => l.label).join(" + ")}
                         </Text>
-                        <Text
+                        {labels.map(l => <Text
                             color="text-muted"
                             variant="text-xs/medium"
                         >
-                            {i18n.Messages.GUILD_AUTOMOD_USERNAME} has been configured in this server.
-                        </Text>
+                            {l.description}
+                        </Text>)}
                     </div>
                 }
                 position="bottom"
