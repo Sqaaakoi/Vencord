@@ -57,7 +57,7 @@ export default definePlugin({
             }
         },
         {
-            find: "Messages.MESSAGE_TOO_LONG_BODY_TEXT",
+            find: "#{intl::MESSAGE_TOO_LONG_BODY_TEXT}",
             replacement: {
                 match: /(for\(let\{check:\i.{0,30}\}of )(\i.\i)\)/,
                 replace: (_, behind, defaultEntries) =>
