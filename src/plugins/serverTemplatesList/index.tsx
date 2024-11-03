@@ -88,7 +88,7 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "Messages.GUILD_TEMPLATE_SELECTOR_OPTION_HEADER",
+            find: "#{intl::GUILD_TEMPLATE_SELECTOR_OPTION_HEADER}",
             replacement: [
                 // Guild icon, key is also used later for other identification
                 {
@@ -97,7 +97,7 @@ export default definePlugin({
                 },
                 // Inject templates
                 {
-                    match: /(GUILD_TEMPLATE_SELECTOR_OPTION_HEADER}\),)(\(0,\i\.\i\)\((\i).{0,30}onClick:(\i).{0,500}?)]}/,
+                    match: /(#{intl::GUILD_TEMPLATE_SELECTOR_OPTION_HEADER}\)}\),)(\(0,\i\.\i\)\((\i).{0,30}onClick:(\i).{0,500}?)]}/,
                     replace: "$1...$self.injectTemplates($3,$4,[$2])]}"
                 }
             ]
