@@ -6,14 +6,13 @@
 
 import { ApplicationCommandInputType, ApplicationCommandOptionType, Command, findOption } from "@api/Commands";
 import { Devs } from "@utils/constants";
+import { getIntlMessage } from "@utils/discord";
 import { proxyLazy } from "@utils/lazy";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { i18n, PermissionsBits, PermissionStore } from "@webpack/common";
+import { PermissionsBits, PermissionStore } from "@webpack/common";
 
 const { sendPollMessage } = findByPropsLazy("sendPollMessage");
-
-const loaded = false;
 
 export default definePlugin({
     name: "PollCommands",
@@ -28,14 +27,14 @@ export default definePlugin({
                 options: [
                     {
                         name: "question",
-                        description: i18n?.Messages?.CREATE_POLL_QUESTION_PLACEHOLDER,
+                        description: getIntlMessage("CREATE_POLL_QUESTION_PLACEHOLDER"),
                         type: ApplicationCommandOptionType.STRING,
                         required: true,
                         maxLength: 300
                     },
                     {
                         name: "duration",
-                        description: i18n?.Messages?.CREATE_POLL_DURATION_LABEL + " in hours",
+                        description: getIntlMessage("CREATE_POLL_DURATION_LABEL") + " in hours",
                         type: ApplicationCommandOptionType.INTEGER,
                         required: false,
                         minValue: 1,
