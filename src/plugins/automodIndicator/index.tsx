@@ -5,9 +5,10 @@
  */
 
 import { Devs } from "@utils/constants";
+import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { i18n, Icons, Text, Tooltip } from "@webpack/common";
+import { Icons, Text, Tooltip } from "@webpack/common";
 import { Guild } from "discord-types/general";
 import { Constants } from "discord-types/other";
 
@@ -32,15 +33,15 @@ export default definePlugin({
 
     AutoModGuildIcon({ guild }: { guild: Guild; }) {
         const hasAutoMod = guild.hasFeature("AUTO_MODERATION" as keyof Constants["GuildFeatures"]);
-        const imageFilterDescriptions = ["", i18n.Messages.EXPLICIT_CONTENT_FILTER_MEDIUM_DESCRIPTION_V2, i18n.Messages.EXPLICIT_CONTENT_FILTER_HIGH_DESCRIPTION_V2];
+        const imageFilterDescriptions = ["", "EXPLICIT_CONTENT_FILTER_MEDIUM_DESCRIPTION_V2", "EXPLICIT_CONTENT_FILTER_HIGH_DESCRIPTION_V2"];
         const labels = [
             hasAutoMod && {
-                label: i18n.Messages.GUILD_AUTOMOD_USERNAME,
-                description: i18n.Messages.GUILD_AUTOMOD_USERNAME + " has been configured in this server."
+                label: getIntlMessage("GUILD_AUTOMOD_USERNAME"),
+                description: getIntlMessage("GUILD_AUTOMOD_USERNAME") + " has been configured in this server."
             },
             guild.explicitContentFilter > 0 && {
-                label: i18n.Messages.FORM_LABEL_EXPLICIT_CONTENT_FILTER_V2,
-                description: imageFilterDescriptions[guild.explicitContentFilter]
+                label: getIntlMessage("FORM_LABEL_EXPLICIT_CONTENT_FILTER_V2"),
+                description: getIntlMessage(imageFilterDescriptions[guild.explicitContentFilter])
             },
         ].filter(Boolean) as { label: string; description: string; }[];
         if (!labels.length) return null;
