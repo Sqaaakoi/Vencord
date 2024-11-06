@@ -146,3 +146,6 @@
 [submodule "src/thirdpartyplugins/userFlags"]
 	path = src/thirdpartyplugins/userFlags
 	url = https://git.nin0.dev/userplugins/userflags
+[submodule "src/thirdpartyplugins/venfetch"]
+	path = src/thirdpartyplugins/venfetch
+	url = https://git.nin0.dev/userplugins/venfetch
