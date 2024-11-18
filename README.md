@@ -1,15 +1,18 @@
 # Vencord (Sqaaakoi's personal fork)
 
-The cutest Discord client mod, now with niche quality of life additions
+The cutest Discord client mod, now with quality of life additions and other things I find useful
 
-For more information about Vencord, see the **[upstream README](https://github.com/Vendicated/Vencord/blob/main/README.md)**
+For more information and to support the Vencord project, see the **[upstream README](https://github.com/Vendicated/Vencord/blob/main/README.md)**
 
 ## Features
 
 This is a list of features in this fork.
-Last updated 18th November 2024.
+Last updated 19th November 2024.
+
+All of these plugins have their own branch in the repository. If you want to add them to your own fork, consider adding this repository as a remote and merging the changes into your branch.
 
 ### My plugins
+
 -   AskMeToMute
     -   Mute yourself when moderators server mute you, and automatically remove your server mute if you have permission.
 -   AutoMute
@@ -46,7 +49,13 @@ Last updated 18th November 2024.
     -   Removes a LOT of annoyances from Discord
     -   See the [README](https://github.com/Sqaaakoi/vc-junkCleanup/blob/main/README.md#removed-junk) for more information
     -   Available as a [userplugin](https://github.com/Sqaaakoi/vc-junkCleanup) (for easy standalone installation)
+-   SqaaakoiForkSupport
+    -   Adds a welcome/changelog modal
+    -   Warns you about asking for support with my plugins in the Vencord support channel
+    -   You probably don't want this in your own fork. Do not blindly merge all my changes into your own fork because of this.
+
 ### My unmaintained plugins
+
 -   ResizableSidebar
     -   Resize the sidebar on the left of your screen.
     -   Right click the invisible handle to reset it.
@@ -55,7 +64,9 @@ Last updated 18th November 2024.
     -   Adds a markdown rule for text that shakes around
     -   Code taken from the 3rd party WigglyText plugin (https://github.com/nexpid/WigglyText)
     -   Unmaintained as it's way too niche, and it's somehow incompatible with the WigglyText plugin
+
 ### Modified plugins
+
 -   ShowHiddenThings
     -   Added a few new settings
         -   Always showing the members page in server settings
@@ -71,10 +82,26 @@ Last updated 18th November 2024.
         -   Remove timeout button
     -   Timeout indicator is shown as orange when the timeout was caused by AutoMod
 
+### Less notable plugin changes (where I haven't added myself to developers for these plugins)
+
+-   NoTrack
+    -   Disable Sentry in native by preventing the `@sentry/electron` package from loading 
+-   MutualGroupDMs
+    -   Fix bug where mutual groups wouldn't show in DM sidebar when user has no mutual friends or servers
+    -   https://github.com/Vendicated/Vencord/pull/2976
+-   NoDevtoolsWarning
+    -   Mark as required on Vesktop
+-   ThemeAttributes
+    -   Adds `streamer-mode` class on the root `html` element to indicate Streamer Mode is enabled
+    -   https://github.com/Vendicated/Vencord/pull/2696
+
 ### Other non-mainline plugins
 
 See the [git submodules list](./gitmodules) for a list of user plugins
 
+-   ShowMessageEmbeds (by Suffocate)
+    -   Adds a context menu option to show embeds for links that don't have one.
+    -   https://github.com/Vendicated/Vencord/pull/3004
 
 ## Installing
 
