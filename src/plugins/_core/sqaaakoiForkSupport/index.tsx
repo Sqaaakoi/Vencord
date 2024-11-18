@@ -37,6 +37,10 @@ export default definePlugin({
     WelcomeModal,
     openWelcomeModal,
 
+    myOriginalPlugins,
+    myOriginalPluginsWithContributors,
+    pluginsIContributedTo,
+
     commands: [{
         name: "welcome-modal",
         description: "Show first time run modal",
