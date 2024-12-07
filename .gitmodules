@@ -146,3 +146,21 @@
 [submodule "src/thirdpartyplugins/venfetch"]
 	path = src/thirdpartyplugins/venfetch
 	url = https://git.nin0.dev/userplugins/venfetch
+[submodule "src/thirdpartyplugins/fart"]
+	path = src/thirdpartyplugins/fart
+	url = https://git.nin0.dev/duke/fart
+[submodule "src/thirdpartyplugins/ventex"]
+	path = src/thirdpartyplugins/ventex
+	url = https://github.com/vgskye/ventex
+[submodule "src/thirdpartyplugins/categoryCloner"]
+	path = src/thirdpartyplugins/categoryCloner
+	url = https://github.com/mafineeek/vencord-category-cloner
+[submodule "src/thirdpartyplugins/randomGary"]
+	path = src/thirdpartyplugins/randomGary
+	url = https://github.com/Zach11111/randomGary
+[submodule "src/thirdpartyplugins/collapseChatButtons"]
+	path = src/thirdpartyplugins/collapseChatButtons
+	url = https://github.com/coldcord/collapseChatButtons
+[submodule "src/thirdpartyplugins/copyFolderId"]
+	path = src/thirdpartyplugins/copyFolderId
+	url = https://github.com/sadan4/vc-copyFolderId
