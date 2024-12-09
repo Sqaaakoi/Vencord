@@ -151,7 +151,7 @@ async function printReport() {
                             ];
                             if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
                             return lines.join("\n");
-                        }).join("\n\n") || "None").concat(`\n\n-# [Commit](${COMMIT_LINK}) [View Workflow]({${WORKFLOW_URL}})`),
+                        }).join("\n\n") || "None").concat(`\n\n-# [Commit](${COMMIT_LINK}) [View Workflow](${WORKFLOW_URL})`),
                         color: report.badPatches.length ? 0xff0000 : 0x00ff00
                     },
                     {
