@@ -34,6 +34,9 @@ for (const variable of ["DISCORD_TOKEN", "CHROMIUM_BIN"]) {
 }
 
 const CANARY = process.env.USE_CANARY === "true";
+const { BRANCH_NAME, WORKFLOW_URL, COMMIT_HASH } = process.env;
+const COMMIT_LINK = `https://www.github.com/Vendicated/Vencord/commit/${COMMIT_HASH}`;
+const SHORT_HASH = COMMIT_HASH?.slice(0, 6) ?? "Error getting commit hash";
 
 const browser = await pup.launch({
     headless: true,
@@ -136,11 +139,11 @@ async function printReport() {
             },
             body: JSON.stringify({
                 description: "Here's the latest Vencord Report!",
-                username: "Vencord Reporter" + (CANARY ? " (Canary)" : ""),
+                username: `Vencord Reporter [${BRANCH_NAME}] ${CANARY ? " (Canary)" : ""}`,
                 embeds: [
                     {
                         title: "Bad Patches",
-                        description: report.badPatches.map(p => {
+                        description: (report.badPatches.map(p => {
                             const lines = [
                                 `**__${p.plugin} (${p.type}):__**`,
                                 `ID: \`${p.id}\``,
@@ -148,7 +151,7 @@ async function printReport() {
                             ];
                             if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
                             return lines.join("\n");
-                        }).join("\n\n") || "None",
+                        }).join("\n\n") || "None").concat(`\n\n-# [Commit](${COMMIT_LINK}) [View Workflow]({${WORKFLOW_URL}})`),
                         color: report.badPatches.length ? 0xff0000 : 0x00ff00
                     },
                     {

@@ -54,6 +54,9 @@ jobs:
               run: |
                   export PATH="$PWD/node_modules/.bin:$PATH"
                   export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
+                  export WORKFLOW_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                  export COMMIT_HASH=$(git rev-parse HEAD)
+                  export BRANCH_NAME=${GITHUM_REF#refs/heads/}
 
                   esbuild scripts/generateReport.ts > dist/report.mjs
                   node dist/report.mjs >> $GITHUB_STEP_SUMMARY
@@ -68,6 +71,9 @@ jobs:
                   export PATH="$PWD/node_modules/.bin:$PATH"
                   export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
                   export USE_CANARY=true
+                  export WORKFLOW_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                  export COMMIT_HASH=$(git rev-parse HEAD)
+                  export BRANCH_NAME=${GITHUM_REF#refs/heads/}
 
                   esbuild scripts/generateReport.ts > dist/report.mjs
                   node dist/report.mjs >> $GITHUB_STEP_SUMMARY
