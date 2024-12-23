@@ -31,8 +31,6 @@ const settings = definePluginSettings({
     showTimeouts: opt("Show member timeout icons in chat."),
     showInvitesPaused: opt("Show the invites paused tooltip in the server list."),
     showModView: opt("Show the member mod view context menu item in all servers."),
-    disableDiscoveryFilters: opt("Disable filters in Server Discovery search that hide servers that don't meet discovery criteria."),
-    disableDisallowedDiscoveryFilters: opt("Disable filters in Server Discovery search that hide NSFW & disallowed servers."),
     showMembersPageInSettings: opt("Shows the member page in the settings of non-community servers even if Show Members in Channel List is enabled, and disable the redirect to the sidebar in community servers."),
     showMembersPageInSidebar: opt("Shows the member page in sidebar of non-community servers regardless of the Show Members in Channel List setting."),
     bannerColorPicker: opt("Show the non-Nitro banner color picker in the profile editor when you have Nitro"),
@@ -43,6 +41,8 @@ export default definePlugin({
     tags: ["ShowTimeouts", "ShowInvitesPaused", "ShowModView", "DisableDiscoveryFilters", "ShowMembersPage"],
     description: "Displays various hidden & moderator-only things regardless of permissions.",
     authors: [Devs.Dolfies, Devs.Sqaaakoi],
+    settings,
+
     patches: [
         {
             find: "showCommunicationDisabledStyles",
@@ -87,42 +87,6 @@ export default definePlugin({
             }
         },
         {
-            find: "prod_discoverable_guilds",
-            predicate: () => settings.store.disableDiscoveryFilters,
-            replacement: {
-                match: /\{"auto_removed:.*?\}/,
-                replace: "{}"
-            }
-        },
-        // remove the 200 server minimum
-        {
-            find: '">200"',
-            predicate: () => settings.store.disableDiscoveryFilters,
-            replacement: {
-                match: '">200"',
-                replace: '">0"'
-            }
-        },
-        // empty word filter
-        {
-            find: '"pepe","nude"',
-            predicate: () => settings.store.disableDisallowedDiscoveryFilters,
-            replacement: {
-                match: /(?<=[?=])\["pepe",.+?\]/,
-                replace: "[]",
-            },
-        },
-        // patch request that queries if term is allowed
-        {
-            find: ".GUILD_DISCOVERY_VALID_TERM,query:",
-            predicate: () => settings.store.disableDisallowedDiscoveryFilters,
-            all: true,
-            replacement: {
-                match: /\i\.\i\.get\(\{url:\i\.\i\.GUILD_DISCOVERY_VALID_TERM,query:\{term:\i\},oldFormErrors:!0,rejectWithError:!1\}\)/g,
-                replace: "Promise.resolve({ body: { valid: true } })"
-            }
-        },
-        {
             find: ".GUILD_SETTINGS_MEMBERS_PAGE),",
             predicate: () => settings.store.showMembersPageInSettings,
             replacement: {
@@ -132,7 +96,7 @@ export default definePlugin({
         },
         // disable redirect to sidebar
         {
-            find: /\i\.isCommunity\(\).{0,300}WindowLaunchIcon/,
+            find: "GuildSettingsMembersRow",
             predicate: () => settings.store.showMembersPageInSettings,
             replacement: {
                 match: /\i\.isCommunity\(\)/,
@@ -164,6 +128,5 @@ export default definePlugin({
                 replace: ":null,$1"
             }
         },
-    ],
-    settings,
+    ]
 });
