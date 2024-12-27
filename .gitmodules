@@ -164,3 +164,12 @@
 [submodule "src/thirdpartyplugins/copyFolderId"]
 	path = src/thirdpartyplugins/copyFolderId
 	url = https://github.com/sadan4/vc-copyFolderId
+[submodule "src/thirdpartyplugins/vcPanelSettings"]
+	path = src/thirdpartyplugins/vcPanelSettings
+	url = https://git.nin0.dev/userplugins/vcPanelSettings
+[submodule "src/thirdpartyplugins/betterSpotifyCard"]
+	path = src/thirdpartyplugins/betterSpotifyCard
+	url = https://git.nin0.dev/userplugins/betterSpotifyCard
+[submodule "src/thirdpartyplugins/animalese"]
+	path = src/thirdpartyplugins/animalese
+	url = https://github.com/ryawaa/vencord-animalese
