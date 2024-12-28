@@ -173,3 +173,6 @@
 [submodule "src/thirdpartyplugins/animalese"]
 	path = src/thirdpartyplugins/animalese
 	url = https://github.com/ryawaa/vencord-animalese
+[submodule "src/thirdpartyplugins/shyTyping"]
+	path = src/thirdpartyplugins/shyTyping
+	url = https://git.nin0.dev/Sqaaakoi-VencordUserPlugins/shyTyping
