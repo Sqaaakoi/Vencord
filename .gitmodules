@@ -110,9 +110,6 @@
 [submodule "src/thirdpartyplugins/rpcEditor"]
 	path = src/thirdpartyplugins/rpcEditor
 	url = https://git.nin0.dev/userplugins/rpc-editor
-[submodule "src/thirdpartyplugins/fullUserInChatbox"]
-	path = src/thirdpartyplugins/fullUserInChatbox
-	url = https://github.com/sadan4/vc-fullUserInChatbox
 [submodule "src/thirdpartyplugins/copyStatusUrls"]
 	path = src/thirdpartyplugins/copyStatusUrls
 	url = https://github.com/sadan4/vc-copyStatusUrls
