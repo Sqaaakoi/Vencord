@@ -36,14 +36,16 @@ export default definePlugin({
         const imageFilterDescriptions = ["", "EXPLICIT_CONTENT_FILTER_MEDIUM_DESCRIPTION_V2", "EXPLICIT_CONTENT_FILTER_HIGH_DESCRIPTION_V2"];
         const labels = [
             hasAutoMod && {
+                key: "automod",
                 label: getIntlMessage("GUILD_AUTOMOD_USERNAME"),
                 description: getIntlMessage("GUILD_AUTOMOD_USERNAME") + " has been configured in this server."
             },
             guild.explicitContentFilter > 0 && {
+                key: "explicitContentFilter",
                 label: getIntlMessage("FORM_LABEL_EXPLICIT_CONTENT_FILTER_V2"),
                 description: getIntlMessage(imageFilterDescriptions[guild.explicitContentFilter])
             },
-        ].filter(Boolean) as { label: string; description: string; }[];
+        ].filter(Boolean) as { key: string; label: string; description: string; }[];
         if (!labels.length) return null;
         return <div className={classes.guildIconV2Container}>
             <Tooltip
@@ -58,6 +60,7 @@ export default definePlugin({
                         {labels.map(l => <Text
                             color="text-muted"
                             variant="text-xs/medium"
+                            key={l.key}
                         >
                             {l.description}
                         </Text>)}
