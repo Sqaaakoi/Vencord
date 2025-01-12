@@ -32,6 +32,13 @@ export default definePlugin({
         //         replace: ""
         //     }
         // }
+        {
+            find: '"MobileWebSidebarStore"',
+            replacement: {
+                match: /let (\i)=!1;(.{0,50}return)(!\i\.\i)\|\|\1(.{0,300}?MOBILE_WEB_SIDEBAR_OPEN:function\()\)\{(.{0,30}?MOBILE_WEB_SIDEBAR_CLOSE:function\()\)\{/,
+                replace: "let $1=$3;$2 $1$4fluxEvent){if($3&&!fluxEvent?.force)return;$5fluxEvent){if($3&&!fluxEvent?.force)return;"
+            }
+        }
     ],
     renderTitleBar(props) {
         return <ErrorBoundary noop>

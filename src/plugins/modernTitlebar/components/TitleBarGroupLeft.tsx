@@ -10,6 +10,7 @@ import { classes } from "@utils/misc";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { NavigationRouter } from "@webpack/common";
 
+import SidebarButton from "./SidebarButton";
 import StatCounters from "./StatCounters";
 import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
@@ -24,6 +25,7 @@ export default function TitleBarGroupLeft({ userId }: { userId: string; }) {
             className={cl("button-home")}
             icon={ClydeIcon}
         />
+        <SidebarButton />
         {/* {userId && <TotalMentionsBadge />} */}
         {userId && <StatCounters />}
     </div >;
