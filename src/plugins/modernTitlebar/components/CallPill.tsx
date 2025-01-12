@@ -6,10 +6,11 @@
 
 import "./CallPill.css";
 
-import { classes, getIntlMessage, useTimer } from "@utils/index";
+import { classes, getIntlMessage } from "@utils/index";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, Icons, Menu, NavigationRouter, SelectedChannelStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, ContextMenuApi, Icons, Menu, NavigationRouter, SelectedChannelStore } from "@webpack/common";
 
+import { useCallTimer } from "../utils/callTimer";
 import Pill from "./Pill";
 import { cl } from "./TitleBar";
 
@@ -39,14 +40,13 @@ function formatDuration(ms: number) {
 }
 
 export default function CallPill(props: { userId: string; }) {
-    const channelId = useStateFromStores([SelectedChannelStore], () => SelectedChannelStore.getVoiceChannelId());
-    const time = useTimer({
-        deps: [channelId],
-        interval: 100
-    });
-    if (!channelId || !props.userId) return null;
+    const time = useCallTimer();
+
+    if (time === null || !props.userId) return null;
     return <Pill
         action={() => {
+            const channelId = SelectedChannelStore.getVoiceChannelId();
+            if (!channelId) return;
             const channel = ChannelStore.getChannel(channelId);
             NavigationRouter.transitionToGuild(channel.getGuildId(), channelId);
         }}
@@ -58,7 +58,7 @@ export default function CallPill(props: { userId: string; }) {
         }}
     >
         <Icons.PhoneCallIcon size="xs" color="currentColor" />
-        <span className={classes(cl("pill-content"), cl("call-pill-content"))}>{formatDuration(time)}</span>
+        <span className={classes(cl("pill-content"), cl("call-pill-content"))}>{formatDuration(time!)}</span>
     </Pill>;
 }
 
