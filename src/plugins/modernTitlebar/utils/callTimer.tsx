@@ -16,12 +16,6 @@ function notifySubscribers() {
     hookSubscribers.forEach(i => i());
 }
 
-function subscribe(update: () => void) {
-    console.error("guh???");
-    hookSubscribers.add(update);
-    return () => hookSubscribers.delete(update);
-}
-
 function updateCallTimer() {
     const newChannelId = SelectedChannelStore.getVoiceChannelId() ?? null;
     if (newChannelId === channelId) return;
@@ -43,7 +37,10 @@ function updateCallTimer() {
 }
 
 export function useCallTimer() {
-    return React.useSyncExternalStore(subscribe, () => {
+    return React.useSyncExternalStore(update => {
+        hookSubscribers.add(update);
+        return () => hookSubscribers.delete(update);
+    }, () => {
         if (timestamp === null) return null;
         return Date.now() - timestamp;
     });
