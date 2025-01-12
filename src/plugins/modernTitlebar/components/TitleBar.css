@@ -27,4 +27,5 @@
     margin: auto 0;
     height: var(--vc-moderntitlebar-contents-height);
     display: flex;
+    gap: var(--vc-moderntitlebar-spacing)
 }

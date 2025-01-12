@@ -2,6 +2,7 @@
     display: flex;
     margin: calc(-1 * var(--vc-moderntitlebar-spacing)) calc(-1 * var(--vc-moderntitlebar-spacing)) 0;
     height: var(--vc-moderntitlebar-height);
+    gap: var(--vc-moderntitlebar-spacing)
 }
 
 .vc-modernTitlebar-button.vc-modernTitlebar-window-button {
