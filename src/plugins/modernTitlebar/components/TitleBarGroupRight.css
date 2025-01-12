@@ -1,0 +1,15 @@
+.vc-modernTitlebar-titlebar-group-right {
+    margin-right: var(--vc-moderntitlebar-spacing);
+}
+
+.vc-modernTitlebar-button-home {
+    color: var(--interactive-hover);
+}
+
+.vc-modernTitlebar-button-home:is(:hover, :active) {
+    color: var(--white-500);
+}
+
+.vc-modernTitlebar-button.vc-modernTitlebar-button-home:is(:hover, :active) .vc-modernTitlebar-button-inner {
+    background-color: var(--button-filled-brand-background);
+}

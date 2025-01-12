@@ -1,0 +1,22 @@
+.vc-modernTitlebar-button {
+    background-color: transparent;
+    color: var(--text-normal);
+    padding: 0;
+    height: 32px;
+    width: 32px;
+    -webkit-app-region: no-drag;
+}
+
+.vc-modernTitlebar-button-inner {
+    padding: 4px;
+    border-radius: 50%;
+    height: 24px;
+}
+
+.vc-modernTitlebar-button:is(:hover, :active) {
+    color: var(--interactive-hover);
+}
+
+.vc-modernTitlebar-button:is(:hover, :active) .vc-modernTitlebar-button-inner {
+    background-color: var(--background-modifier-hover);
+}
