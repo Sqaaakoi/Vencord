@@ -24,13 +24,13 @@ export default definePlugin({
                 replace: "return $self.renderTitleBar(arguments[0]);switch(0){"
             }
         },
-        {
-            find: 'setProperty("--custom-app-panels-height"',
-            replacement: {
-                match: /,\(0,\i\.jsx\).{0,30}?ACCOUNT_PANEL,.{0,30}?{}\)}\)/,
-                replace: ""
-            }
-        }
+        // {
+        //     find: 'setProperty("--custom-app-panels-height"',
+        //     replacement: {
+        //         match: /,\(0,\i\.jsx\).{0,30}?ACCOUNT_PANEL,.{0,30}?{}\)}\)/,
+        //         replace: ""
+        //     }
+        // }
     ],
     renderTitleBar(props) {
         return <ErrorBoundary noop>
