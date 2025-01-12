@@ -1,0 +1,15 @@
+.vc-modernTitlebar-stat-counters {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    margin: auto 0;
+}
+
+.vc-modernTitlebar-stat-counter {
+    display: inline-block;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--header-secondary);
+    text-transform: uppercase;
+}

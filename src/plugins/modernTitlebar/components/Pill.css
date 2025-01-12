@@ -1,0 +1,27 @@
+.vc-modernTitlebar-pill {
+    background-color: transparent;
+    color: var(--interactive-active);
+    padding: 4px 0;
+    height: 32px;
+    width: auto;
+    -webkit-app-region: no-drag;
+}
+
+.vc-modernTitlebar-pill-inner {
+    background-color: var(--button-secondary-background);
+    padding: 2px 4px;
+    border-radius: 20px;
+    height: 16px;
+    display: flex;
+}
+
+
+.vc-modernTitlebar-pill-content {
+    margin-left: 4px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--font-display);
+    font-weight: 700;
+}
