@@ -10,6 +10,7 @@ import definePlugin from "@utils/types";
 
 import TitleBar from "./components/TitleBar";
 import { settings } from "./settings";
+import { startCallTimerSubscription, stopCallTimerSubscription } from "./utils/callTimer";
 
 export default definePlugin({
     name: "ModernTitlebar",
@@ -36,5 +37,12 @@ export default definePlugin({
         return <ErrorBoundary noop>
             <TitleBar {...props} />
         </ErrorBoundary>;
+    },
+
+    start() {
+        startCallTimerSubscription();
+    },
+    stop() {
+        stopCallTimerSubscription();
     }
 });
