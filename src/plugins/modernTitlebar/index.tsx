@@ -39,6 +39,22 @@ export default definePlugin({
                 match: /let (\i)=!1;(.{0,50}return)(!\i\.\i)\|\|\1(.{0,300}?MOBILE_WEB_SIDEBAR_OPEN:function\()\)\{(.{0,30}?MOBILE_WEB_SIDEBAR_CLOSE:function\()\)\{/,
                 replace: "let $1=$3;$2 $1$4fluxEvent){if($3&&!fluxEvent?.force)return;$5fluxEvent){if($3&&!fluxEvent?.force)return;"
             }
+        },
+        // Make the Guilds bar not be removed from the DOM entirely, to prevent an ugly animation when reopening the sidebar
+        {
+            find: 'case"pendingFriends":',
+            replacement: {
+                match: /(?<=container,children:\[)(\i)&&(.{0,40}?className:\i\.guilds,)/,
+                replace: "$2hidden:!$1,"
+            }
+        },
+        // Accept the hidden property from above
+        {
+            find: "unreadMentionsIndicatorTop,barClassName",
+            replacement: {
+                match: /\[\i\.hidden\]:\i/,
+                replace: "$&||arguments[0]?.hidden"
+            }
         }
     ],
     renderTitleBar(props) {
