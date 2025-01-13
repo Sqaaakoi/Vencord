@@ -14,11 +14,10 @@ import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
 import WindowButtons from "./WindowButtons";
 
-// const AccountPanel = findComponentByCodeLazy("isShaking:this.isCopiedStreakGodlike");
-
 export default function TitleBarGroupRight({ userId, windowKey }: { userId: string; windowKey: any; }) {
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-right"))}>
         <CallPill userId={userId} />
+        {/* <AccountPanel /> */}
         {userId && <TitleBarButton
             action={() => FluxDispatcher.dispatch({
                 type: "QUICKSWITCHER_SHOW",
