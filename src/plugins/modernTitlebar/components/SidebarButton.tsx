@@ -4,21 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findStoreLazy } from "@webpack";
-import { FluxDispatcher, Icons } from "@webpack/common";
-import { FluxEvents } from "@webpack/types";
+import { Icons } from "@webpack/common";
 
+import { toggleSidebar } from "../utils/sidebar";
 import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
 
-const MobileWebSidebarStore = findStoreLazy("MobileWebSidebarStore");
-
 export default function SidebarButton() {
     return <TitleBarButton
-        action={() => FluxDispatcher.dispatch({
-            type: "MOBILE_WEB_SIDEBAR_" + (MobileWebSidebarStore.getIsOpen() ? "CLOSE" : "OPEN") as FluxEvents,
-            force: true
-        })}
+        action={() => toggleSidebar()}
         className={cl("button-sidebar")}
         icon={Icons.MenuIcon}
     />;

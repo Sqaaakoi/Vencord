@@ -11,6 +11,7 @@ import definePlugin from "@utils/types";
 import TitleBar from "./components/TitleBar";
 import { settings } from "./settings";
 import { startCallTimerSubscription, stopCallTimerSubscription } from "./utils/callTimer";
+import { keybindHandler } from "./utils/sidebar";
 
 export default definePlugin({
     name: "ModernTitlebar",
@@ -48,8 +49,10 @@ export default definePlugin({
 
     start() {
         startCallTimerSubscription();
+        document.addEventListener("keydown", keybindHandler);
     },
     stop() {
         stopCallTimerSubscription();
+        document.removeEventListener("keydown", keybindHandler);
     }
 });
