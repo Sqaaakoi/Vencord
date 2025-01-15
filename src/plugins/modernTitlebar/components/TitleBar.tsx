@@ -37,7 +37,6 @@ export default function TitleBar(props: {
         <OverrideCSS className={cl("styles")} />
         <div className={cl("titlebar")}>
             <TitleBarGroupLeft userId={userId} />
-            {JSON.stringify(props)}
             <div className={classes(cl("spacer"))} />
             <TitleBarGroupRight userId={userId} windowKey={props?.windowKey} />
         </div >
