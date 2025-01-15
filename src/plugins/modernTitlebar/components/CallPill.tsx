@@ -18,27 +18,20 @@ import { cl } from "./TitleBar";
 const formatChannelName = findByCodeLazy("#{intl::GROUP_DM_ALONE}");
 const VoiceChannelActions = findByPropsLazy("selectVoiceChannel", "disconnect");
 
+// Adapted from CallTimer
 function formatDuration(ms: number) {
-    // here be dragons (moment fucking sucks)
-    const human = false;
+    const format = (n: number) => ("" + n).padStart(2, "0");
 
-    const format = (n: number) => human ? n : n.toString().padStart(2, "0");
-    const unit = (s: string) => human ? s : "";
-    const delim = human ? " " : ":";
-
-    // thx copilot
     const d = Math.floor(ms / 86400000);
     const h = Math.floor((ms % 86400000) / 3600000);
     const m = Math.floor(((ms % 86400000) % 3600000) / 60000);
     const s = Math.floor((((ms % 86400000) % 3600000) % 60000) / 1000);
 
-    let res = "";
-    if (d) res += `${d}d `;
-    if (h || res) res += `${format(h)}${unit("h")}${delim}`;
-    if (m || res || !human) res += `${format(m)}${unit("m")}${delim}`;
-    res += `${format(s)}${unit("s")}`;
+    const list = [d, h, m, s];
+    if (d === 0) list.unshift();
+    if (d === 0 && h === 0) list.unshift();
 
-    return res;
+    return list.map(format).join(":");
 }
 
 export default function CallPill(props: { userId: string; }) {
