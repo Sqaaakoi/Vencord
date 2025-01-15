@@ -20,22 +20,24 @@ export const cl = (name: string) => `vc-modernTitlebar-${name}`;
 
 export default function TitleBar(props: {
     focused: boolean;
-    windowKey: any;
+    windowKey?: any;
     type: string;
-    macOSFrame: boolean;
-    themeOverride: any;
+    macOSFrame?: boolean;
+    themeOverride?: any;
 }) {
     const userId = useStateFromStores([UserStore], () => UserStore.getCurrentUser()?.id, []);
     const ref = useRef<HTMLDivElement>(null);
 
+    if (props?.macOSFrame) return null;
+
     return <div
         className={cl("container")}
         ref={ref}
-    // onContextMenu={e => ContextMenuApi.openContextMenu(e, () => <BasicContextMenu />)}
     >
         <OverrideCSS className={cl("styles")} />
         <div className={cl("titlebar")}>
             <TitleBarGroupLeft userId={userId} />
+            {JSON.stringify(props)}
             <div className={classes(cl("spacer"))} />
             <TitleBarGroupRight userId={userId} windowKey={props?.windowKey} />
         </div >

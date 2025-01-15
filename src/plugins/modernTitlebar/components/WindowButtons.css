@@ -1,12 +1,3 @@
-.vc-modernTitlebar-window-buttons {
-    display: flex;
-}
-
-.vc-modernTitlebar-button.vc-modernTitlebar-window-button-close {
-    width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
-    padding-right: var(--vc-moderntitlebar-spacing);
-}
-
 .vc-modernTitlebar-window-button-close:is(:hover, :active) {
     color: var(--white-500);
 }
