@@ -17,6 +17,7 @@ export default definePlugin({
     name: "ModernTitlebar",
     description: "Adds a thicker, more modern looking titlebar to Discord, without the Visual Refresh",
     authors: [Devs.Sqaaakoi],
+    tags: ["CustomTitlebar"],
     settings,
     patches: [
         {
