@@ -44,10 +44,8 @@ export const windowActions = {
 };
 
 export default function WindowButtons({ windowKey }: { windowKey: any; }) {
-    if (!windowActions.canUseWindowButtons) return <div className={cl("window-buttons")} />;
-    return <div
-        className={cl("window-buttons")}
-    >
+    if (!windowActions.canUseWindowButtons) return null;
+    return <>
         <TitleBarButton
             action={() => windowActions.minimize(windowKey)}
             className={clwb("minimize")}
@@ -75,5 +73,5 @@ export default function WindowButtons({ windowKey }: { windowKey: any; }) {
                 onContextMenu: sp
             }}
         />
-    </div >;
+    </ >;
 }
