@@ -79,13 +79,15 @@ export function CallPillContextMenu({ channel }: { channel: Channel; }) {
                 action={() => NavigationRouter.transitionToGuild(channel.getGuildId(), channel.id)}
             />
         </Menu.MenuGroup>
-        <Menu.MenuItem
-            id="disconnect"
-            color="danger"
-            label={getIntlMessage("DISCONNECT_SELF")}
-            action={() => {
-                VoiceChannelActions.disconnect();
-            }}
-        />
+        <Menu.MenuGroup>
+            <Menu.MenuItem
+                id="disconnect"
+                color="danger"
+                label={getIntlMessage("DISCONNECT_SELF")}
+                action={() => {
+                    VoiceChannelActions.disconnect();
+                }}
+            />
+        </Menu.MenuGroup>
     </Menu.Menu>;
 }
