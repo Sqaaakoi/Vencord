@@ -2,6 +2,7 @@
     --vc-moderntitlebar-height: 40px;
     --vc-moderntitlebar-contents-height: 32px;
     --vc-moderntitlebar-spacing: calc(calc(var(--vc-moderntitlebar-height) - var(--vc-moderntitlebar-contents-height)) / 2);
+    --vc-moderntitlebar-spacing-half: calc(var(--vc-moderntitlebar-spacing) / 2);
 }
 
 .vc-modernTitlebar-container {
@@ -24,8 +25,7 @@
 }
 
 .vc-modernTitlebar-titlebar-group {
-    margin: auto 0;
-    height: var(--vc-moderntitlebar-contents-height);
+    /* margin: auto 0; */
+    height: var(--vc-moderntitlebar-height);
     display: flex;
-    gap: var(--vc-moderntitlebar-spacing)
 }

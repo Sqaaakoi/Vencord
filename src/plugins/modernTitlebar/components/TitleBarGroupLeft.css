@@ -1,8 +1,6 @@
-.vc-modernTitlebar-titlebar-group-left {
-    margin-left: var(--vc-moderntitlebar-spacing);
-}
-
-.vc-modernTitlebar-button-home {
+.vc-modernTitlebar-button.vc-modernTitlebar-button-home {
+    width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
+    padding-left: var(--vc-moderntitlebar-spacing);
     color: var(--interactive-hover);
 }
 

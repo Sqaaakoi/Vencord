@@ -1,8 +1,9 @@
 .vc-modernTitlebar-pill {
     background-color: transparent;
     color: var(--interactive-active);
-    padding: 4px 0;
-    height: 32px;
+    padding: var(--vc-moderntitlebar-spacing-half);
+    margin: auto 0;
+    height: 24px;
     width: auto;
     -webkit-app-region: no-drag;
 }
