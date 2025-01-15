@@ -7,13 +7,15 @@
 import "./CallPill.css";
 
 import { classes, getIntlMessage } from "@utils/index";
-import { findByPropsLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, Icons, Menu, NavigationRouter, SelectedChannelStore } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, GuildStore, Icons, Menu, NavigationRouter, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
+import { Channel } from "discord-types/general";
 
 import { useCallTimer } from "../utils/callTimer";
 import Pill from "./Pill";
 import { cl } from "./TitleBar";
 
+const formatChannelName = findByCodeLazy("#{intl::GROUP_DM_ALONE}");
 const VoiceChannelActions = findByPropsLazy("selectVoiceChannel", "disconnect");
 
 function formatDuration(ms: number) {
@@ -53,7 +55,8 @@ export default function CallPill(props: { userId: string; }) {
         className={cl("call-pill")}
         pillProps={{
             onContextMenu(e) {
-                ContextMenuApi.openContextMenu(e, () => <CallPillContextMenu />);
+                const channel = ChannelStore.getChannel(SelectedChannelStore.getVoiceChannelId()!);
+                ContextMenuApi.openContextMenu(e, () => <CallPillContextMenu channel={channel} />);
             }
         }}
     >
@@ -62,11 +65,19 @@ export default function CallPill(props: { userId: string; }) {
     </Pill>;
 }
 
-export function CallPillContextMenu() {
+export function CallPillContextMenu({ channel }: { channel: Channel; }) {
+    const guild = GuildStore.getGuild(channel.getGuildId());
     return <Menu.Menu
         navId="vc-modernTitlebar-call-pill-menu"
         onClose={ContextMenuApi.closeContextMenu}
     >
+        <Menu.MenuItem
+            id="current-channel"
+            label={formatChannelName(channel, UserStore, RelationshipStore)}
+            subtext={guild?.name}
+            action={() => NavigationRouter.transitionToGuild(channel.getGuildId(), channel.id)}
+        />
+        <Menu.MenuSeparator />
         <Menu.MenuItem
             id="disconnect"
             color="danger"

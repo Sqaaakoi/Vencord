@@ -10,6 +10,7 @@ import { classes } from "@utils/misc";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { NavigationRouter } from "@webpack/common";
 
+import { settings } from "../settings";
 import SidebarButton from "./SidebarButton";
 import StatCounters from "./StatCounters";
 import { cl } from "./TitleBar";
@@ -19,13 +20,14 @@ const { ClydeIcon } = findByPropsLazy("ClydeIcon");
 const DefaultRouteStore = findStoreLazy("DefaultRouteStore");
 
 export default function TitleBarGroupLeft({ userId }: { userId: string; }) {
+    const { homeButton, sidebarButton } = settings.use(["homeButton", "sidebarButton"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-left"))}>
-        <TitleBarButton
+        {homeButton && <TitleBarButton
             action={() => NavigationRouter.transitionTo(DefaultRouteStore.defaultRoute)}
             className={cl("button-home")}
             icon={ClydeIcon}
-        />
-        <SidebarButton />
+        />}
+        {sidebarButton && <SidebarButton />}
         {/* {userId && <TotalMentionsBadge />} */}
         {userId && <StatCounters />}
     </div >;
