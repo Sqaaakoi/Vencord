@@ -9,7 +9,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
-import { Button, Flex, Parser, RelationshipStore, Text, useEffect, UserStore, useState } from "@webpack/common";
+import { Button, ComponentDispatch, Flex, FluxDispatcher, Parser, RelationshipStore, Text, UserStore } from "@webpack/common";
 
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
@@ -27,26 +27,10 @@ const parseMarkdown = (text: string) => Parser.parse(text, true, {
     allowEmojiLinks: true,
 });
 
+const markAsRead = () => DataStore.set(WELCOME_NOTICE_VERSION_KEY, CURRENT_WELCOME_NOTICE_VERSION);
+
 // First time run card
-export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, text, callbackConfirm }: { modalProps: ModalProps; close: () => void; isFriend: boolean; force: boolean; welcomeBack: boolean; text: string; callbackConfirm: (confirm: () => void) => void; }) {
-    const [unlocked, setUnlocked] = useState(force);
-    const [closing, setClosing] = useState(false);
-    useEffect(() => {
-        setTimeout(() => setUnlocked(true), (isFriend ? 5000 : 15000) + ((Math.random() - 0.5) * 5));
-    });
-
-    const confirm = () => {
-        setClosing(true);
-        if (unlocked) setTimeout(() => setUnlocked(true), 1500 + ((Math.random() - 0.5) * 2));
-    };
-    callbackConfirm(confirm);
-
-    if (closing && unlocked) {
-        close();
-        DataStore.set(WELCOME_NOTICE_VERSION_KEY, CURRENT_WELCOME_NOTICE_VERSION);
-    }
-
-
+export function WelcomeModal({ modalProps, close, welcomeBack, text }: { modalProps: ModalProps; close: (wow: boolean) => void; welcomeBack: boolean; text: string; }) {
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM} >
         <ModalHeader >
             <div
@@ -65,8 +49,9 @@ export function WelcomeModal({ modalProps, close, isFriend, force, welcomeBack, 
             <Flex direction={Flex.Direction.HORIZONTAL_REVERSE}>
                 <Button
                     color={Button.Colors.GREEN}
-                    submitting={closing && !unlocked}
-                    onClick={() => confirm()}
+                    onClick={() => {
+                        close(true);
+                    }}
                 >
                     Continue
                 </Button>
@@ -92,19 +77,22 @@ export async function openWelcomeModal(force: boolean) {
         if (currentVersion >= CURRENT_WELCOME_NOTICE_VERSION) return;
     }
     const isFriend = RelationshipStore.isFriend(SQAAAKOI_USER_ID) || UserStore.getCurrentUser().id === SQAAAKOI_USER_ID;
-    let confirm = () => { };
-    const callbackConfirm = (fn: () => void) => confirm = fn;
-    const key = openModal(modalProps => (
+    let key = "";
+    const close = (wow: boolean) => {
+        closeModal(key);
+        markAsRead();
+        if (!wow) return;
+        FluxDispatcher.dispatch({ type: "PURCHASED_ITEMS_FESTIVITY_SET_CAN_PLAY_WOW_MOMENT", value: true });
+        ComponentDispatch.dispatch("PREMIUM_SUBSCRIPTION_CREATED");
+    };
+    key = openModal(modalProps => (
         <WelcomeModal
             modalProps={modalProps}
-            close={() => closeModal(key)}
-            isFriend={isFriend}
-            force={force}
+            close={close}
             welcomeBack={force || currentVersion !== 0}
             text={WELCOME_MESSAGE(isFriend)}
-            callbackConfirm={callbackConfirm}
         />
     ), {
-        onCloseRequest: () => confirm()
+        onCloseRequest: () => close(false)
     });
 }

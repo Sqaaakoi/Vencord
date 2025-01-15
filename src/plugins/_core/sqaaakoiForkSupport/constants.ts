@@ -6,13 +6,12 @@
 
 import { Devs } from "@utils/constants";
 
-
 export const SQAAAKOI_USER_ID = Devs.Sqaaakoi.id + "";
 
-export const CURRENT_WELCOME_NOTICE_VERSION = 4;
+export const CURRENT_WELCOME_NOTICE_VERSION = 5;
 export const WELCOME_NOTICE_VERSION_KEY = "SqaaakoiForkSupport_StartupMessageVersion";
 
-export const LAST_UPDATED_AT = new Date("2024-07-28T14:28:07.117Z");
+export const LAST_UPDATED_AT = new Date("2025-01-15T07:33:16.451Z");
 
 // friends or not
 const F = (strings: TemplateStringsArray, ...args: any[]) => [true, String.raw(strings, ...args)] as [boolean, string];
@@ -46,17 +45,18 @@ export const WELCOME_HEADER = "## 👋 Welcome to Sqaaakoi's Vencord fork!";
 export const WELCOME_BACK_HEADER = "## 👋 What's new in Sqaaakoi's Vencord fork";
 
 export const WELCOME_MESSAGE = friendsOnlyFilter`
-It's been a few months since I updated this. Here's what I've been working on, and what's coming soon.
+Happy (late) new year!
 
-## Useful plugins
-**JunkCleanup** allows you to remove a lot of the annoyances in Discord. Includes 20+ toggles for you to choose what should be removed.
-**NewPluginsManager** automatically notifies you when new plugins and plugin settings are added. It is enabled by default.
-**BetterQuickReact** extends the context menu reactions list to include all the reactions you need.
+Despite ChannelTabs being too much of a nightmare to implement cleanly, the custom titlebar is coming back!
 
-You might also want to try **AutomodIndicator**, **ProfileCommand**, and **PreSendModeration**.
+**ModernTitlebar** implements a highly configurable titlebar with various useful buttons and indicators.
+It can replace the following plugins and do much more
+- CallTimer (adds a pill to the right side of the titlebar with basic information about your current call)
+- ServerListIndicators (adds these statistics to the left side of the titlebar)
+I intend to move the account panel in the bottom left corner of the app to be inside of this titlebar very soon.
 
-## Coming soon
-**VoiceChatTweaks** (name not final) which fixes issues with the voice channel UI and UX
+## Coming ~~soon~~ eventually
+**VoiceChatTweaks** (name not final) will add the ability to automatically start watching streams
 
 If any of my plugins have an issue, please file an issue on [GitHub](https://github.com/Sqaaakoi/Vencord/issues)
 ${F`${LF}-# Thank you, friends! If you have feedback on these plugins, please DM me :)`}
