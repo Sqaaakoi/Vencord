@@ -9,16 +9,18 @@ import "./TitleBarGroupRight.css";
 import { classes } from "@utils/misc";
 import { FluxDispatcher, Icons } from "@webpack/common";
 
+import { settings } from "../settings";
 import CallPill from "./CallPill";
 import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
 import WindowButtons from "./WindowButtons";
 
 export default function TitleBarGroupRight({ userId, windowKey }: { userId: string; windowKey: any; }) {
+    const { quickSwitcherButton, callPill } = settings.use(["quickSwitcherButton", "callPill"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-right"))}>
-        <CallPill userId={userId} />
+        {callPill && <CallPill userId={userId} />}
         {/* <AccountPanel /> */}
-        {userId && <TitleBarButton
+        {quickSwitcherButton && userId && <TitleBarButton
             action={() => FluxDispatcher.dispatch({
                 type: "QUICKSWITCHER_SHOW",
                 query: "",
