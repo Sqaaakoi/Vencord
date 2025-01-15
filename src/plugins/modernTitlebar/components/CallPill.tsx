@@ -27,11 +27,10 @@ function formatDuration(ms: number) {
     const m = Math.floor(((ms % 86400000) % 3600000) / 60000);
     const s = Math.floor((((ms % 86400000) % 3600000) % 60000) / 1000);
 
-    const list = [d, h, m, s];
-    if (d === 0) list.unshift();
-    if (d === 0 && h === 0) list.unshift();
+    const list = [h, m, s];
+    if (d === 0 && h === 0) list.shift();
 
-    return list.map(format).join(":");
+    return (d > 0 ? `${d}d ` : "") + list.map(format).join(":");
 }
 
 export default function CallPill(props: { userId: string; }) {
