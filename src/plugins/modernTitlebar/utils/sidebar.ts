@@ -34,7 +34,7 @@ export function useSidebar() {
 export function keybindHandler(e: KeyboardEvent) {
     const hasMod = navigator.platform.includes("Mac") ? e.metaKey : e.ctrlKey;
     const hasMeta = navigator.platform.includes("Mac") ? e.ctrlKey : e.metaKey;
-    if (hasMod && !hasMeta && !e.shiftKey && !e.altKey && e.key === "\\") {
+    if (hasMod && !hasMeta && !e.shiftKey && !e.altKey && ["\\", "ContextMenu"].includes(e.key)) {
         e.preventDefault();
         e.stopPropagation();
         toggleSidebar();
