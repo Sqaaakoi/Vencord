@@ -9,66 +9,70 @@ import { useState } from "@webpack/common";
 
 interface LazyCSS {
     classes: string[];
-    suffix?: string;
-    properties: string;
+    style(stylesModule: Record<string, string>): string;
 }
 
+const hoist = "body #app-mount";
+const height = "var(--vc-moderntitlebar-height)";
+
 const selectors: LazyCSS[] = [
-    {
-        classes: ["standardSidebarView"],
-        properties: "top: var(--vc-moderntitlebar-height);"
-    },
-    // Does Discord even use this?
-    // {
-    //     classes: ["splashBackground", "loggingIn"],
-    //     suffix: "::before",
-    //     properties: "height: var(-vc-modernTitlebar-height);"
-    // },
-    {
-        classes: ["scroller", "unreadMentionsBar"],
-        properties: "padding-top: 4px;"
-    },
+    // Sidebar top left corner
     {
         classes: ["sidebar", "sidebarListRounded"],
-        properties: "border-radius: 8px 0 0;\noverflow: hidden;"
+        style: m => `${hoist} .${m.sidebar} { border-radius: 8px 0 0; overflow: hidden; }`
     },
-    {
-        classes: ["layer", "bg", "baseLayer"],
-        properties: "top: calc(-1 * var(--vc-moderntitlebar-height));\npadding-top: var(--vc-moderntitlebar-height);"
-    },
+    // Layers
     {
         classes: ["bg", "layer", "baseLayer"],
-        properties: "top: calc(-1 * var(--vc-moderntitlebar-height));"
+        style: m => `${hoist} .${m.layer} { padding-top: ${height}; top: calc(-1 * ${height}); } ${hoist} .${m.bg} { top: calc(-1 * ${height}); }`
+    },
+    // Loading screen??
+    {
+        classes: ["container", "statusLink"],
+        style: m => `${hoist} .${m.container.split(" ")[0]} { padding-top: ${height}; top: calc(-1 * ${height}); }`
     },
 
+    {
+        classes: ["standardSidebarView"],
+        style: m => `${hoist} .${m.standardSidebarView} { top: ${height}; }`
+    },
+
+    {
+        classes: ["videoHeight", "normal", "noChat"],
+        style: m => `${hoist} .${m.videoHeight}.${m.normal} { top: calc(50vh - ${height}); } ${hoist} .${m.videoHeight}.${m.noChat} { top: calc(100vh - ${height}); }`
+    },
+    // Guilds list
+    {
+        classes: ["scroller", "unreadMentionsBar"],
+        style: m => `${hoist} .${m.scroller} { padding-top: 4px; }`
+    },
     // Fixes unrelated to Discord's own titlebar height
 
     // Context menu overlapping
     {
         classes: ["layerContainer", "layerHidden"],
-        properties: "top: var(--vc-moderntitlebar-height);"
+        style: m => `${hoist} .${m.layerContainer} { top: ${height}; }`
     },
-    // User profile popouts
-    {
-        classes: ["userPopoutInner"],
-        properties: "max-height: calc(100vh - 28px - var(--custom-user-popout-outside-components-height) - var(--vc-moderntitlebar-height));"
-    }
 ];
 
 function InjectCSSWhenReady(props: { selector: LazyCSS; }) {
     const lc = props.selector;
-    const [className, setClassName] = useState("");
+    const [stylesModule, setStylesModule] = useState(undefined);
     waitFor([...lc.classes], module => {
-        if (!className) setClassName(`body #app-mount .${(module[lc.classes[0]] as unknown as string).replaceAll(" ", ".")}${lc.suffix ? " " + lc.suffix : ""}`);
+        if (stylesModule === undefined) setStylesModule(module);
     });
-    return <style>
-        {className.length ? (`${className} {\n${lc.properties}\n}`) : "/* Webpack find not finished yet */"}
-    </style>;
+    let result = "/* Webpack find not finished yet */";
+    try {
+        if (stylesModule !== undefined) result = lc.style(stylesModule);
+    } catch (e) {
+        console.error(e);
+        result = "/* Style errored.*/";
+    }
+    return <style>{result}</style>;
 }
 
 export default function OverrideCSS(props: { className: string; }) {
     return <div className={props.className} style={{ display: "none" }}>
-        { /* eslint-disable-next-line react/jsx-key */}
-        {selectors.map(i => <InjectCSSWhenReady selector={i} />)}
+        {selectors.map((lc, i) => <InjectCSSWhenReady selector={lc} key={i} />)}
     </div>;
 }
