@@ -1,9 +1,9 @@
 .vc-modernTitlebar-button {
     background-color: transparent;
     color: var(--text-normal);
-    padding: 0;
-    height: 32px;
-    width: 32px;
+    padding: 0 var(--vc-moderntitlebar-spacing-half);
+    height: var(--vc-moderntitlebar-height);
+    width: calc(32px + var(--vc-moderntitlebar-spacing));
     -webkit-app-region: no-drag;
 }
 

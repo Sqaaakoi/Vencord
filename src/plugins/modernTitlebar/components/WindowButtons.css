@@ -1,17 +1,10 @@
 .vc-modernTitlebar-window-buttons {
     display: flex;
-    margin: calc(-1 * var(--vc-moderntitlebar-spacing)) calc(-1 * var(--vc-moderntitlebar-spacing)) 0;
-    height: var(--vc-moderntitlebar-height);
-    gap: var(--vc-moderntitlebar-spacing)
-}
-
-.vc-modernTitlebar-button.vc-modernTitlebar-window-button {
-    height: var(--vc-moderntitlebar-height);
-    margin: 0;
 }
 
 .vc-modernTitlebar-button.vc-modernTitlebar-window-button-close {
-    margin-right: var(--vc-moderntitlebar-spacing);
+    width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
+    padding-right: var(--vc-moderntitlebar-spacing);
 }
 
 .vc-modernTitlebar-window-button-close:is(:hover, :active) {
