@@ -71,13 +71,14 @@ export function CallPillContextMenu({ channel }: { channel: Channel; }) {
         navId="vc-modernTitlebar-call-pill-menu"
         onClose={ContextMenuApi.closeContextMenu}
     >
-        <Menu.MenuItem
-            id="current-channel"
-            label={formatChannelName(channel, UserStore, RelationshipStore)}
-            subtext={guild?.name}
-            action={() => NavigationRouter.transitionToGuild(channel.getGuildId(), channel.id)}
-        />
-        <Menu.MenuSeparator />
+        <Menu.MenuGroup label="Current Call">
+            <Menu.MenuItem
+                id="current-channel"
+                label={formatChannelName(channel, UserStore, RelationshipStore)}
+                subtext={guild?.name}
+                action={() => NavigationRouter.transitionToGuild(channel.getGuildId(), channel.id)}
+            />
+        </Menu.MenuGroup>
         <Menu.MenuItem
             id="disconnect"
             color="danger"
