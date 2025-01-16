@@ -73,5 +73,5 @@ export default function WindowButtons({ windowKey }: { windowKey: any; }) {
                 onContextMenu: sp
             }}
         />
-    </ >;
+    </>;
 }
