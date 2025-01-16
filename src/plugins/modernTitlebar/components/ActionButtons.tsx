@@ -6,10 +6,12 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 
+import DeafenButton from "./buttons/DeafenButton";
 import MuteButton from "./buttons/MuteButton";
 
 export default function ActionButtons() {
     return <ErrorBoundary noop>
         <MuteButton />
+        <DeafenButton />
     </ErrorBoundary>;
 }
