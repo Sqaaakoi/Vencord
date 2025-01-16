@@ -9,7 +9,7 @@ import "./CallPill.css";
 import { classes, getIntlMessage } from "@utils/index";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
 import { ChannelStore, ContextMenuApi, GuildStore, Icons, Menu, NavigationRouter, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
-import { Channel } from "discord-types/general";
+import { Channel, User } from "discord-types/general";
 
 import { useCallTimer } from "../utils/callTimer";
 import Pill from "./Pill";
@@ -33,10 +33,10 @@ function formatDuration(ms: number) {
     return (d > 0 ? `${d}d ` : "") + list.map(format).join(":");
 }
 
-export default function CallPill(props: { userId: string; }) {
+export default function CallPill(props: { user: User | undefined; }) {
     const time = useCallTimer();
 
-    if (time === null || !props.userId) return null;
+    if (time === null || !props.user) return null;
     return <Pill
         action={() => {
             const channelId = SelectedChannelStore.getVoiceChannelId();
