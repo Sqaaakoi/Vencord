@@ -5,8 +5,8 @@
  */
 
 import { getIntlMessage } from "@utils/discord";
-import { findByCodeLazy, findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, Icons, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
+import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, Icons, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../TitleBar";
 import TitleBarButton from "../TitleBarButton";
@@ -24,6 +24,9 @@ const toggleMute = findByCodeLazy("toggleSelfMute({location:", "#{intl::SUPPRESS
 const classes = findByPropsLazy("strikethrough", "buildOverrideButton");
 
 const getTooltipLabel = findByCodeLazy("#{intl::CONSOLE_CONNECTING_DISABLED}", "#{intl::MUTE_ALT}");
+
+const requireContextMenu = extractAndLoadChunksLazy(["handleInputAudioContextMenu"], new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{0,100}?renderInputDevices"));
+const AudioDeviceContextMenu = findByCodeLazy('navId:"audio-device-context",');
 
 export default function MuteButton() {
     // Most of this was blatantly stolen from Discord's own button.
@@ -59,7 +62,18 @@ export default function MuteButton() {
                 onMouseLeave: () => { tooltipProps.onMouseLeave(); events.onMouseLeave(); },
                 role: "switch",
                 "aria-checked": muted,
-                disabled: awaitingRemote
+                disabled: awaitingRemote,
+                onContextMenu(e) {
+                    ContextMenuApi.openContextMenuLazy(e, async () => {
+                        await requireContextMenu();
+                        return () => <AudioDeviceContextMenu
+                            onClose={ContextMenuApi.closeContextMenu}
+                            renderInputDevices
+                            renderInputModes
+                            renderInputVolume
+                        />;
+                    });
+                }
             }}
         >
             {serverMute || suppress ?
