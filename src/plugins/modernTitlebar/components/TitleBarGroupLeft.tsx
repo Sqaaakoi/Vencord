@@ -9,6 +9,7 @@ import "./TitleBarGroupLeft.css";
 import { classes } from "@utils/misc";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { NavigationRouter } from "@webpack/common";
+import { User } from "discord-types/general";
 
 import { settings } from "../settings";
 import SidebarButton from "./SidebarButton";
@@ -19,7 +20,7 @@ import TitleBarButton from "./TitleBarButton";
 const { ClydeIcon } = findByPropsLazy("ClydeIcon");
 const DefaultRouteStore = findStoreLazy("DefaultRouteStore");
 
-export default function TitleBarGroupLeft({ userId }: { userId: string; }) {
+export default function TitleBarGroupLeft({ user }: { user: User | undefined; }) {
     const { homeButton, sidebarButton } = settings.use(["homeButton", "sidebarButton"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-left"))}>
         {homeButton && <TitleBarButton
@@ -28,7 +29,7 @@ export default function TitleBarGroupLeft({ userId }: { userId: string; }) {
             icon={ClydeIcon}
         />}
         {sidebarButton && <SidebarButton />}
-        {/* {userId && <TotalMentionsBadge />} */}
-        {userId && <StatCounters />}
+        {/* {user && <TotalMentionsBadge />} */}
+        {user && <StatCounters />}
     </div >;
 }
