@@ -20,13 +20,13 @@ export default function TitleBarButton(props: {
     buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
 }) {
     return <button
+        {...props.buttonProps}
         onClick={props.action}
         className={classes(cl("button"), props.className)}
-        {...props.buttonProps}
     >
         <div className={cl("button-inner")}>
             {props.icon ?
-                <props.icon height={20} width={20} color="currentColor" /> :
+                <props.icon color="currentColor" /> :
                 props.children
             }
         </div>

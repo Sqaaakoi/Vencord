@@ -17,11 +17,11 @@ import TitleBarButton from "./TitleBarButton";
 import WindowButtons from "./WindowButtons";
 
 export default function TitleBarGroupRight({ userId, windowKey }: { userId: string; windowKey: any; }) {
-    const { quickSwitcherButton, callPill } = settings.use(["quickSwitcherButton", "callPill"]);
+    const { quickSwitcherButton, callPill, actionButtons } = settings.use(["quickSwitcherButton", "callPill", "actionButtons"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-right"))}>
         {callPill && <CallPill userId={userId} />}
         {/* <AccountPanel /> */}
-        {userId && <ActionButtons />}
+        {actionButtons && userId && <ActionButtons />}
         {quickSwitcherButton && userId && <TitleBarButton
             action={() => FluxDispatcher.dispatch({
                 type: "QUICKSWITCHER_SHOW",
