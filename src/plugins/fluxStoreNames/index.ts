@@ -15,8 +15,8 @@ export default definePlugin({
         {
             find: 'this,"_changeCallbacks",',
             replacement: {
-                match: /(\i\(this,)"_changeCallbacks",/,
-                replace: "$1Symbol.toStringTag,this?.getName()),$&"
+                match: /\i\(this,"_changeCallbacks",/,
+                replace: "Object.defineProperty(this,Symbol.toStringTag,{value:this?.getName()}),$&"
             }
         }
     ]
