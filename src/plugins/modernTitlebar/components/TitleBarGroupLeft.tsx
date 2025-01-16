@@ -31,5 +31,5 @@ export default function TitleBarGroupLeft({ user }: { user: User | undefined; })
         {sidebarButton && <SidebarButton />}
         {/* {user && <TotalMentionsBadge />} */}
         {user && <StatCounters />}
-    </div >;
+    </div>;
 }
