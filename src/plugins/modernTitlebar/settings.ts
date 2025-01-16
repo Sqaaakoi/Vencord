@@ -33,6 +33,11 @@ export const settings = definePluginSettings({
         description: "Show a current call timer pill",
         default: true
     },
+    actionButtons: {
+        type: OptionType.BOOLEAN,
+        description: "Show the mute/deafen buttons",
+        default: true
+    },
     quickSwitcherButton: {
         type: OptionType.BOOLEAN,
         description: "Show a quick switcher button",
