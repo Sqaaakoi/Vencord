@@ -5,11 +5,12 @@
  */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { User } from "discord-types/general";
 
 import DeafenButton from "./buttons/DeafenButton";
 import MuteButton from "./buttons/MuteButton";
 
-export default function ActionButtons() {
+export default function ActionButtons(props: { user: User | undefined; }) {
     return <ErrorBoundary noop>
         <MuteButton />
         <DeafenButton />
