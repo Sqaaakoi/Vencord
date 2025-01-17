@@ -6,9 +6,9 @@
 
 import { Icons } from "@webpack/common";
 
-import { toggleSidebar } from "../utils/sidebar";
-import { cl } from "./TitleBar";
-import TitleBarButton from "./TitleBarButton";
+import { toggleSidebar } from "../../utils/sidebar";
+import { cl } from "../TitleBar";
+import TitleBarButton from "../TitleBarButton";
 
 export default function SidebarButton() {
     return <TitleBarButton
