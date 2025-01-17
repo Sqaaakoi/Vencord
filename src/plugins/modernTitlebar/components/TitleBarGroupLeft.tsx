@@ -12,16 +12,17 @@ import { NavigationRouter } from "@webpack/common";
 import { User } from "discord-types/general";
 
 import { settings } from "../settings";
-import SidebarButton from "./SidebarButton";
+import SidebarButton from "./buttons/SidebarButton";
 import StatCounters from "./StatCounters";
 import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
+import TotalMentionsBadge from "./TotalMentionsBadge";
 
 const { ClydeIcon } = findByPropsLazy("ClydeIcon");
 const DefaultRouteStore = findStoreLazy("DefaultRouteStore");
 
 export default function TitleBarGroupLeft({ user }: { user: User | undefined; }) {
-    const { homeButton, sidebarButton } = settings.use(["homeButton", "sidebarButton"]);
+    const { homeButton, sidebarButton, mentionsBadge } = settings.use(["homeButton", "sidebarButton", "mentionsBadge"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-left"))}>
         {homeButton && <TitleBarButton
             action={() => NavigationRouter.transitionTo(DefaultRouteStore.defaultRoute)}
@@ -29,7 +30,7 @@ export default function TitleBarGroupLeft({ user }: { user: User | undefined; })
             icon={ClydeIcon}
         />}
         {sidebarButton && <SidebarButton />}
-        {/* {user && <TotalMentionsBadge />} */}
         {user && <StatCounters />}
+        {mentionsBadge && user && <TotalMentionsBadge />}
     </div>;
 }

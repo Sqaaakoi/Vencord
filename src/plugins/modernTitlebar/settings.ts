@@ -28,6 +28,11 @@ export const settings = definePluginSettings({
         description: "Show the number of servers you are in",
         default: false
     },
+    mentionsBadge: {
+        type: OptionType.BOOLEAN,
+        description: "Show a mention counter",
+        default: true
+    },
     callPill: {
         type: OptionType.BOOLEAN,
         description: "Show a current call timer pill",

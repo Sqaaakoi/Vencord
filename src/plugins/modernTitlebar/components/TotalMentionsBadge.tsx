@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./TotalMentionsBadge.css";
+
 import { classes } from "@utils/misc";
 import { findExportedComponentLazy, findStoreLazy } from "@webpack";
 import { React, useStateFromStores } from "@webpack/common";
