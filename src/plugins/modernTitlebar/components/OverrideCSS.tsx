@@ -50,8 +50,13 @@ const selectors: LazyCSS[] = [
 
     // Context menu overlapping
     {
-        classes: ["layerContainer", "layerHidden"],
-        style: m => `${hoist} .${m.layerContainer} { top: ${height}; }`
+        classes: ["layerContainer", "clickTrapContainer"],
+        style: m => `${hoist} .${m.layerContainer}:has(>.${m.clickTrapContainer}) { top: ${height}; }`
+    },
+    // Modals
+    {
+        classes: ["layer", "hidden"],
+        style: m => `${hoist} .${m.layer} { top: ${height}; }`
     },
 ];
 
