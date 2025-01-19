@@ -239,15 +239,5 @@ export default definePlugin({
         for (const key in makeShortcuts()) {
             delete window[key];
         }
-    },
-
-    patches: [
-        {
-            find: 'this,"_changeCallbacks",',
-            replacement: {
-                match: /\i\(this,"_changeCallbacks",/,
-                replace: "Object.defineProperty(this,Symbol.toStringTag,{value:this.getName()}),$&"
-            }
-        }
-    ]
+    }
 });
