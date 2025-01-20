@@ -48,11 +48,6 @@ const selectors: LazyCSS[] = [
     },
     // Fixes unrelated to Discord's own titlebar height
 
-    // Context menu overlapping
-    {
-        classes: ["layerContainer", "clickTrapContainer"],
-        style: m => `${hoist} .${m.layerContainer}:has(>.${m.clickTrapContainer}) { top: ${height}; }`
-    },
     // Modals
     {
         classes: ["layer", "hidden"],
