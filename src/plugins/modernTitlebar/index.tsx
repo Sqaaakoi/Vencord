@@ -11,6 +11,7 @@ import definePlugin from "@utils/types";
 import TitleBar from "./components/TitleBar";
 import { settings } from "./settings";
 import { startCallTimerSubscription, stopCallTimerSubscription } from "./utils/callTimer";
+import { adjustContextMenu } from "./utils/contextMenu";
 import { keybindHandler } from "./utils/sidebar";
 
 export default definePlugin({
@@ -56,6 +57,14 @@ export default definePlugin({
                 match: /\[\i\.hidden\]:\i/,
                 replace: "$&||arguments[0]?.hidden"
             }
+        },
+        // Stop context menus from going off screen
+        {
+            find: 'if("pageX"in',
+            replacement: {
+                match: /=(\i\.pageY)/,
+                replace: "=$self.adjustContextMenu($1)"
+            }
         }
     ],
     renderTitleBar(props) {
@@ -63,6 +72,7 @@ export default definePlugin({
             <TitleBar {...props} />
         </ErrorBoundary>;
     },
+    adjustContextMenu,
 
     start() {
         startCallTimerSubscription();
