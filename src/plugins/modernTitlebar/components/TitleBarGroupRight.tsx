@@ -7,14 +7,13 @@
 import "./TitleBarGroupRight.css";
 
 import { classes } from "@utils/misc";
-import { FluxDispatcher, Icons } from "@webpack/common";
 import { User } from "discord-types/general";
 
 import { settings } from "../settings";
 import ActionButtons from "./ActionButtons";
+import QuickSwitcherButton from "./buttons/QuickSwitcherButton";
 import CallPill from "./CallPill";
 import { cl } from "./TitleBar";
-import TitleBarButton from "./TitleBarButton";
 import WindowButtons from "./WindowButtons";
 
 export default function TitleBarGroupRight({ user, windowKey }: { user: User | undefined; windowKey: any; }) {
@@ -23,15 +22,7 @@ export default function TitleBarGroupRight({ user, windowKey }: { user: User | u
         {callPill && <CallPill user={user} />}
         {/* <AccountPanel /> */}
         {actionButtons && user && <ActionButtons user={user} />}
-        {quickSwitcherButton && user && <TitleBarButton
-            action={() => FluxDispatcher.dispatch({
-                type: "QUICKSWITCHER_SHOW",
-                query: "",
-                queryMode: null
-            })}
-            className={cl("quick-switcher")}
-            icon={Icons.CompassIcon}
-        />}
+        {quickSwitcherButton && user && <QuickSwitcherButton />}
         <WindowButtons windowKey={windowKey} />
     </div>;
 }
