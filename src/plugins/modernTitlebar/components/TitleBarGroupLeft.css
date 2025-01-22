@@ -1,5 +1,5 @@
 .vc-modernTitlebar-titlebar-group-left > :first-child {
-    width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
+    min-width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
     padding-left: var(--vc-moderntitlebar-spacing);
 }
 

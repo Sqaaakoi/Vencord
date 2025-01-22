@@ -12,6 +12,7 @@ import { User } from "discord-types/general";
 import { settings } from "../settings";
 import ActionButtons from "./ActionButtons";
 import QuickSwitcherButton from "./buttons/QuickSwitcherButton";
+import SettingsButton from "./buttons/SettingsButton";
 import CallPill from "./CallPill";
 import { cl } from "./TitleBar";
 import WindowButtons from "./WindowButtons";
@@ -22,6 +23,7 @@ export default function TitleBarGroupRight({ user, windowKey }: { user: User | u
         {callPill && <CallPill user={user} />}
         {/* <AccountPanel /> */}
         {actionButtons && user && <ActionButtons user={user} />}
+        {actionButtons && user && <SettingsButton user={user} />}
         {quickSwitcherButton && user && <QuickSwitcherButton />}
         <WindowButtons windowKey={windowKey} />
     </div>;
