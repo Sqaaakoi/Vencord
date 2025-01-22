@@ -1,0 +1,10 @@
+.vc-modernTitlebar-profile .vc-modernTitlebar-button-inner {
+    display: flex;
+    flex-direction: row;
+    gap: var(--vc-moderntitlebar-spacing)
+}
+
+.vc-modernTitlebar-profile-name {
+    margin: auto 0;
+    vertical-align: middle;
+}
