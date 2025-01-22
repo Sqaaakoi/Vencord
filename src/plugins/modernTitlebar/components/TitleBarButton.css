@@ -3,13 +3,13 @@
     color: var(--interactive-normal);
     padding: 0 var(--vc-moderntitlebar-spacing-half);
     height: var(--vc-moderntitlebar-height);
-    width: calc(32px + var(--vc-moderntitlebar-spacing));
+    min-width: calc(32px + var(--vc-moderntitlebar-spacing));
     -webkit-app-region: no-drag;
 }
 
 .vc-modernTitlebar-button-inner {
     padding: 4px;
-    border-radius: 50%;
+    border-radius: 16px;
     height: 24px;
 }
 
