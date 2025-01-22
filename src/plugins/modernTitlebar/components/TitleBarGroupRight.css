@@ -1,4 +1,4 @@
 .vc-modernTitlebar-titlebar-group-right > :last-child {
-    width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
+    min-width: calc(32px + var(--vc-moderntitlebar-spacing) + var(--vc-moderntitlebar-spacing-half));
     padding-right: var(--vc-moderntitlebar-spacing);
 }

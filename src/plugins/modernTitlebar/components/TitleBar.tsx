@@ -25,7 +25,7 @@ export default function TitleBar(props: {
     macOSFrame?: boolean;
     themeOverride?: any;
 }) {
-    const user = useStateFromStores([UserStore], () => UserStore.getCurrentUser()?.id, []);
+    const user = useStateFromStores([UserStore], () => UserStore.getCurrentUser(), []);
 
     if (props?.macOSFrame) return null;
 
