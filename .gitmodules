@@ -62,9 +62,6 @@
 [submodule "src/thirdpartyplugins/inRole"]
 	path = src/thirdpartyplugins/inRole
 	url = https://git.nin0.dev/userplugins/in-role
-[submodule "src/thirdpartyplugins/globalBadges"]
-	path = src/thirdpartyplugins/globalBadges
-	url = https://github.com/Domis-Vencord-Plugins/GlobalBadges
 [submodule "src/thirdpartyplugins/keyboardSounds"]
 	path = src/thirdpartyplugins/keyboardSounds
 	url = https://github.com/Domis-Vencord-Plugins/KeyboardSounds
@@ -110,12 +107,6 @@
 [submodule "src/thirdpartyplugins/sortReactions"]
 	path = src/thirdpartyplugins/sortReactions
 	url = https://github.com/HAHALOSAH/SortReactions
-[submodule "src/thirdpartyplugins/holyNotes"]
-	path = src/thirdpartyplugins/holyNotes
-	url = https://github.com/WolfPlugs/HolyNotes-VC
-[submodule "src/thirdpartyplugins/writeUpperCase"]
-	path = src/thirdpartyplugins/writeUpperCase
-	url = https://github.com/KrstlSkll69/WriteUpperCase
 [submodule "src/thirdpartyplugins/moreReact"]
 	path = src/thirdpartyplugins/moreReact
 	url = https://github.com/coldcord/moreReact
@@ -128,9 +119,6 @@
 [submodule "src/thirdpartyplugins/iconViewer"]
 	path = src/thirdpartyplugins/iconViewer
 	url = https://github.com/coldcord/iconViewer
-[submodule "src/thirdpartyplugins/userFlags"]
-	path = src/thirdpartyplugins/userFlags
-	url = https://git.nin0.dev/userplugins/userflags
 [submodule "src/thirdpartyplugins/venfetch"]
 	path = src/thirdpartyplugins/venfetch
 	url = https://git.nin0.dev/userplugins/venfetch
