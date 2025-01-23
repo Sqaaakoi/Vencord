@@ -62,6 +62,9 @@
 [submodule "src/thirdpartyplugins/inRole"]
 	path = src/thirdpartyplugins/inRole
 	url = https://git.nin0.dev/userplugins/in-role
+[submodule "src/thirdpartyplugins/atSomeone"]
+	path = src/thirdpartyplugins/atSomeone
+	url = https://github.com/Masterjoona/vc-atsomeone
 [submodule "src/thirdpartyplugins/globalBadges"]
 	path = src/thirdpartyplugins/globalBadges
 	url = https://github.com/Domis-Vencord-Plugins/GlobalBadges
@@ -77,6 +80,9 @@
 [submodule "src/thirdpartyplugins/messageColors"]
 	path = src/thirdpartyplugins/messageColors
 	url = https://github.com/henmalib/vc-messageColors
+[submodule "src/thirdpartyplugins/encryptcord"]
+	path = src/thirdpartyplugins/encryptcord
+	url = https://github.com/Inbestigator/Encryptcord
 [submodule "src/thirdpartyplugins/emojiOnMouseUp"]
 	path = src/thirdpartyplugins/emojiOnMouseUp
 	url = https://github.com/sadan4/emojiOnMouseUp
@@ -119,6 +125,9 @@
 [submodule "src/thirdpartyplugins/moreReact"]
 	path = src/thirdpartyplugins/moreReact
 	url = https://github.com/coldcord/moreReact
+[submodule "src/thirdpartyplugins/antiRickroll"]
+	path = src/thirdpartyplugins/antiRickroll
+	url = https://github.com/rynmy/vencord-antirickroll
 [submodule "src/thirdpartyplugins/whosWatching"]
 	path = src/thirdpartyplugins/whosWatching
 	url = https://github.com/fres621/vencord-whos-watching
