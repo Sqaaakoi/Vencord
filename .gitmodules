@@ -13,6 +13,9 @@
 [submodule "src/thirdpartyplugins/timelessClips"]
 	path = src/thirdpartyplugins/timelessClips
 	url = https://github.com/Masterjoona/vc-timelessclips
+[submodule "src/thirdpartyplugins/goodPerson"]
+	path = src/thirdpartyplugins/goodPerson
+	url = https://git.nin0.dev/userplugins/vc-goodperson/
 [submodule "src/thirdpartyplugins/betterActivities"]
 	path = src/thirdpartyplugins/betterActivities
 	url = https://github.com/D3SOX/vc-betterActivities
@@ -119,6 +122,9 @@
 [submodule "src/thirdpartyplugins/iconViewer"]
 	path = src/thirdpartyplugins/iconViewer
 	url = https://github.com/coldcord/iconViewer
+[submodule "src/thirdpartyplugins/userFlags"]
+	path = src/thirdpartyplugins/userFlags
+	url = https://git.nin0.dev/userplugins/userflags
 [submodule "src/thirdpartyplugins/venfetch"]
 	path = src/thirdpartyplugins/venfetch
 	url = https://git.nin0.dev/userplugins/venfetch
