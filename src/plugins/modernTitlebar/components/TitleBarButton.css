@@ -1,10 +1,14 @@
 .vc-modernTitlebar-button {
     background-color: transparent;
-    color: var(--interactive-normal);
+    color: var(--channel-icon);
     padding: 0 var(--vc-moderntitlebar-spacing-half);
     height: var(--vc-moderntitlebar-height);
     min-width: calc(32px + var(--vc-moderntitlebar-spacing));
     -webkit-app-region: no-drag;
+}
+
+.app-focused .vc-modernTitlebar-button {
+    color: var(--interactive-normal);
 }
 
 .vc-modernTitlebar-button-inner {

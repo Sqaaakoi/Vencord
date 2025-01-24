@@ -11,7 +11,11 @@
     width: 100%;
     font-size: 12px;
     font-weight: 600;
-    color: var(--header-secondary);
+    color: var(--channel-icon);
     text-transform: uppercase;
     text-wrap: nowrap;
+}
+
+.app-focused .vc-modernTitlebar-stat-counter {
+    color: var(--header-secondary);
 }
