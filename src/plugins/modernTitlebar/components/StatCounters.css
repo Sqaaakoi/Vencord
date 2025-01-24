@@ -16,6 +16,6 @@
     text-wrap: nowrap;
 }
 
-.vc-modernTitlebar-focused .vc-modernTitlebar-stat-counter {
+.app-focused .vc-modernTitlebar-stat-counter {
     color: var(--header-secondary);
 }

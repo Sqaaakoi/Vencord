@@ -29,7 +29,7 @@ export default function TitleBar(props: {
 
     if (props?.macOSFrame) return null;
 
-    return <div className={classes(cl("container"), props.focused && cl("focused"))}>
+    return <div className={cl("container")}>
         <OverrideCSS className={cl("styles")} />
         <div className={cl("titlebar")}>
             <TitleBarGroupLeft user={user} />
