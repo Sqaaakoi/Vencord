@@ -29,6 +29,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy } from "@webpack";
 import { Button, Flex, Forms, React, Text, UserProfileStore, UserStore, useState } from "@webpack/common";
 import { User } from "discord-types/general";
+import { ReactElement } from "react";
 import virtualMerge from "virtual-merge";
 
 interface UserProfile extends User {
@@ -87,7 +88,7 @@ const settings = definePluginSettings({
 
 interface ColorPickerProps {
     color: number | null;
-    label: React.ReactElement;
+    label: ReactElement<any>;
     showEyeDropper?: boolean;
     suggestedColors?: string[];
     onChange(value: number | null): void;
@@ -128,7 +129,7 @@ export default definePlugin({
         {
             find: "#{intl::USER_SETTINGS_RESET_PROFILE_THEME}",
             replacement: {
-                match: /#{intl::USER_SETTINGS_RESET_PROFILE_THEME}"\]\)}\)(?<=color:(\i),.{0,500}?color:(\i),.{0,500}?)/,
+                match: /#{intl::USER_SETTINGS_RESET_PROFILE_THEME}\)}\)(?<=color:(\i),.{0,500}?color:(\i),.{0,500}?)/,
                 replace: "$&,$self.addCopy3y3Button({primary:$1,accent:$2})"
             }
         }
