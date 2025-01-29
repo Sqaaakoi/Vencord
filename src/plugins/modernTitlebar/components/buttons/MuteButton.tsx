@@ -5,8 +5,8 @@
  */
 
 import { getIntlMessage } from "@utils/discord";
-import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, Icons, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
+import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../TitleBar";
 import TitleBarButton from "../TitleBarButton";
@@ -27,6 +27,8 @@ const getTooltipLabel = findByCodeLazy("#{intl::CONSOLE_CONNECTING_DISABLED}", "
 
 const requireContextMenu = extractAndLoadChunksLazy(["handleInputAudioContextMenu"], new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{0,100}?renderInputDevices"));
 const AudioDeviceContextMenu = findByCodeLazy('navId:"audio-device-context",');
+
+const MicrophoneDenyIcon = findComponentByCodeLazy("M17.55 12.29c.1-.23.33-.37.58-.34.29.03.58.05.87.05h.04c.35 0 .63.32.51.65");
 
 export default function MuteButton() {
     // Most of this was blatantly stolen from Discord's own button.
@@ -50,7 +52,7 @@ export default function MuteButton() {
     return <Tooltip
         text={speakingWhileMuted ? getIntlMessage("ACCOUNT_SPEAKING_WHILE_MUTED") : getTooltipLabel(selfMute, serverMute, suppress, awaitingRemote, false)}
         position="bottom"
-        color={speakingWhileMuted ? Tooltip.Colors.GREEN : undefined}
+        color={speakingWhileMuted ? "green" : undefined}
         forceOpen={speakingWhileMuted}
     >
         {tooltipProps => <TitleBarButton
@@ -77,7 +79,7 @@ export default function MuteButton() {
             }}
         >
             {serverMute || suppress ?
-                <Icons.MicrophoneDenyIcon
+                <MicrophoneDenyIcon
                     size="custom"
                     colorClass={classes.strikethrough}
                     color="currentColor"
