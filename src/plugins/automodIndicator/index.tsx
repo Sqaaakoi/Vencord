@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { SafetyIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { Icons, Text, Tooltip } from "@webpack/common";
+import { Text, Tooltip } from "@webpack/common";
 import { Guild } from "discord-types/general";
 import { Constants } from "discord-types/other";
 
@@ -70,8 +71,9 @@ export default definePlugin({
                 tooltipContentClassName={tooltipClasses.tooltipRemovePadding}
             >
                 {tooltipProps => <div className={iconClasses.flowerStarContainer} {...tooltipProps}>
-                    <Icons.ShieldIcon
-                        size="xs"
+                    <SafetyIcon
+                        width={16}
+                        height={16}
                         color="var(--text-normal)"
                     />
                 </div>}
