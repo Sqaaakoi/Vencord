@@ -53,24 +53,6 @@ export function getIntlMessageFromHash(hashedKey: string, values?: Record<Proper
 }
 
 /**
- * Get an internationalized message from a non hashed key
- * @param key The plain message key
- * @param values The values to interpolate, if it's a rich message
- */
-export function getIntlMessage(key: string, values?: Record<PropertyKey, any>): any {
-    return getIntlMessageFromHash(runtimeHashMessageKey(key), values);
-}
-
-/**
- * Get an internationalized message from a hashed key
- * @param key The hashed message key
- * @param values The values to interpolate, if it's a rich message
- */
-export function getIntlMessageFromHash(key: string, values?: Record<PropertyKey, any>): any {
-    return values == null ? i18n.intl.string(i18n.t[key]) : i18n.intl.format(i18n.t[key], values);
-}
-
-/**
  * Open the invite modal
  * @param code The invite code
  * @returns Whether the invite was accepted
