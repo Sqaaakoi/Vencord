@@ -73,8 +73,6 @@ function handleActivityToggle(e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     const ignoredActivityIndex = settings.store.ignoredActivities.findIndex(act => act.id === activity.id);
     if (ignoredActivityIndex === -1) settings.store.ignoredActivities.push(activity);
     else settings.store.ignoredActivities.splice(ignoredActivityIndex, 1);
-
-    recalculateActivities();
 }
 
 function recalculateActivities() {
@@ -245,7 +243,7 @@ export default definePlugin({
             find: '"LocalActivityStore"',
             replacement: [
                 {
-                    match: /HANG_STATUS.+?(?=!\i\(\)\(\i,\i\)&&)(?<=(\i)\.push.+?)/,
+                    match: /HANG_STATUS.+?(?=!?\i\(\)\(\i,\i\))(?<=(\i)\.push.+?)/,
                     replace: (m, activities) => `${m}${activities}=${activities}.filter($self.isActivityNotIgnored);`
                 }
             ]
