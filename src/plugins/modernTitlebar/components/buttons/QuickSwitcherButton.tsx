@@ -5,14 +5,16 @@
  */
 
 import { getIntlMessage } from "@utils/discord";
-import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, FluxDispatcher, Icons, Menu, NavigationRouter, React, RelationshipStore, UserStore } from "@webpack/common";
+import { findByCodeLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, FluxDispatcher, Menu, NavigationRouter, React, RelationshipStore, UserStore } from "@webpack/common";
 
 import { cl } from "../TitleBar";
 import TitleBarButton from "../TitleBarButton";
 
 // stolen from PinDMs
 export const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { getPrivateChannelIds: () => string[]; };
+
+const CompassIcon = findComponentByCodeLazy("M23 12a11 11 0 1 1-22 0 11 11 0 0 1 22 0ZM7.74 9.3A2 2 0 0 1 9.3 7.75l7.22-1.45");
 
 export default function QuickSwitcherButton() {
     return <TitleBarButton
@@ -22,7 +24,7 @@ export default function QuickSwitcherButton() {
             queryMode: null
         })}
         className={cl("quick-switcher")}
-        icon={Icons.CompassIcon}
+        icon={CompassIcon}
         buttonProps={{
             onContextMenu(e) {
                 ContextMenuApi.openContextMenu(e, () => <ChannelPickerContextMenu />);

@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { CogWheel } from "@components/Icons";
 import { getIntlMessage } from "@utils/discord";
 import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findModuleId, proxyLazyWebpack, wreq } from "@webpack";
-import { ContextMenuApi, Icons, SettingsRouter, Tooltip } from "@webpack/common";
+import { ContextMenuApi, SettingsRouter, Tooltip } from "@webpack/common";
 import { User } from "discord-types/general";
 
 import { cl } from "../TitleBar";
@@ -34,7 +35,8 @@ export default function SettingsButton(props: { user: User; }) {
                     });
                 }
             }}
-            icon={Icons.SettingsIcon}
-        />}
+        >
+            <CogWheel />
+        </TitleBarButton>}
     </Tooltip>;
 }

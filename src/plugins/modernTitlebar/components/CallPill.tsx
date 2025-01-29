@@ -7,8 +7,8 @@
 import "./CallPill.css";
 
 import { classes, getIntlMessage } from "@utils/index";
-import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, GuildStore, Icons, Menu, NavigationRouter, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, GuildStore, Menu, NavigationRouter, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
 import { Channel, User } from "discord-types/general";
 
 import { useCallTimer } from "../utils/callTimer";
@@ -17,6 +17,8 @@ import { cl } from "./TitleBar";
 
 const formatChannelName = findByCodeLazy("#{intl::GROUP_DM_ALONE}");
 const VoiceChannelActions = findByPropsLazy("selectVoiceChannel", "disconnect");
+
+const PhoneCallIcon = findComponentByCodeLazy("M13 7a1 1 0 0 1 1-1 4 4 0 0");
 
 // Adapted from CallTimer
 function formatDuration(ms: number) {
@@ -52,7 +54,7 @@ export default function CallPill(props: { user: User | undefined; }) {
             }
         }}
     >
-        <Icons.PhoneCallIcon size="xs" color="currentColor" />
+        <PhoneCallIcon size="xs" color="currentColor" />
         <span className={classes(cl("pill-content"), cl("call-pill-content"))}>{formatDuration(time!)}</span>
     </Pill>;
 }

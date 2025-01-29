@@ -7,7 +7,7 @@
 import "./TitleBarGroupLeft.css";
 
 import { classes } from "@utils/misc";
-import { findByPropsLazy, findStoreLazy } from "@webpack";
+import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { NavigationRouter } from "@webpack/common";
 import { User } from "discord-types/general";
 
@@ -18,7 +18,7 @@ import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
 import TotalMentionsBadge from "./TotalMentionsBadge";
 
-const { ClydeIcon } = findByPropsLazy("ClydeIcon");
+const ClydeIcon = findComponentByCodeLazy("M19.73 4.87a18.2 18.2 0 0 0-4.6-1.44");
 const DefaultRouteStore = findStoreLazy("DefaultRouteStore");
 
 export default function TitleBarGroupLeft({ user }: { user: User | undefined; }) {

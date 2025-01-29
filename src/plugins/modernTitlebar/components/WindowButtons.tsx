@@ -8,7 +8,6 @@ import "./WindowButtons.css";
 
 import { classes } from "@utils/misc";
 import { findByPropsLazy } from "@webpack";
-import { Icons } from "@webpack/common";
 
 import { cl } from "./TitleBar";
 import TitleBarButton from "./TitleBarButton";
@@ -49,29 +48,38 @@ export default function WindowButtons({ windowKey }: { windowKey: any; }) {
         <TitleBarButton
             action={() => windowActions.minimize(windowKey)}
             className={clwb("minimize")}
-            icon={Icons.ChevronSmallDownIcon}
             buttonProps={{
                 onAuxClick: sp,
                 onContextMenu: sp
             }}
-        />
+        >
+            <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M5.3 9.3a1 1 0 0 1 1.4 0l5.3 5.29 5.3-5.3a1 1 0 1 1 1.4 1.42l-6 6a1 1 0 0 1-1.4 0l-6-6a1 1 0 0 1 0-1.42Z" />
+            </svg>
+        </TitleBarButton>
         <TitleBarButton
             action={() => windowActions.maximize(windowKey)}
             className={clwb("maximize")}
-            icon={Icons.ChevronSmallUpIcon}
             buttonProps={{
                 onAuxClick: sp,
                 onContextMenu: sp
             }}
-        />
+        >
+            <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M5.3 14.7a1 1 0 0 0 1.4 0L12 9.42l5.3 5.3a1 1 0 0 0 1.4-1.42l-6-6a1 1 0 0 0-1.4 0l-6 6a1 1 0 0 0 0 1.42Z" />
+            </svg>
+        </TitleBarButton>
         <TitleBarButton
             action={() => windowActions.close(windowKey)}
             className={clwb("close")}
-            icon={Icons.XSmallIcon}
             buttonProps={{
                 onAuxClick: sp,
                 onContextMenu: sp
             }}
-        />
+        >
+            <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.3 18.7a1 1 0 0 0 1.4-1.4L13.42 12l5.3-5.3a1 1 0 0 0-1.42-1.4L12 10.58l-5.3-5.3a1 1 0 0 0-1.4 1.42L10.58 12l-5.3 5.3a1 1 0 1 0 1.42 1.4L12 13.42l5.3 5.3Z" />
+            </svg>
+        </TitleBarButton >
     </>;
 }

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, Icons, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
+import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../TitleBar";
 import TitleBarButton from "../TitleBarButton";
@@ -24,6 +24,8 @@ const getTooltipLabel = findByCodeLazy("#{intl::SERVER_DEAFENED_DIALOG_TITLE}", 
 
 const requireContextMenu = extractAndLoadChunksLazy(["handleInputAudioContextMenu"], new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{0,100}?renderOutputDevices"));
 const AudioDeviceContextMenu = findByCodeLazy('navId:"audio-device-context",');
+
+const HeadphonesDenyIcon = findComponentByCodeLazy("M12.38 1c.38.02.58.45.4.78-.15.3-.3.62-.4.95A.4.4 0 0 1 12 3");
 
 export default function DeafenButton() {
     // Most of this was blatantly stolen from Discord's own button.
@@ -69,7 +71,7 @@ export default function DeafenButton() {
             }}
         >
             {serverDeaf ?
-                <Icons.HeadphonesDenyIcon
+                <HeadphonesDenyIcon
                     size="custom"
                     colorClass={classes.strikethrough}
                     color="currentColor"
