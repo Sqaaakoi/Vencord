@@ -7,7 +7,7 @@
 import "./TotalMentionsBadge.css";
 
 import { classes } from "@utils/misc";
-import { findExportedComponentLazy, findStoreLazy } from "@webpack";
+import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { React, useStateFromStores } from "@webpack/common";
 
 import { cl } from "./TitleBar";
@@ -15,8 +15,8 @@ import { cl } from "./TitleBar";
 const GuildReadStateStore = findStoreLazy("GuildReadStateStore");
 const RelationshipStore = findStoreLazy("RelationshipStore");
 const NotificationSettingsStore = findStoreLazy("NotificationSettingsStore");
-const NumberBadge = findExportedComponentLazy("NumberBadge");
-const TextBadge = findExportedComponentLazy("TextBadge");
+const NumberBadge = findComponentByCodeLazy("{count:", ".numberBadge,");
+const TextBadge = findComponentByCodeLazy("{text:", ".textBadge,");
 
 export default function TotalMentionsBadge() {
     const mentionCount = useBadgeCount();
