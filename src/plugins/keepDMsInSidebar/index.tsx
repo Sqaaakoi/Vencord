@@ -50,7 +50,6 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     const { user, channel }: { user: User; channel: Channel; } = props;
     const group = findGroupChildrenByChildId(["close-dm", "leave-channel"], children);
     const cachedChannelId = user ? ChannelStore.getDMFromUserId(user?.id) : channel?.id;
-    debugger;
     const enabled = !!cachedChannelId && channelIDList.split(",").map(id => id.trim()).includes(cachedChannelId);
     if (group)
         group.push(
@@ -93,10 +92,12 @@ export default definePlugin({
     },
     flux: {
         TYPING_START({ channelId }: { channelId: string; }) {
-            typingCache[channelId] = Date.now();
+            if (ChannelStore.getChannel(channelId)?.isPrivate())
+                typingCache[channelId] = Date.now();
         },
         TYPING_START_LOCAL({ channelId }: { channelId: string; }) {
-            typingCache[channelId] = Date.now();
+            if (ChannelStore.getChannel(channelId)?.isPrivate())
+                typingCache[channelId] = Date.now();
         }
     },
     useSidebarPrivateChannelIds(unreadChannelIds: string[]) {
