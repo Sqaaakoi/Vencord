@@ -10,7 +10,7 @@ import { Devs } from "@utils/constants";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
-import { ChannelStore, Menu, MessageStore, PrivateChannelsStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, ContextMenuApi, Menu, MessageStore, PrivateChannelsStore, useStateFromStores } from "@webpack/common";
 import { Channel, Message, User } from "discord-types/general";
 
 enum UnreadDMsPosition {
@@ -68,6 +68,41 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
         );
 };
 
+function openSettingsContextMenu(e) {
+    ContextMenuApi.openContextMenu(e, () => {
+        const { channelIDList } = settings.use(["channelIDList"]);
+        return <Menu.Menu
+            navId="vc-keepDMsInSidebar-settings"
+            onClose={ContextMenuApi.closeContextMenu}
+        >
+            <Menu.MenuGroup label="Keep DMs in Sidebar">
+                <Menu.MenuControlItem
+                    id="recent-dm-count"
+                    label="Recent DMs count"
+                    control={(props, ref) => (
+                        <Menu.MenuSliderControl
+                            ref={ref}
+                            {...props}
+                            minValue={0}
+                            maxValue={20}
+                            value={settings.store.keepRecentDMCount}
+                            renderValue={v => Math.round(v).toString()}
+                            onChange={v => settings.store.keepRecentDMCount = Math.round(v)}
+                        />
+                    )}
+                />
+                <Menu.MenuItem
+                    id="clear"
+                    label="Clear pinned DMs"
+                    color="danger"
+                    disabled={!channelIDList.length}
+                    action={() => settings.store.channelIDList = ""}
+                />
+            </Menu.MenuGroup>
+        </Menu.Menu>;
+    });
+}
+
 const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore");
 
 const typingCache = {};
@@ -84,12 +119,20 @@ export default definePlugin({
                 match: /\(0,\i\.\i\)\(\[\i\.\i\],\(\)=>\i\.\i\.getUnreadPrivateChannelIds\(\)\)/,
                 replace: "$self.useSidebarPrivateChannelIds($&)"
             }
+        },
+        {
+            find: "#{intl::DISCODO_DISABLED}",
+            replacement: {
+                match: /(?=onClick:.{0,30}__OVERLAY__)/,
+                replace: "onContextMenu:$self.openSettingsContextMenu,"
+            }
         }
     ],
     contextMenus: {
         "user-context": contextMenuPatch,
         "gdm-context": contextMenuPatch,
     },
+    openSettingsContextMenu,
     flux: {
         TYPING_START({ channelId }: { channelId: string; }) {
             if (ChannelStore.getChannel(channelId)?.isPrivate())
