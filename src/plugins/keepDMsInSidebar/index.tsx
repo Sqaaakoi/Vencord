@@ -80,7 +80,7 @@ export default definePlugin({
         {
             find: "getUnreadPrivateChannelIds()),",
             replacement: {
-                match: /\(0,\i.useStateFromStoresArray\)\(\[\i\.default\],\(\)=>\i\.default\.getUnreadPrivateChannelIds\(\)\)/,
+                match: /\(0,\i\.\i\)\(\[\i\.\i\],\(\)=>\i\.\i\.getUnreadPrivateChannelIds\(\)\)/,
                 replace: "$self.useSidebarPrivateChannelIds($&)"
             }
         }
