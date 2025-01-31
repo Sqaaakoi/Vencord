@@ -11,7 +11,7 @@ import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { ChannelStore, Menu, MessageStore, PrivateChannelsStore, useStateFromStores } from "@webpack/common";
-import { Message, User } from "discord-types/general";
+import { Channel, Message, User } from "discord-types/general";
 
 enum UnreadDMsPosition {
     Above = "above",
@@ -47,9 +47,10 @@ const settings = definePluginSettings({
 const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     const { channelIDList } = settings.use(["channelIDList"]);
     if (!props) return;
-    const { user }: { user: User; } = props;
-    const group = findGroupChildrenByChildId("close-dm", children);
-    const cachedChannelId = ChannelStore.getDMFromUserId(user.id);
+    const { user, channel }: { user: User; channel: Channel; } = props;
+    const group = findGroupChildrenByChildId(["close-dm", "leave-channel"], children);
+    const cachedChannelId = user ? ChannelStore.getDMFromUserId(user?.id) : channel?.id;
+    debugger;
     const enabled = !!cachedChannelId && channelIDList.split(",").map(id => id.trim()).includes(cachedChannelId);
     if (group)
         group.push(
@@ -59,7 +60,8 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 key="toggle-pinned-to-sidebar"
                 checked={enabled}
                 action={async () => {
-                    const channelId = await PrivateChannelsStore.getOrEnsurePrivateChannel(user.id);
+                    const channelId = cachedChannelId || (user ? await PrivateChannelsStore.getOrEnsurePrivateChannel(user?.id) : null);
+                    if (!channelId) return;
                     const old = channelIDList.split(",").map(id => id.trim()).filter(id => id.length > 0);
                     settings.store.channelIDList = (enabled ? old.filter(id => id !== channelId) : [...old, channelId]).join(",");
                 }}
