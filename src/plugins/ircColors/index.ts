@@ -20,14 +20,14 @@ import { definePluginSettings } from "@api/Settings";
 import { hash as h64 } from "@intrnl/xxhash64";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { useMemo } from "@webpack/common";
+import { ThemeStore, useMemo, useStateFromStores } from "@webpack/common";
 
 // Calculate a CSS color string based on the user ID
 function calculateNameColorForUser(id?: string) {
-    const { lightness } = settings.use(["lightness"]);
-    const idHash = useMemo(() => id ? h64(id) : null, [id]);
-
-    return idHash && `hsl(${idHash % 360n}, 100%, ${lightness}%)`;
+    const { lightness, lightnessLightMode, hashSeed } = settings.use(["lightness", "lightnessLightMode", "hashSeed"]);
+    const theme = useStateFromStores([ThemeStore], () => ThemeStore.theme === "light");
+    const idHash = useMemo(() => id ? h64(id, hashSeed as bigint) : null, [id, hashSeed]);
+    return idHash && `hsl(${idHash % 360n}, 100%, ${theme ? lightnessLightMode : lightness}%)`;
 }
 
 const settings = definePluginSettings({
@@ -35,6 +35,11 @@ const settings = definePluginSettings({
         description: "Lightness, in %. Change if the colors are too light or too dark",
         type: OptionType.NUMBER,
         default: 70,
+    },
+    lightnessLightMode: {
+        description: "Lightness, in %. Change if the colors are too light or too dark",
+        type: OptionType.NUMBER,
+        default: 30,
     },
     memberListColors: {
         description: "Replace role colors in the member list",
@@ -44,16 +49,25 @@ const settings = definePluginSettings({
     },
     applyColorOnlyToUsersWithoutColor: {
         description: "Apply colors only to users who don't have a predefined color",
-        restartNeeded: false,
         type: OptionType.BOOLEAN,
         default: false
     },
-    applyColorOnlyInDms: {
-        description: "Apply colors only in direct messages; do not apply colors in servers.",
-        restartNeeded: false,
+    applyColorInDms: {
+        description: "Apply colors in direct messages",
         type: OptionType.BOOLEAN,
-        default: false
-    }
+        default: true
+    },
+    applyColorInServers: {
+        description: "Apply colors in servers",
+        type: OptionType.BOOLEAN,
+        default: true
+    },
+    hashSeed: {
+        description: "Seed for hash function",
+        restartNeeded: false,
+        type: OptionType.BIGINT,
+        default: 0n
+    },
 });
 
 export default definePlugin({
@@ -84,12 +98,13 @@ export default definePlugin({
         const id = context?.message?.author?.id;
         const colorString = context?.author?.colorString;
         const color = calculateNameColorForUser(id);
+        const { applyColorInDms, applyColorInServers, applyColorOnlyToUsersWithoutColor } = settings.use(["applyColorInDms", "applyColorInServers", "applyColorOnlyToUsersWithoutColor"]);
 
-        if (settings.store.applyColorOnlyInDms && !context?.channel?.isPrivate()) {
+        if (!(context?.channel?.isPrivate() ? applyColorInDms : applyColorInServers)) {
             return colorString;
         }
 
-        return (!settings.store.applyColorOnlyToUsersWithoutColor || !colorString)
+        return (!applyColorOnlyToUsersWithoutColor || !colorString)
             ? color
             : colorString;
     },
@@ -97,12 +112,13 @@ export default definePlugin({
         const id = context?.user?.id;
         const colorString = context?.colorString;
         const color = calculateNameColorForUser(id);
+        const { applyColorInDms, applyColorInServers, applyColorOnlyToUsersWithoutColor } = settings.use(["applyColorInDms", "applyColorInServers", "applyColorOnlyToUsersWithoutColor"]);
 
-        if (settings.store.applyColorOnlyInDms && !context?.channel?.isPrivate()) {
+        if (!(context?.channel?.isPrivate() ? applyColorInDms : applyColorInServers)) {
             return colorString;
         }
 
-        return (!settings.store.applyColorOnlyToUsersWithoutColor || !colorString)
+        return (!applyColorOnlyToUsersWithoutColor || !colorString)
             ? color
             : colorString;
     }
