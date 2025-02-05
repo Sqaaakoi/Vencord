@@ -27,7 +27,6 @@ import * as $MessageDecorations from "./MessageDecorations";
 import * as $MessageEventsAPI from "./MessageEvents";
 import * as $MessagePopover from "./MessagePopover";
 import * as $MessageUpdater from "./MessageUpdater";
-import * as $NicknameIcons from "./NicknameIcons";
 import * as $Notices from "./Notices";
 import * as $Notifications from "./Notifications";
 import * as $ServerList from "./ServerList";
@@ -123,8 +122,3 @@ export const MessageUpdater = $MessageUpdater;
  * An API allowing you to get an user setting
  */
 export const UserSettings = $UserSettings;
-
-/**
- * An API allowing you to add icons to the nickname, in profiles
- */
-export const NicknameIcons = $NicknameIcons;
