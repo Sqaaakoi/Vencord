@@ -11,12 +11,7 @@ on:
             - package.json
             - pnpm-lock.yaml
     workflow_dispatch:
-        inputs:
-                branch:
-                    type: string
-                    required: true
-                    description: the branch to run the reporter on
-                    default: sqaaakoi-stable-v2
+
     schedule:
         # Every 6 hours
         - cron: 0 0,6,12,18 * * *
@@ -27,14 +22,7 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-              if: ${{ github.event_name != 'workflow_dispatch' }}
               with:
-                  submodules: 'recursive'
-
-            - uses: actions/checkout@v4
-              if: ${{ github.event_name == 'workflow_dispatch' }}
-              with:
-                  ref: "${{ inputs.branch }}"
                   submodules: 'recursive'
 
             - uses: pnpm/action-setup@v3 # Install pnpm using packageManager key in package.json
