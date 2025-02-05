@@ -1,6 +1,8 @@
 name: Test Patches
 on:
     push:
+        branches:
+            - sqaaakoi-stable-v2
         paths:
             - .github/workflows/reportBrokenPlugins.yml
             - src/**
