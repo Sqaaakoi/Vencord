@@ -58,8 +58,8 @@ jobs:
                   export COMMIT_HASH=$(git rev-parse HEAD)
                   export BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-                  esbuild scripts/generateReport.ts > dist/report.md
-                  node dist/report.md >> $GITHUB_STEP_SUMMARY
+                  esbuild scripts/generateReport.ts > dist/report.mjs
+                  node dist/report.mjs >> $GITHUB_STEP_SUMMARY
               env:
                   DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
                   DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -75,8 +75,8 @@ jobs:
                   export COMMIT_HASH=$(git rev-parse HEAD)
                   export BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-                  esbuild scripts/generateReport.ts > dist/report.md
-                  node dist/report.md >> $GITHUB_STEP_SUMMARY
+                  esbuild scripts/generateReport.ts > dist/report.mjs
+                  node dist/report.mjs >> $GITHUB_STEP_SUMMARY
               env:
                   DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
                   DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
