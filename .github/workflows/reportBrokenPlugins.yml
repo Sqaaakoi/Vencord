@@ -11,12 +11,12 @@ on:
             - package.json
             - pnpm-lock.yaml
     workflow_dispatch:
-        # inputs:
-        #         branch:
-        #             type: string
-        #             required: true
-        #             description: the branch to run the reporter on
-        #             default: sqaaakoi-stable-v2
+        inputs:
+                branch:
+                    type: string
+                    required: true
+                    description: the branch to run the reporter on
+                    default: sqaaakoi-stable-v2
     schedule:
         # Every 6 hours
         - cron: 0 0,6,12,18 * * *
