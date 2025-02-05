@@ -1,23 +1,32 @@
 name: Test Patches
 on:
     workflow_dispatch:
+        inputs:
+                branch:
+                    type: string
+                    required: true
+                    description: the branch to run the reporter on
+                    default: sqaaakoi-stable-v2
     schedule:
-        # Every day at midnight
-        - cron: 0 0 * * *
+        # Every 6 hours
+        - cron: 0 */6 * * *
 
 jobs:
     TestPlugins:
-        if: github.repository == 'Vendicated/Vencord'
         runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v4
               if: ${{ github.event_name == 'schedule' }}
               with:
-                  ref: dev
+                  submodules: 'recursive'
+
 
             - uses: actions/checkout@v4
               if: ${{ github.event_name == 'workflow_dispatch' }}
+              with:
+                  ref: "${{ inputs.branch }}"
+                  submodules: 'recursive'
 
             - uses: pnpm/action-setup@v3 # Install pnpm using packageManager key in package.json
 
@@ -33,7 +42,7 @@ jobs:
 
             - name: Install Google Chrome
               id: setup-chrome
-              uses: browser-actions/setup-chrome@82b9ce628cc5595478a9ebadc480958a36457dc2
+              uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce
               with:
                   chrome-version: stable
 
@@ -45,9 +54,12 @@ jobs:
               run: |
                   export PATH="$PWD/node_modules/.bin:$PATH"
                   export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
+                  export WORKFLOW_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                  export COMMIT_HASH=$(git rev-parse HEAD)
+                  export BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-                  esbuild scripts/generateReport.ts > dist/report.mjs
-                  node dist/report.mjs >> $GITHUB_STEP_SUMMARY
+                  esbuild scripts/generateReport.ts > dist/report.md
+                  node dist/report.md >> $GITHUB_STEP_SUMMARY
               env:
                   DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
                   DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -59,9 +71,12 @@ jobs:
                   export PATH="$PWD/node_modules/.bin:$PATH"
                   export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
                   export USE_CANARY=true
+                  export WORKFLOW_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                  export COMMIT_HASH=$(git rev-parse HEAD)
+                  export BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-                  esbuild scripts/generateReport.ts > dist/report.mjs
-                  node dist/report.mjs >> $GITHUB_STEP_SUMMARY
+                  esbuild scripts/generateReport.ts > dist/report.md
+                  node dist/report.md >> $GITHUB_STEP_SUMMARY
               env:
                   DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
                   DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
