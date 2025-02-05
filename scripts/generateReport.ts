@@ -144,12 +144,12 @@ async function printReport() {
                     if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
                     return lines.join("\n");
                 }).join("\n\n"),
-                success: report.badPatches.length
+                failure: report.badPatches.length
             },
             {
                 title: "Bad Webpack Finds",
                 description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n"),
-                success: report.badWebpackFinds.length
+                failure: report.badWebpackFinds.length
             },
             {
                 title: "Bad Starts",
@@ -161,15 +161,15 @@ async function printReport() {
                     return lines.join("\n");
                 }
                 ).join("\n\n"),
-                success: report.badStarts.length
+                failure: report.badStarts.length
             },
             {
                 title: "Discord Errors",
                 description: toCodeBlock(report.otherErrors.join("\n"), 0, true),
-                success: report.otherErrors.length
+                failure: report.otherErrors.length
             }
         ];
-        const failure = results.some(r => !r.success);
+        const failure = results.some(r => r.failure);
         await fetch(process.env.DISCORD_WEBHOOK, {
             method: "POST",
             headers: {
@@ -184,7 +184,7 @@ async function printReport() {
                         description: `-# [Commit \`${SHORT_HASH}\`](${COMMIT_LINK})`,
                         color: failure ? 0xff0000 : 0x00ff00
                     },
-                    ...(results.filter(r => !r.success).map(({ success, ...report }) => ({
+                    ...(results.filter(r => r.failure).map(({ failure, ...report }) => ({
                         ...report, color: 0xff5f00
                     })))
                 ]
