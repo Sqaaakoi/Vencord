@@ -160,7 +160,7 @@ async function printReport() {
                     ];
                     return lines.join("\n");
                 }
-                ).join("\n\n") || "None",
+                ).join("\n\n"),
                 success: report.badStarts.length
             },
             {
@@ -180,12 +180,13 @@ async function printReport() {
                 embeds: [
                     {
                         title: `${failure ? "Failure" : "Success"} on ${BRANCH_NAME}`,
-                        description: `-# [Commit](${COMMIT_LINK})\n-# [View Workflow](${WORKFLOW_URL})`,
+                        url: WORKFLOW_URL,
+                        description: `-# [Commit \`${SHORT_HASH}\`](${COMMIT_LINK})`,
                         color: failure ? 0xff0000 : 0x00ff00
                     },
-                    ...(failure ? results.map(({ success, ...report }) => ({
-                        ...report, color: success ? 0xff0000 : 0x00ff00
-                    })) : [])
+                    ...(results.filter(r => !r.success).map(({ success, ...report }) => ({
+                        ...report, color: 0xff5f00
+                    })))
                 ]
             })
         }).then(res => {
