@@ -26,7 +26,7 @@
 import { readFileSync } from "fs";
 import pup, { JSHandle } from "puppeteer-core";
 
-for (const variable of ["DISCORD_TOKEN", "CHROMIUM_BIN"]) {
+for (const variable of ["CHROMIUM_BIN"]) {
     if (!process.env[variable]) {
         console.error(`Missing environment variable ${variable}`);
         process.exit(1);
@@ -35,7 +35,7 @@ for (const variable of ["DISCORD_TOKEN", "CHROMIUM_BIN"]) {
 
 const CANARY = process.env.USE_CANARY === "true";
 const { BRANCH_NAME, WORKFLOW_URL, COMMIT_HASH } = process.env;
-const COMMIT_LINK = `https://www.github.com/Vendicated/Vencord/commit/${COMMIT_HASH}`;
+const COMMIT_LINK = `https://github.com/Sqaaakoi/Vencord/commit/${COMMIT_HASH}`;
 const SHORT_HASH = COMMIT_HASH?.slice(0, 6) ?? "Error getting commit hash";
 
 const browser = await pup.launch({
@@ -132,50 +132,60 @@ async function printReport() {
     console.log();
 
     if (process.env.DISCORD_WEBHOOK) {
+        const results = [
+            {
+                title: "Bad Patches",
+                description: report.badPatches.map(p => {
+                    const lines = [
+                        `**__${p.plugin} (${p.type}):__**`,
+                        `ID: \`${p.id}\``,
+                        `Match: ${toCodeBlock(p.match, "Match: ".length, true)}`
+                    ];
+                    if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
+                    return lines.join("\n");
+                }).join("\n\n"),
+                success: report.badPatches.length
+            },
+            {
+                title: "Bad Webpack Finds",
+                description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n"),
+                success: report.badWebpackFinds.length
+            },
+            {
+                title: "Bad Starts",
+                description: report.badStarts.map(p => {
+                    const lines = [
+                        `**__${p.plugin}:__**`,
+                        toCodeBlock(p.error, 0, true)
+                    ];
+                    return lines.join("\n");
+                }
+                ).join("\n\n") || "None",
+                success: report.badStarts.length
+            },
+            {
+                title: "Discord Errors",
+                description: toCodeBlock(report.otherErrors.join("\n"), 0, true),
+                success: report.otherErrors.length
+            }
+        ];
+        const failure = results.some(r => !r.success);
         await fetch(process.env.DISCORD_WEBHOOK, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                description: "Here's the latest Vencord Report!",
                 username: `Vencord Reporter [${BRANCH_NAME}] ${CANARY ? " (Canary)" : ""}`,
                 embeds: [
                     {
-                        title: "Bad Patches",
-                        description: (report.badPatches.map(p => {
-                            const lines = [
-                                `**__${p.plugin} (${p.type}):__**`,
-                                `ID: \`${p.id}\``,
-                                `Match: ${toCodeBlock(p.match, "Match: ".length, true)}`
-                            ];
-                            if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
-                            return lines.join("\n");
-                        }).join("\n\n") || "None").concat(`\n\n-# [Commit](${COMMIT_LINK}) [View Workflow](${WORKFLOW_URL})`),
-                        color: report.badPatches.length ? 0xff0000 : 0x00ff00
+                        title: `${failure ? "Failure" : "Success"} on ${BRANCH_NAME}`,
+                        description: `-# [Commit](${COMMIT_LINK})\n-# [View Workflow](${WORKFLOW_URL})`,
+                        color: failure ? 0xff0000 : 0x00ff00
                     },
-                    {
-                        title: "Bad Webpack Finds",
-                        description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n") || "None",
-                        color: report.badWebpackFinds.length ? 0xff0000 : 0x00ff00
-                    },
-                    {
-                        title: "Bad Starts",
-                        description: report.badStarts.map(p => {
-                            const lines = [
-                                `**__${p.plugin}:__**`,
-                                toCodeBlock(p.error, 0, true)
-                            ];
-                            return lines.join("\n");
-                        }
-                        ).join("\n\n") || "None",
-                        color: report.badStarts.length ? 0xff0000 : 0x00ff00
-                    },
-                    {
-                        title: "Discord Errors",
-                        description: report.otherErrors.length ? toCodeBlock(report.otherErrors.join("\n"), 0, true) : "None",
-                        color: report.otherErrors.length ? 0xff0000 : 0x00ff00
-                    }
+                    ...(failure ? results.map(({ success, ...report }) => ({
+                        ...report, color: success ? 0xff0000 : 0x00ff00
+                    })) : [])
                 ]
             })
         }).then(res => {
@@ -316,7 +326,7 @@ async function reporterRuntime(token: string) {
 await page.evaluateOnNewDocument(`
     if (location.host.endsWith("discord.com")) {
         ${readFileSync("./dist/browser.js", "utf-8")};
-        (${reporterRuntime.toString()})(${JSON.stringify(process.env.DISCORD_TOKEN)});
+        ${process.env.DISCORD_TOKEN ? `(${reporterRuntime.toString()})(${JSON.stringify(process.env.DISCORD_TOKEN)});` : ""}
     }
 `);
 
