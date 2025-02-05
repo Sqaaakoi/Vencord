@@ -11,12 +11,12 @@ on:
             - package.json
             - pnpm-lock.yaml
     workflow_dispatch:
-        inputs:
-                branch:
-                    type: string
-                    required: true
-                    description: the branch to run the reporter on
-                    default: sqaaakoi-stable-v2
+        # inputs:
+        #         branch:
+        #             type: string
+        #             required: true
+        #             description: the branch to run the reporter on
+        #             default: sqaaakoi-stable-v2
     schedule:
         # Every 6 hours
         - cron: 0 0,6,12,18 * * *
@@ -30,7 +30,6 @@ jobs:
               if: ${{ github.event_name != 'workflow_dispatch' }}
               with:
                   submodules: 'recursive'
-
 
             - uses: actions/checkout@v4
               if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -68,6 +67,7 @@ jobs:
                   export COMMIT_HASH=$(git rev-parse HEAD)
                   export BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
+                  git restore --source sqaaakoi-stable-v2 -- scripts/generateReport.ts
                   esbuild scripts/generateReport.ts > dist/report.mjs
                   node dist/report.mjs >> $GITHUB_STEP_SUMMARY
               env:
@@ -85,6 +85,7 @@ jobs:
                   export COMMIT_HASH=$(git rev-parse HEAD)
                   export BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
+                  git restore --source sqaaakoi-stable-v2 -- scripts/generateReport.ts
                   esbuild scripts/generateReport.ts > dist/report.mjs
                   node dist/report.mjs >> $GITHUB_STEP_SUMMARY
               env:
