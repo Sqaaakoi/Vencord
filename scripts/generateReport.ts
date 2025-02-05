@@ -36,7 +36,7 @@ for (const variable of ["CHROMIUM_BIN"]) {
 const CANARY = process.env.USE_CANARY === "true";
 const { BRANCH_NAME, WORKFLOW_URL, COMMIT_HASH } = process.env;
 const COMMIT_LINK = `https://github.com/Sqaaakoi/Vencord/commit/${COMMIT_HASH}`;
-const SHORT_HASH = COMMIT_HASH?.slice(0, 6) ?? "Error getting commit hash";
+const SHORT_HASH = COMMIT_HASH?.slice(0, 7) ?? "Error getting commit hash";
 
 const browser = await pup.launch({
     headless: true,
@@ -170,22 +170,23 @@ async function printReport() {
             }
         ];
         const failure = results.some(r => r.failure);
+        const canary = CANARY ? " (Canary)" : "";
         await fetch(process.env.DISCORD_WEBHOOK, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username: `Vencord Reporter [${BRANCH_NAME}] ${CANARY ? " (Canary)" : ""}`,
+                username: `Vencord Reporter [${BRANCH_NAME}]${canary}`,
                 embeds: [
                     {
-                        title: `${failure ? "Failure" : "Success"} on ${BRANCH_NAME}`,
+                        title: `${failure ? "Failure" : "Success"} on \`${BRANCH_NAME}\`${canary}`,
                         url: WORKFLOW_URL,
                         description: `-# [Commit \`${SHORT_HASH}\`](${COMMIT_LINK})`,
                         color: failure ? 0xff0000 : 0x00ff00
                     },
                     ...(results.filter(r => r.failure).map(({ failure, ...report }) => ({
-                        ...report, color: 0xff5f00
+                        ...report, color: 0xffd000
                     })))
                 ]
             })
