@@ -116,6 +116,9 @@
 [submodule "src/thirdpartyplugins/whosWatching"]
 	path = src/thirdpartyplugins/whosWatching
 	url = https://github.com/fres621/vencord-whos-watching
+[submodule "src/thirdpartyplugins/sidebarChat"]
+	path = src/thirdpartyplugins/sidebarChat
+	url = https://github.com/Masterjoona/vc-sidebarchat
 [submodule "src/thirdpartyplugins/userFlags"]
 	path = src/thirdpartyplugins/userFlags
 	url = https://git.nin0.dev/userplugins/userflags
@@ -134,6 +137,9 @@
 [submodule "src/thirdpartyplugins/randomGary"]
 	path = src/thirdpartyplugins/randomGary
 	url = https://github.com/Zach11111/randomGary
+[submodule "src/thirdpartyplugins/collapseChatButtons"]
+	path = src/thirdpartyplugins/collapseChatButtons
+	url = https://github.com/coldcord/collapseChatButtons
 [submodule "src/thirdpartyplugins/vcPanelSettings"]
 	path = src/thirdpartyplugins/vcPanelSettings
 	url = https://git.nin0.dev/userplugins/vcPanelSettings
@@ -146,3 +152,15 @@
 [submodule "src/thirdpartyplugins/shyTyping"]
 	path = src/thirdpartyplugins/shyTyping
 	url = https://git.nin0.dev/Sqaaakoi-VencordUserPlugins/shyTyping
+[submodule "src/thirdpartyplugins/holyNotes"]
+	path = src/thirdpartyplugins/holyNotes
+	url = https://github.com/WolfPlugs/HolyNotes-VC
+[submodule "src/thirdpartyplugins/writeUpperCase"]
+	path = src/thirdpartyplugins/writeUpperCase
+	url = https://github.com/KrstlSkll69/WriteUpperCase
+[submodule "src/thirdpartyplugins/antiRickroll"]
+	path = src/thirdpartyplugins/antiRickroll
+	url = https://github.com/ryawaa/vencord-antirickroll
+[submodule "src/thirdpartyplugins/atSomeone"]
+	path = src/thirdpartyplugins/atSomeone
+	url = https://github.com/Masterjoona/vc-atsomeone
