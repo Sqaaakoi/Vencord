@@ -123,7 +123,7 @@ export default definePlugin({
         {
             find: "#{intl::DISCODO_DISABLED}",
             replacement: {
-                match: /(?=onClick:.{0,30}__OVERLAY__)/,
+                match: /(?=onClick:\(\)=>{.{0,300}"discodo")/,
                 replace: "onContextMenu:$self.openSettingsContextMenu,"
             }
         }
