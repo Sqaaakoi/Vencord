@@ -5,7 +5,7 @@
  */
 
 import { getIntlMessage } from "@utils/discord";
-import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findByCodeLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, ContextMenuApi, Tooltip, useEffect, useStateFromStores } from "@webpack/common";
 
 import { cl } from "../TitleBar";
@@ -21,11 +21,9 @@ const GameConsoleStore = findStoreLazy("GameConsoleStore");
 const useMuted = findByCodeLazy(/,impersonateStore:\i\.\i/);
 const toggleMute = findByCodeLazy("toggleSelfMute({location:", "#{intl::SUPPRESSED}");
 
-const classes = findByPropsLazy("strikethrough", "buildOverrideButton");
-
 const getTooltipLabel = findByCodeLazy("#{intl::CONSOLE_CONNECTING_DISABLED}", "#{intl::MUTE_ALT}");
 
-const requireContextMenu = extractAndLoadChunksLazy(["handleInputAudioContextMenu"], new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{0,100}?renderInputDevices"));
+const requireContextMenu = extractAndLoadChunksLazy(["handleInputAudioContextMenu"], new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{0,150}?renderInputDevices"));
 const AudioDeviceContextMenu = findByCodeLazy('navId:"audio-device-context",');
 
 const MicrophoneDenyIcon = findComponentByCodeLazy("M17.55 12.29c.1-.23.33-.37.58-.34.29.03.58.05.87.05h.04c.35 0 .63.32.51.65");
@@ -81,8 +79,7 @@ export default function MuteButton() {
             {serverMute || suppress ?
                 <MicrophoneDenyIcon
                     size="custom"
-                    colorClass={classes.strikethrough}
-                    color="currentColor"
+                    color={muted ? "var(--status-danger)" : "currentColor"}
                 />
                 :
                 <Component
