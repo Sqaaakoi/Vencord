@@ -33,11 +33,6 @@ export function requireStyle(name: string) {
     return style;
 }
 
-function findDocuments() {
-    const popouts = PopoutWindowStore?.getWindowKeys()?.map(k => PopoutWindowStore?.getWindow(k)?.document) ?? [];
-    return [document, ...popouts];
-}
-
 /**
  * A style object can be obtained by importing a stylesheet with `?managed` at the end of the import
  * @param style The style object or name
@@ -51,13 +46,12 @@ function findDocuments() {
 export function enableStyle(style: Style | string) {
     if (typeof style === "string") style = requireStyle(style);
 
+    const previousState = style.enabled;
+
     style.enabled = true;
     compileStyle(style);
 
-    if (style.enabled)
-        return false;
-
-    return true;
+    return !previousState;
 }
 
 /**
@@ -74,13 +68,12 @@ export function disableStyle(style: Style | string) {
         }
     }
 
-    compileStyle(style);
-
-    if (!style.enabled)
-        return false;
+    const previousState = style.enabled;
 
     style.enabled = false;
-    return true;
+    compileStyle(style);
+
+    return previousState;
 }
 
 /**
@@ -190,7 +183,8 @@ export function updateStyleInDocument(style: Style, doc: Document) {
  * @see {@link setStyleVariables} for more info on style classnames
  */
 export function compileStyle(style: Style) {
-    findDocuments().forEach(doc => updateStyleInDocument(style, doc));
+    const popouts = PopoutWindowStore?.getWindowKeys()?.map(k => PopoutWindowStore?.getWindow(k)?.document) ?? [];
+    return [document, ...popouts].forEach(doc => updateStyleInDocument(style, doc));
 }
 
 /**
