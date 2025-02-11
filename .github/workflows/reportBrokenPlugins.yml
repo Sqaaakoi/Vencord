@@ -11,10 +11,21 @@ on:
             - package.json
             - pnpm-lock.yaml
     workflow_dispatch:
-
+        inputs:
+            discord_branch:
+                type: choice
+                description: "Discord Branch to test patches on"
+                options:
+                    - both
+                    - stable
+                    - canary
+                    default: both
     schedule:
         # Every 6 hours
         - cron: 0 0,6,12,18 * * *
+    # schedule:
+    #   # Every day at midnight
+    #   - cron: 0 0 * * *
 
 jobs:
     TestPlugins:
@@ -46,7 +57,7 @@ jobs:
             - name: Build Vencord Reporter Version
               run: pnpm buildReporter
 
-            - name: Create Report
+            - name: Run Reporter
               timeout-minutes: 10
               run: |
                   export PATH="$PWD/node_modules/.bin:$PATH"
@@ -57,25 +68,36 @@ jobs:
 
                   git restore --source sqaaakoi-stable-v2 -- scripts/generateReport.ts
                   esbuild scripts/generateReport.ts > dist/report.mjs
-                  node dist/report.mjs >> $GITHUB_STEP_SUMMARY
-              env:
-                  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-                  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
 
-            - name: Create Report (Canary)
-              timeout-minutes: 10
-              if: success() || failure() # even run if previous one failed
-              run: |
-                  export PATH="$PWD/node_modules/.bin:$PATH"
-                  export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
-                  export USE_CANARY=true
-                  export WORKFLOW_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                  export COMMIT_HASH=$(git rev-parse HEAD)
-                  export BRANCH_NAME=${GITHUB_REF#refs/heads/}
+                  stable_output_file=$(mktemp)
+                  canary_output_file=$(mktemp)
 
-                  git restore --source sqaaakoi-stable-v2 -- scripts/generateReport.ts
-                  esbuild scripts/generateReport.ts > dist/report.mjs
-                  node dist/report.mjs >> $GITHUB_STEP_SUMMARY
+                  pids=""
+
+                  branch="${{ inputs.discord_branch }}"
+                  if [[ "${{ github.event_name }}" = "schedule" ]]; then
+                    branch="both"
+                  fi
+
+                  if [[ "$branch" = "both" || "$branch" = "stable" ]]; then
+                    node dist/report.mjs > "$stable_output_file" &
+                    pids+=" $!"
+                  fi
+
+                  if [[ "$branch" = "both" || "$branch" = "canary" ]]; then
+                    USE_CANARY=true node dist/report.mjs > "$canary_output_file" &
+                    pids+=" $!"
+                  fi
+
+                  exit_code=0
+                  for pid in $pids; do
+                      if ! wait "$pid"; then
+                        exit_code=1
+                      fi
+                  done
+
+                  cat "$stable_output_file" "$canary_output_file" >> $GITHUB_STEP_SUMMARY
+                  exit $exit_code
               env:
-                  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-                  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+                  WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+                  WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
