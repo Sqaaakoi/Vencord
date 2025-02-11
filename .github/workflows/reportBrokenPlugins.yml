@@ -19,7 +19,7 @@ on:
                     - both
                     - stable
                     - canary
-                    default: both
+                default: both
     schedule:
         # Every 6 hours
         - cron: 0 0,6,12,18 * * *
