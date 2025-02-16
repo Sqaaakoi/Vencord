@@ -16,11 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* eslint-disable no-fallthrough */
-
-// eslint-disable-next-line spaced-comment
 /// <reference types="../src/globals" />
-// eslint-disable-next-line spaced-comment
 /// <reference types="../src/modules" />
 
 import { createHmac } from "crypto";
@@ -61,14 +57,17 @@ async function maybeGetError(handle: JSHandle): Promise<string | undefined> {
         .catch(() => undefined);
 }
 
+interface PatchInfo {
+    plugin: string;
+    type: string;
+    id: string;
+    match: string;
+    error?: string;
+};
+
 const report = {
-    badPatches: [] as {
-        plugin: string;
-        type: string;
-        id: string;
-        match: string;
-        error?: string;
-    }[],
+    badPatches: [] as PatchInfo[],
+    slowPatches: [] as PatchInfo[],
     badStarts: [] as {
         plugin: string;
         error: string;
@@ -139,26 +138,30 @@ async function printReport() {
     console.log();
 
     if (process.env.WEBHOOK_URL) {
-        const results = [
-            {
-                title: "Bad Patches",
-                description: report.badPatches.map(p => {
-                    const lines = [
-                        `**__${p.plugin} (${p.type}):__**`,
-                        `ID: \`${p.id}\``,
-                        `Match: ${toCodeBlock(p.match, "Match: ".length, true)}`
-                    ];
-                    if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
-                    return lines.join("\n");
-                }).join("\n\n"),
-                failure: report.badPatches.length
-            },
-            {
+        const patchesToEmbed = (title: string, patches: PatchInfo[], color: number) => ({
+            title,
+            color,
+            description: patches.map(p => {
+                const lines = [
+                    `**__${p.plugin} (${p.type}):__**`,
+                    `ID: \`${p.id}\``,
+                    `Match: ${toCodeBlock(p.match, "Match: ".length, true)}`
+                ];
+                if (p.error) lines.push(`Error: ${toCodeBlock(p.error, "Error: ".length, true)}`);
+
+                return lines.join("\n");
+            }).join("\n\n"),
+        });
+
+        const embeds = [
+            report.badPatches.length > 0 && patchesToEmbed("Bad Patches", report.badPatches, 0xff0000),
+            report.slowPatches.length > 0 && patchesToEmbed("Slow Patches", report.slowPatches, 0xf0b232),
+            report.badWebpackFinds.length > 0 && {
                 title: "Bad Webpack Finds",
-                description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n"),
-                failure: report.badWebpackFinds.length
+                description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n") || "None",
+                color: 0xffd000
             },
-            {
+            report.badStarts.length > 0 && {
                 title: "Bad Starts",
                 description: report.badStarts.map(p => {
                     const lines = [
@@ -167,35 +170,31 @@ async function printReport() {
                     ];
                     return lines.join("\n");
                 }
-                ).join("\n\n"),
-                failure: report.badStarts.length
+                ).join("\n\n") || "None",
+                color: 0xffd000
             },
-            {
+            report.otherErrors.length > 0 && {
                 title: "Discord Errors",
-                description: toCodeBlock(report.otherErrors.join("\n"), 0, true),
-                failure: report.otherErrors.length
+                description: report.otherErrors.length ? toCodeBlock(report.otherErrors.join("\n"), 0, true) : "None",
+                color: 0xffd000
             }
-        ];
-        const failure = results.some(r => r.failure);
-        const canary = CANARY ? " (Canary)" : "";
+        ].filter(Boolean);
+
+        (embeds as any[]).unshift({
+            author: {
+                name: `Discord ${CANARY ? "Canary" : "Stable"} (${metaData.buildNumber})`,
+                url: `https://nelly.tools/builds/app/${metaData.buildHash}`,
+                icon_url: CANARY ? "https://cdn.discordapp.com/emojis/1252721945699549327.png?size=128" : "https://cdn.discordapp.com/emojis/1252721943463985272.png?size=128"
+            },
+            title: `${embeds.length > 0 ? "Failure" : "Success"} on \`${BRANCH_NAME}\`${CANARY ? " (Canary)" : ""}`,
+            url: WORKFLOW_URL,
+            description: `-# [Commit \`${SHORT_HASH}\`](${COMMIT_LINK})`,
+            color: CANARY ? 0xfbb642 : 0x5865f2
+        });
+
         const body = JSON.stringify({
-            username: `Vencord Reporter [${BRANCH_NAME}]${canary}`,
-            embeds: [
-                {
-                    author: {
-                        name: `Discord ${CANARY ? "Canary" : "Stable"} (${metaData.buildNumber})`,
-                        url: `https://nelly.tools/builds/app/${metaData.buildHash}`,
-                        icon_url: CANARY ? "https://cdn.discordapp.com/emojis/1252721945699549327.png?size=128" : "https://cdn.discordapp.com/emojis/1252721943463985272.png?size=128"
-                    },
-                    title: `${failure ? "Failure" : "Success"} on \`${BRANCH_NAME}\`${canary}`,
-                    url: WORKFLOW_URL,
-                    description: `-# [Commit \`${SHORT_HASH}\`](${COMMIT_LINK})`,
-                    color: CANARY ? 0xfbb642 : 0x5865f2
-                },
-                ...(results.filter(r => r.failure).map(({ failure, ...report }) => ({
-                    ...report, color: 0xffd000
-                })))
-            ]
+            username: "Vencord Reporter" + (CANARY ? " (Canary)" : ""),
+            embeds
         });
 
         const headers = {
@@ -262,14 +261,17 @@ page.on("console", async e => {
 
         switch (tag) {
             case "WebpackInterceptor:":
-                const patchFailMatch = message.match(/Patch by (.+?) (had no effect|errored|found no module|took [\d.]+?ms) \(Module id is (.+?)\): (.+)/)!;
-                if (!patchFailMatch) break;
+                const patchFailMatch = message.match(/Patch by (.+?) (had no effect|errored|found no module) \(Module id is (.+?)\): (.+)/);
+                const patchSlowMatch = message.match(/Patch by (.+?) (took [\d.]+?ms) \(Module id is (.+?)\): (.+)/);
+                const match = patchFailMatch ?? patchSlowMatch;
+                if (!match) break;
 
                 logStderr(await getText());
                 process.exitCode = 1;
 
-                const [, plugin, type, id, regex] = patchFailMatch;
-                report.badPatches.push({
+                const [, plugin, type, id, regex] = match;
+                const list = patchFailMatch ? report.badPatches : report.slowPatches;
+                list.push({
                     plugin,
                     type,
                     id,

@@ -90,17 +90,13 @@ export const filters = {
 };
 
 export type CallbackFn = (module: ModuleExports, id: PropertyKey) => void;
-export type FactoryListernFn = (factory: AnyModuleFactory) => void;
+export type FactoryListernFn = (factory: AnyModuleFactory, moduleId: PropertyKey) => void;
 
 export const waitForSubscriptions = new Map<FilterFn, CallbackFn>();
 export const moduleListeners = new Set<CallbackFn>();
 export const factoryListeners = new Set<FactoryListernFn>();
 
 export function _initWebpack(webpackRequire: WebpackRequire) {
-    if (webpackRequire.c == null) {
-        return;
-    }
-
     wreq = webpackRequire;
     cache = webpackRequire.c;
 
