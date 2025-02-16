@@ -12,6 +12,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { ChannelStore, ContextMenuApi, Menu, MessageStore, PresenceStore, PrivateChannelsStore, RelationshipStore, UserStore, useStateFromStores } from "@webpack/common";
 import { Channel, Message, User } from "discord-types/general";
+import { MouseEvent } from "react";
 
 enum UnreadDMsPosition {
     Above = "above",
@@ -40,12 +41,22 @@ const settings = definePluginSettings({
     keepRecentDMCount: {
         description: "Number of recent DMs to always keep in the sidebar",
         type: OptionType.NUMBER,
-        default: 0
+        default: 3
+    },
+    keepRecentDmsVisible: {
+        description: "Show recent DMs in the sidebar",
+        type: OptionType.BOOLEAN,
+        default: false
     },
     onlineMembersOnly: {
         description: "Only show pinned DMs of users that are online or where at least one member in a group is online",
         type: OptionType.BOOLEAN,
         default: false
+    },
+    showRecentBots: {
+        description: "Show recent bots/apps",
+        type: OptionType.BOOLEAN,
+        default: true
     }
 });
 
@@ -73,9 +84,22 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
         );
 };
 
-function openSettingsContextMenu(e) {
+function openSettingsContextMenu(e: MouseEvent) {
+    let actionTaken = false;
+    if (e.ctrlKey) {
+        settings.store.onlineMembersOnly = !settings.store.onlineMembersOnly;
+        actionTaken = true;
+    }
+    if (navigator.platform.includes("Mac") ? e.metaKey : e.altKey) {
+        settings.store.keepRecentDmsVisible = !settings.store.keepRecentDmsVisible;
+        actionTaken = true;
+    }
+    if (actionTaken) {
+        e.preventDefault();
+        return;
+    }
     ContextMenuApi.openContextMenu(e, () => {
-        const { channelIDList, onlineMembersOnly } = settings.use(["channelIDList", "onlineMembersOnly"]);
+        const { channelIDList, keepRecentDmsVisible, onlineMembersOnly, showRecentBots } = settings.use(["channelIDList", "keepRecentDmsVisible", "onlineMembersOnly", "showRecentBots"]);
         return <Menu.Menu
             navId="vc-keepDMsInSidebar-settings"
             onClose={ContextMenuApi.closeContextMenu}
@@ -87,6 +111,12 @@ function openSettingsContextMenu(e) {
                     checked={onlineMembersOnly}
                     action={() => settings.store.onlineMembersOnly = !onlineMembersOnly}
                 />
+                <Menu.MenuCheckboxItem
+                    id="recent-dm-enabled"
+                    label="Show recent DMs"
+                    checked={keepRecentDmsVisible}
+                    action={() => settings.store.keepRecentDmsVisible = !keepRecentDmsVisible}
+                />
                 <Menu.MenuControlItem
                     id="recent-dm-count"
                     label="Recent DMs count"
@@ -94,13 +124,19 @@ function openSettingsContextMenu(e) {
                         <Menu.MenuSliderControl
                             ref={ref}
                             {...props}
-                            minValue={0}
+                            minValue={1}
                             maxValue={20}
                             value={settings.store.keepRecentDMCount}
                             renderValue={v => Math.round(v).toString()}
                             onChange={v => settings.store.keepRecentDMCount = Math.round(v)}
                         />
                     )}
+                />
+                <Menu.MenuCheckboxItem
+                    id="show-bots"
+                    label="Show recent bots"
+                    checked={showRecentBots}
+                    action={() => settings.store.showRecentBots = !showRecentBots}
                 />
                 <Menu.MenuItem
                     id="clear"
@@ -155,7 +191,7 @@ export default definePlugin({
         }
     },
     useSidebarPrivateChannelIds(unreadChannelIds: string[]) {
-        const { channelIDList, unreadDMsPosition, keepForSeconds, keepRecentDMCount, onlineMembersOnly } = settings.use(["channelIDList", "unreadDMsPosition", "keepForSeconds", "keepRecentDMCount", "onlineMembersOnly"]);
+        const { channelIDList, unreadDMsPosition, keepForSeconds, keepRecentDMCount, keepRecentDmsVisible, onlineMembersOnly, showRecentBots } = settings.use(["channelIDList", "unreadDMsPosition", "keepForSeconds", "keepRecentDMCount", "keepRecentDmsVisible", "onlineMembersOnly", "showRecentBots"]);
         const filterToOnlineOnly = (id: string) => {
             if (!onlineMembersOnly) return true;
             const channel = ChannelStore.getChannel(id);
@@ -168,8 +204,16 @@ export default definePlugin({
         };
         const pinnedList = channelIDList.split(",").map(id => id.trim()).filter(id => id.length > 0).filter(filterToOnlineOnly);
         const update = useForceUpdater();
-        const recentChannels: string[] = useStateFromStores([PrivateChannelSortStore, ChannelStore, RelationshipStore, PresenceStore], () => PrivateChannelSortStore.getPrivateChannelIds().filter(filterToOnlineOnly));
-        const staticRecentChannels = recentChannels.filter(id => !pinnedList.includes(id)).slice(0, keepRecentDMCount);
+        const recentChannels: string[] = useStateFromStores([PrivateChannelSortStore, ChannelStore, RelationshipStore, PresenceStore], () => PrivateChannelSortStore.getPrivateChannelIds().filter(id => {
+            if (showRecentBots) return true;
+            const channel = ChannelStore.getChannel(id);
+            if (!channel) return true;
+            if (!channel?.recipients) return true;
+            return !channel?.recipients?.every(rId => {
+                return UserStore.getUser(rId).bot;
+            });
+        }).filter(filterToOnlineOnly));
+        const staticRecentChannels = recentChannels.filter(id => !pinnedList.includes(id)).slice(0, keepRecentDmsVisible ? keepRecentDMCount : 0);
         const dynamicRecentChannels = recentChannels.filter(id => {
             const message = (MessageStore as unknown as { getLastMessage: (channelId: string) => Message; }).getLastMessage(id);
             if (!message) return false;
