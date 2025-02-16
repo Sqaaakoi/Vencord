@@ -31,6 +31,7 @@ import { Logger } from "@utils/Logger";
 import { canonicalizeFind, canonicalizeReplacement } from "@utils/patches";
 import { Patch, Plugin, PluginDef, ReporterTestable, StartAt } from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
+import { patches } from "@webpack/patcher";
 import { FluxEvents } from "@webpack/types";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -43,7 +44,7 @@ export const PMLogger = logger;
 export const plugins = Plugins;
 export const excluded = ExcludedPlugins;
 export const meta = PluginMeta;
-export const patches = [] as Patch[];
+export { patches };
 
 /** Whether we have subscribed to flux events of all the enabled plugins when FluxDispatcher was ready */
 let enabledPluginsSubscribedFlux = false;
