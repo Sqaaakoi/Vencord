@@ -34,7 +34,7 @@ import { FluxDispatcher } from "@webpack/common";
 import { patches } from "@webpack/patcher";
 import { FluxEvents } from "@webpack/types";
 
-import Plugins from "~plugins";
+import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
 
 import { traceFunction } from "../debug/Tracer";
 
@@ -42,6 +42,8 @@ const logger = new Logger("PluginManager", "#a6d189");
 
 export const PMLogger = logger;
 export const plugins = Plugins;
+export const excluded = ExcludedPlugins;
+export const meta = PluginMeta;
 export { patches };
 
 /** Whether we have subscribed to flux events of all the enabled plugins when FluxDispatcher was ready */
