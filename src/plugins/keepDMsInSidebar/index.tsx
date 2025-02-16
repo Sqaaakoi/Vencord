@@ -10,7 +10,7 @@ import { Devs } from "@utils/constants";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, Menu, MessageStore, PrivateChannelsStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, ContextMenuApi, Menu, MessageStore, PresenceStore, PrivateChannelsStore, RelationshipStore, UserStore, useStateFromStores } from "@webpack/common";
 import { Channel, Message, User } from "discord-types/general";
 
 enum UnreadDMsPosition {
@@ -41,6 +41,11 @@ const settings = definePluginSettings({
         description: "Number of recent DMs to always keep in the sidebar",
         type: OptionType.NUMBER,
         default: 0
+    },
+    onlineMembersOnly: {
+        description: "Only show pinned DMs of users that are online or where at least one member in a group is online",
+        type: OptionType.BOOLEAN,
+        default: false
     }
 });
 
@@ -70,12 +75,18 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
 
 function openSettingsContextMenu(e) {
     ContextMenuApi.openContextMenu(e, () => {
-        const { channelIDList } = settings.use(["channelIDList"]);
+        const { channelIDList, onlineMembersOnly } = settings.use(["channelIDList", "onlineMembersOnly"]);
         return <Menu.Menu
             navId="vc-keepDMsInSidebar-settings"
             onClose={ContextMenuApi.closeContextMenu}
         >
             <Menu.MenuGroup label="Keep DMs in Sidebar">
+                <Menu.MenuCheckboxItem
+                    id="online-only"
+                    label="Online users/groups only"
+                    checked={onlineMembersOnly}
+                    action={() => settings.store.onlineMembersOnly = !onlineMembersOnly}
+                />
                 <Menu.MenuControlItem
                     id="recent-dm-count"
                     label="Recent DMs count"
@@ -144,10 +155,20 @@ export default definePlugin({
         }
     },
     useSidebarPrivateChannelIds(unreadChannelIds: string[]) {
-        const { channelIDList, unreadDMsPosition, keepForSeconds, keepRecentDMCount } = settings.use(["channelIDList", "unreadDMsPosition", "keepForSeconds", "keepRecentDMCount"]);
-        const pinnedList = channelIDList.split(",").map(id => id.trim()).filter(id => id.length > 0);
+        const { channelIDList, unreadDMsPosition, keepForSeconds, keepRecentDMCount, onlineMembersOnly } = settings.use(["channelIDList", "unreadDMsPosition", "keepForSeconds", "keepRecentDMCount", "onlineMembersOnly"]);
+        const filterToOnlineOnly = (id: string) => {
+            if (!onlineMembersOnly) return true;
+            const channel = ChannelStore.getChannel(id);
+            if (!channel) return true;
+            if (!channel?.recipients) return true;
+            return channel?.recipients?.some(rId => {
+                const status = PresenceStore.getStatus(rId) ?? "offline";
+                return status !== "offline";
+            });
+        };
+        const pinnedList = channelIDList.split(",").map(id => id.trim()).filter(id => id.length > 0).filter(filterToOnlineOnly);
         const update = useForceUpdater();
-        const recentChannels: string[] = useStateFromStores([PrivateChannelSortStore], () => PrivateChannelSortStore.getPrivateChannelIds());
+        const recentChannels: string[] = useStateFromStores([PrivateChannelSortStore, ChannelStore, RelationshipStore, PresenceStore], () => PrivateChannelSortStore.getPrivateChannelIds().filter(filterToOnlineOnly));
         const staticRecentChannels = recentChannels.filter(id => !pinnedList.includes(id)).slice(0, keepRecentDMCount);
         const dynamicRecentChannels = recentChannels.filter(id => {
             const message = (MessageStore as unknown as { getLastMessage: (channelId: string) => Message; }).getLastMessage(id);
