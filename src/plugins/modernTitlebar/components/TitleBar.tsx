@@ -27,12 +27,12 @@ export default function TitleBar(props: {
 }) {
     const user = useStateFromStores([UserStore], () => UserStore.getCurrentUser(), []);
 
-    if (props?.macOSFrame) return null;
+    if (props?.windowKey ? (IS_VESKTOP ? !window?.Vesktop?.Settings?.store?.customTitleBar : false) : false) return null;
 
     return <div className={cl("container")}>
         <OverrideCSS className={cl("styles")} />
         <div className={cl("titlebar")}>
-            <TitleBarGroupLeft user={user} />
+            <TitleBarGroupLeft user={user} windowKey={props?.windowKey} />
             <div className={classes(cl("spacer"))} />
             <TitleBarGroupRight user={user} windowKey={props?.windowKey} />
         </div>
