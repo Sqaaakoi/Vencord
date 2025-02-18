@@ -25,8 +25,8 @@ export default function TitleBarGroupRight({ user, windowKey }: { user: User | u
         {/* <AccountPanel /> */}
         {profileButton && user && <ProfileButton user={user} />}
         {actionButtons && user && <ActionButtons user={user} />}
-        {settingsButton && user && <SettingsButton user={user} />}
-        {quickSwitcherButton && user && <QuickSwitcherButton />}
+        {settingsButton && user && !windowKey && <SettingsButton user={user} />}
+        {quickSwitcherButton && user && !windowKey && <QuickSwitcherButton />}
         <WindowButtons windowKey={windowKey} />
     </div>;
 }
