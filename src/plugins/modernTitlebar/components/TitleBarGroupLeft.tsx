@@ -21,7 +21,7 @@ import TotalMentionsBadge from "./TotalMentionsBadge";
 const ClydeIcon = findComponentByCodeLazy("M19.73 4.87a18.2 18.2 0 0 0-4.6-1.44");
 const DefaultRouteStore = findStoreLazy("DefaultRouteStore");
 
-export default function TitleBarGroupLeft({ user }: { user: User | undefined; }) {
+export default function TitleBarGroupLeft({ user, windowKey }: { user: User | undefined; windowKey: any; }) {
     const { homeButton, sidebarButton, mentionsBadge } = settings.use(["homeButton", "sidebarButton", "mentionsBadge"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-left"))}>
         {homeButton && <TitleBarButton
@@ -29,7 +29,7 @@ export default function TitleBarGroupLeft({ user }: { user: User | undefined; })
             className={cl("button-home")}
             icon={ClydeIcon}
         />}
-        {sidebarButton && <SidebarButton />}
+        {sidebarButton && !windowKey && <SidebarButton />}
         {user && <StatCounters />}
         {mentionsBadge && user && <TotalMentionsBadge />}
     </div>;

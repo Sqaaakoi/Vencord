@@ -22,17 +22,17 @@ const stockWindowActions = findByPropsLazy("minimize", "maximize", "close");
 export const windowActions = {
     minimize(windowKey) {
         if (PlatformMatchers.isPlatformEmbedded) return stockWindowActions.minimize(windowKey);
-        if (IS_VESKTOP) return VesktopNative?.win?.minimize();
+        if (IS_VESKTOP) return VesktopNative?.win?.minimize(windowKey);
         return false;
     },
     maximize(windowKey) {
         if (PlatformMatchers.isPlatformEmbedded) return stockWindowActions.maximize(windowKey);
-        if (IS_VESKTOP) return VesktopNative?.win?.maximize();
+        if (IS_VESKTOP) return VesktopNative?.win?.maximize(windowKey);
         return false;
     },
     close(windowKey) {
         if (PlatformMatchers.isPlatformEmbedded) return stockWindowActions.close(windowKey);
-        if (IS_VESKTOP) return VesktopNative?.win?.close();
+        if (IS_VESKTOP) return VesktopNative?.win?.close(windowKey);
         return false;
     },
     get canUseWindowButtons() {
@@ -66,7 +66,7 @@ export default function WindowButtons({ windowKey }: { windowKey: any; }) {
             }}
         >
             <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M5.3 14.7a1 1 0 0 0 1.4 0L12 9.42l5.3 5.3a1 1 0 0 0 1.4-1.42l-6-6a1 1 0 0 0-1.4 0l-6 6a1 1 0 0 0 0 1.42Z" />
+                <path d="M5.3 14.7a1 1 0 0   0 1.4 0L12 9.42l5.3 5.3a1 1 0 0 0 1.4-1.42l-6-6a1 1 0 0 0-1.4 0l-6 6a1 1 0 0 0 0 1.42Z" />
             </svg>
         </TitleBarButton>
         <TitleBarButton
@@ -80,6 +80,6 @@ export default function WindowButtons({ windowKey }: { windowKey: any; }) {
             <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.3 18.7a1 1 0 0 0 1.4-1.4L13.42 12l5.3-5.3a1 1 0 0 0-1.42-1.4L12 10.58l-5.3-5.3a1 1 0 0 0-1.4 1.42L10.58 12l-5.3 5.3a1 1 0 1 0 1.42 1.4L12 13.42l5.3 5.3Z" />
             </svg>
-        </TitleBarButton >
+        </TitleBarButton>
     </>;
 }
