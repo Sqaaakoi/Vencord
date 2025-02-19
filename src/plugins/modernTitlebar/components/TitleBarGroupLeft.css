@@ -10,7 +10,3 @@ body .vc-modernTitlebar-button.vc-modernTitlebar-button-home {
 body .vc-modernTitlebar-button.vc-modernTitlebar-button-home:is(:hover, :active) {
     color: var(--white-500);
 }
-
-.vc-modernTitlebar-button.vc-modernTitlebar-button-home:is(:hover, :active) .vc-modernTitlebar-button-inner {
-    background-color: var(--button-filled-brand-background);
-}
