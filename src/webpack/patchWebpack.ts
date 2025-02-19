@@ -12,7 +12,7 @@ import { canonicalizeReplacement } from "@utils/patches";
 import { Patch, PatchReplacement } from "@utils/types";
 
 import { traceFunctionWithResults } from "../debug/Tracer";
-import { _initWebpack, _shouldIgnoreModule, factoryListeners, findModuleId, moduleListeners, waitForSubscriptions, wreq } from "./webpack";
+import { _blacklistBadModules, _initWebpack, factoryListeners, findModuleId, moduleListeners, waitForSubscriptions, wreq } from "./webpack";
 import { AnyModuleFactory, AnyWebpackRequire, MaybePatchedModuleFactory, ModuleExports, PatchedModuleFactory, WebpackRequire } from "./wreq.d";
 
 export const patches = [] as Patch[];
@@ -190,6 +190,20 @@ define(Function.prototype, "m", {
             */
 
             define(this, "m", { value: proxiedModuleFactories });
+
+            // Overwrite Webpack's defineExports function to define the export descriptors configurable.
+            // This is needed so we can later blacklist specific exports from Webpack search by making them non-enumerable
+            this.d = function (exports, definition) {
+                for (const key in definition) {
+                    if (Object.hasOwn(definition, key) && !Object.hasOwn(exports, key)) {
+                        Object.defineProperty(exports, key, {
+                            enumerable: true,
+                            configurable: true,
+                            get: definition[key],
+                        });
+                    }
+                }
+            };
         };
     }
 });
@@ -283,11 +297,6 @@ function updateExistingFactory(moduleFactories: AnyWebpackRequire["m"], moduleId
     }
 
     if (existingFactory != null) {
-        // Sanity check to make sure these factories are equal
-        if (String(newFactory) !== String(existingFactory)) {
-            return false;
-        }
-
         // If existingFactory exists in any of the Webpack instances we track, it's either wrapped in our proxy, or it has already been required.
         // In the case it is wrapped in our proxy, and the instance we are setting does not already have it, we need to make sure the instance contains our proxy too.
         if (moduleFactoriesWithFactory !== moduleFactories && existingFactory[SYM_IS_PROXIED_FACTORY]) {
@@ -403,25 +412,15 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
     }
 
     exports = module.exports;
-    if (exports == null) {
-        return factoryReturn;
-    }
 
-    if (typeof require === "function") {
-        const shouldIgnoreModule = _shouldIgnoreModule(exports);
-
-        if (shouldIgnoreModule) {
-            if (require.c != null) {
-                Object.defineProperty(require.c, module.id, {
-                    value: require.c[module.id],
-                    enumerable: false,
-                    configurable: true,
-                    writable: true
-                });
-            }
-
+    if (typeof require === "function" && require.c) {
+        if (_blacklistBadModules(require.c, exports, module.id)) {
             return factoryReturn;
         }
+    }
+
+    if (exports == null) {
+        return factoryReturn;
     }
 
     for (const callback of moduleListeners) {
@@ -559,8 +558,13 @@ function patchFactory(moduleId: PropertyKey, originalFactory: AnyModuleFactory):
                     continue;
                 }
 
+                const pluginsList = [...patchedBy];
+                if (!patchedBy.has(patch.plugin)) {
+                    pluginsList.push(patch.plugin);
+                }
+
                 code = newCode;
-                patchedSource = `// Webpack Module ${String(moduleId)} - Patched by ${[...patchedBy, patch.plugin].join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${String(moduleId)}`;
+                patchedSource = `// Webpack Module ${String(moduleId)} - Patched by ${pluginsList.join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${String(moduleId)}`;
                 patchedFactory = (0, eval)(patchedSource);
 
                 if (!patchedBy.has(patch.plugin)) {
