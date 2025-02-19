@@ -1,0 +1,71 @@
+name: Bug/Crash Report
+description: Create a bug or crash report for Vencord.
+labels: [bug]
+title: "[Bug] "
+
+body:
+    - type: markdown
+      attributes:
+          value: |
+              # This form is not for any issues regarding compiling or updating the software.
+              Follow the following steps to fix your installation. After each step, try to build the software using `pnpm build`
+
+              Make sure that you have pulled any changes `git fetch && git pull`
+              Make sure that you have updated all 3rd party plugins `git submodule update --init --recursive`
+              Still having issues? Update the dependencies `pnpm install --frozen-lockfile`
+
+              If it's still broken after all the above steps, delete the local copy of the repository and clone it again, then follow the official installation guide, then run the command listed above to update 3rd party plugins.
+
+    - type: textarea
+      id: bug-description
+      attributes:
+          label: What happens when the bug or crash occurs?
+          description: Where does this bug or crash occur, when does it occur, etc.
+          placeholder: The bug/crash happens sometimes when I do ..., causing this to not work/the app to crash. I think it happens because of ...
+      validations:
+          required: true
+
+    - type: textarea
+      id: expected-behaviour
+      attributes:
+          label: What is the expected behaviour?
+          description: Simply detail what the expected behaviour is.
+          placeholder: I expect Vencord/Discord to open the ... page instead of ..., it prevents me from doing ...
+      validations:
+          required: false
+
+    - type: textarea
+      id: steps-to-take
+      attributes:
+          label: How do you recreate this bug or crash?
+          description: Give us a list of steps in order to recreate the bug or crash.
+          placeholder: |
+              1. Do ...
+              2. Then ...
+              3. Do this ..., ... and then ...
+              4. Observe "the bug" or "the crash"
+      validations:
+          required: false
+
+    - type: textarea
+      id: crash-log
+      attributes:
+          label: Errors
+          description: Open the Developer Console with Ctrl/Cmd + Shift + i. Then look for any red errors (Ignore network errors like Failed to load resource) and paste them between the "```".
+          value: |
+              ```
+              Replace this text with your crash-log.
+              ```
+      validations:
+          required: false
+
+    - type: checkboxes
+      id: agreement-check
+      attributes:
+          label: Request Agreement
+          description: This fork is tested on canary unlike upstream.
+          options:
+              - label: This issue is NOT with a plugin that is available without changes upstream (stock Vencord)
+                required: true
+              - label: This issue is NOT with an easy to fix issue when compiling
+                required: true
