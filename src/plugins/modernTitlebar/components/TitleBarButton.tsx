@@ -12,12 +12,16 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { cl } from "./TitleBar";
 
+type DataSet = {
+    [key: `data-${string}`]: string;
+};
+
 export default function TitleBarButton(props: {
     action(): void;
     className: string;
     icon?: Icon;
     children?: ReactNode;
-    buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
+    buttonProps?: ButtonHTMLAttributes<HTMLButtonElement> & DataSet;
 }) {
     return <button
         {...props.buttonProps}

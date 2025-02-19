@@ -1,0 +1,7 @@
+.vc-modernTitlebar-button.vc-modernTitlebar-button-home:is(:hover, :active) .vc-modernTitlebar-button-inner {
+    background-color: var(--button-filled-brand-background);
+}
+
+.vc-modernTitlebar-button.vc-modernTitlebar-button-home:is(:hover, :active)[data-branch="canary"] .vc-modernTitlebar-button-inner {
+    background-color: var(--yellow-300);
+}
