@@ -34,7 +34,7 @@ const selectors: LazyCSS[] = [
 
     {
         classes: ["standardSidebarView"],
-        style: m => `${hoist} .${m.standardSidebarView} { top: ${height}; }`
+        style: m => `${hoist} > :not[data-popout-root] ${m.standardSidebarView} { top: ${height}; } ${hoist} > [data-popout-root] .${m.standardSidebarView} { top: 0; }`
     },
 
     {
