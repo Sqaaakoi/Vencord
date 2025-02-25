@@ -13,7 +13,7 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import { cl } from "./TitleBar";
 
 export default function Pill(props: {
-    action(): void;
+    action?(): void;
     className: string;
     icon?: Icon;
     children?: ReactNode;

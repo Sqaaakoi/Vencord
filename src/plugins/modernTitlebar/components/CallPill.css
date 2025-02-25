@@ -7,3 +7,7 @@
     font-variant-numeric: tabular-nums;
     text-transform: none;
 }
+
+.vc-modernTitlebar-call-pill-popout {
+    padding: 8px;
+}
