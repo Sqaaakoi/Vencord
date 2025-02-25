@@ -20,7 +20,7 @@ export const cl = (name: string) => `vc-modernTitlebar-${name}`;
 
 export default function TitleBar(props: {
     focused: boolean;
-    windowKey?: any;
+    windowKey?: string;
     type: string;
     macOSFrame?: boolean;
     themeOverride?: any;

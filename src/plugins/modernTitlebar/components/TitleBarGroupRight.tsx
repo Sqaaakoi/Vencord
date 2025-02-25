@@ -18,7 +18,7 @@ import CallPill from "./CallPill";
 import { cl } from "./TitleBar";
 import WindowButtons from "./WindowButtons";
 
-export default function TitleBarGroupRight({ user, windowKey }: { user: User | undefined; windowKey: any; }) {
+export default function TitleBarGroupRight({ user, windowKey }: { user: User | undefined; windowKey?: string; }) {
     const { quickSwitcherButton, callPill, profileButton, actionButtons, settingsButton } = settings.use(["quickSwitcherButton", "callPill", "profileButton", "actionButtons", "settingsButton"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-right"))}>
         {callPill && <CallPill user={user} />}

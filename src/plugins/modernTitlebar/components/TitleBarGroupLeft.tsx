@@ -16,10 +16,10 @@ import StatCounters from "./StatCounters";
 import { cl } from "./TitleBar";
 import TotalMentionsBadge from "./TotalMentionsBadge";
 
-export default function TitleBarGroupLeft({ user, windowKey }: { user: User | undefined; windowKey: any; }) {
+export default function TitleBarGroupLeft({ user, windowKey }: { user: User | undefined; windowKey?: string; }) {
     const { homeButton, sidebarButton, mentionsBadge } = settings.use(["homeButton", "sidebarButton", "mentionsBadge"]);
     return <div className={classes(cl("titlebar-group"), cl("titlebar-group-left"))}>
-        {homeButton && <HomeIcon />}
+        {homeButton && <HomeIcon windowKey={windowKey} />}
         {sidebarButton && !windowKey && <SidebarButton />}
         {user && <StatCounters />}
         {mentionsBadge && user && <TotalMentionsBadge />}
