@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { createStyle, disableStyle, enableStyle } from "@api/Styles";
 import { waitFor } from "@webpack";
-import { useState } from "@webpack/common";
 
 interface LazyCSS {
     classes: string[];
@@ -55,24 +55,24 @@ const selectors: LazyCSS[] = [
     },
 ];
 
-function InjectCSSWhenReady(props: { selector: LazyCSS; }) {
-    const lc = props.selector;
-    const [stylesModule, setStylesModule] = useState(undefined);
+const injectedStyles: string[] = [];
+
+function injectSelector(lc: LazyCSS) {
+    const styleName = `modernTitlebar-override:${lc.classes.join(".")}`;
     waitFor([...lc.classes], module => {
-        if (stylesModule === undefined) setStylesModule(module);
+        injectedStyles.push(styleName);
+        createStyle(styleName, lc.style(module));
     });
-    let result = "/* Webpack find not finished yet */";
-    try {
-        if (stylesModule !== undefined) result = lc.style(stylesModule);
-    } catch (e) {
-        console.error(e);
-        result = "/* Style errored.*/";
-    }
-    return <style>{result}</style>;
 }
 
-export default function OverrideCSS(props: { className: string; }) {
-    return <div className={props.className} style={{ display: "none" }}>
-        {selectors.map((lc, i) => <InjectCSSWhenReady selector={lc} key={i} />)}
-    </div>;
+export function injectOverrides() {
+    selectors.forEach(injectSelector);
+}
+
+export function enableStyles() {
+    injectedStyles.forEach(enableStyle);
+}
+
+export function disableStyles() {
+    injectedStyles.forEach(disableStyle);
 }
