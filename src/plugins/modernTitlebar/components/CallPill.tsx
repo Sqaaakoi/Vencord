@@ -7,8 +7,8 @@
 import "./CallPill.css";
 
 import { classes, getIntlMessage } from "@utils/index";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { ChannelStore, ContextMenuApi, GuildStore, Menu, NavigationRouter, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, ContextMenuApi, GuildStore, Menu, NavigationRouter, Popout, RelationshipStore, SelectedChannelStore, UserStore, useStateFromStores } from "@webpack/common";
 import { Channel, User } from "discord-types/general";
 
 import { useCallTimer } from "../utils/callTimer";
@@ -19,6 +19,11 @@ const formatChannelName = findByCodeLazy("#{intl::GROUP_DM_ALONE}");
 const VoiceChannelActions = findByPropsLazy("selectVoiceChannel", "disconnect");
 
 const PhoneCallIcon = findComponentByCodeLazy("M13 7a1 1 0 0 1 1-1 4 4 0 0");
+
+const SortedVoiceStateStore = findStoreLazy("SortedVoiceStateStore");
+const ConnectedVoiceUsers = findComponentByCodeLazy(",isSelfOnOtherClient:", "getSessionId");
+
+const popoutClasses = findByPropsLazy("root", "voiceUsers");
 
 // Adapted from CallTimer
 function formatDuration(ms: number) {
@@ -38,25 +43,48 @@ function formatDuration(ms: number) {
 export default function CallPill(props: { user: User | undefined; }) {
     const time = useCallTimer();
 
-    if (time === null || !props.user) return null;
-    return <Pill
-        action={() => {
-            const channelId = SelectedChannelStore.getVoiceChannelId();
-            if (!channelId) return;
-            const channel = ChannelStore.getChannel(channelId);
-            NavigationRouter.transitionToGuild(channel.getGuildId(), channelId);
-        }}
-        className={cl("call-pill")}
-        pillProps={{
-            onContextMenu(e) {
-                const channel = ChannelStore.getChannel(SelectedChannelStore.getVoiceChannelId()!);
-                ContextMenuApi.openContextMenu(e, () => <CallPillContextMenu channel={channel} />);
-            }
-        }}
+    const channel = useStateFromStores([SelectedChannelStore], () => ChannelStore.getChannel(SelectedChannelStore.getVoiceChannelId()!));
+
+    if (time === null || !props.user || !channel) return null;
+    return <Popout
+        renderPopout={({ closePopout }) => <CallPillPopout
+            channel={channel}
+            closePopout={closePopout}
+        />}
+        spacing={16}
+        position="bottom"
+        align="center"
     >
-        <PhoneCallIcon size="xs" color="currentColor" />
-        <span className={classes(cl("pill-content"), cl("call-pill-content"))}>{formatDuration(time!)}</span>
-    </Pill>;
+        {popoutProps => <Pill
+            // action={() => {
+            //     NavigationRouter.transitionToGuild(channel.getGuildId(), channel.id);
+            // }}
+            className={cl("call-pill")}
+            pillProps={{
+                ...popoutProps,
+                onContextMenu(e) {
+                    ContextMenuApi.openContextMenu(e, () => <CallPillContextMenu channel={channel} />);
+                }
+            }}
+        >
+            <PhoneCallIcon size="xs" color="currentColor" />
+            <span className={classes(cl("pill-content"), cl("call-pill-content"))}>{formatDuration(time!)}</span>
+        </Pill>}
+    </Popout>;
+}
+
+export function CallPillPopout({ channel, closePopout }: { channel: Channel; closePopout(): void; }) {
+    const voiceStates = useStateFromStores([SortedVoiceStateStore], () => SortedVoiceStateStore.getVoiceStatesForChannel(channel));
+    return <div className={classes(cl("call-pill-popout"), popoutClasses.root)}>
+        <ConnectedVoiceUsers
+            className={popoutClasses.voiceUsers}
+            allowDragging={false}
+            allowPreviews={false}
+            channel={channel}
+            voiceStates={voiceStates}
+            collapsed={false}
+        />
+    </div>;
 }
 
 export function CallPillContextMenu({ channel }: { channel: Channel; }) {
