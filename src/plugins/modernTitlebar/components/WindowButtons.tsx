@@ -42,7 +42,7 @@ export const windowActions = {
     }
 };
 
-export default function WindowButtons({ windowKey }: { windowKey: any; }) {
+export default function WindowButtons({ windowKey }: { windowKey?: string; }) {
     if (!windowActions.canUseWindowButtons) return null;
     return <>
         <TitleBarButton
