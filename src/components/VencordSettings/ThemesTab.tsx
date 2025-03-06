@@ -78,25 +78,26 @@ function Validators({ themeLinks }: { themeLinks: string[]; }) {
             <Forms.FormText>This section will tell you whether your themes can successfully be loaded</Forms.FormText>
             <div>
                 {themeLinks.map(rawLink => {
-                    const { label, link } = (() => {
-                        const match = /^@(light|dark) (.*)/.exec(rawLink);
-                        if (!match) return { label: rawLink, link: rawLink };
+                    const { label, enabled, link } = (() => {
+                        const match = /^@(light|dark|disabled) (.*)/.exec(rawLink);
+                        if (!match) return { label: rawLink, link: rawLink, enabled: true };
 
                         const [, mode, link] = match;
-                        return { label: `[${mode} mode only] ${link}`, link };
+                        if (mode === "disabled") return { label: `[Disabled] ${link}`, link, enabled: false };
+                        return { label: `[${mode} mode only] ${link}`, link, enabled: true };
                     })();
 
                     return <Card style={{
                         padding: ".5em",
                         marginBottom: ".5em",
                         marginTop: ".5em"
-                    }} key={link}>
+                    }} key={rawLink}>
                         <Forms.FormTitle tag="h5" style={{
                             overflowWrap: "break-word"
                         }}>
                             {label}
                         </Forms.FormTitle>
-                        <Validator link={link} />
+                        {enabled && <Validator link={link} />}
                     </Card>;
                 })}
             </div>
@@ -305,6 +306,7 @@ function ThemesTab() {
                     <Forms.FormTitle tag="h5">Paste links to css files here</Forms.FormTitle>
                     <Forms.FormText>One link per line</Forms.FormText>
                     <Forms.FormText>You can prefix lines with @light or @dark to toggle them based on your Discord theme</Forms.FormText>
+                    <Forms.FormText>To disable a theme, prefix the line with @disabled</Forms.FormText>
                     <Forms.FormText>Make sure to use direct links to files (raw or github.io)!</Forms.FormText>
                 </Card>
 

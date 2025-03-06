@@ -65,7 +65,7 @@ async function initThemes() {
 
     const links = themeLinks
         .map(rawLink => {
-            const match = /^@(light|dark) (.*)/.exec(rawLink);
+            const match = /^@(light|dark|disabled) (.*)/.exec(rawLink);
             if (!match) return rawLink;
 
             const [, mode, link] = match;
