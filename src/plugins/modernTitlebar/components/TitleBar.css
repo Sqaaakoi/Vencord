@@ -11,6 +11,9 @@
     flex-direction: column;
 }
 
+[data-popout-root="true"] .vc-modernTitlebar-container {
+    background: var(--bg-overlay-4, var(--background-secondary));
+}
 
 .vc-modernTitlebar-titlebar {
     -webkit-app-region: drag;
