@@ -66,6 +66,14 @@ export default definePlugin({
                 match: /=(\i\.pageY)/,
                 replace: "=$self.adjustContextMenu($1)"
             }
+        },
+        // The New Activity Popout
+        {
+            find: /withTitleBar:.{0,20}?\.isPlatformEmbedded/,
+            replacement: {
+                match: /\i\.isPlatformEmbedded&&/,
+                replace: ""
+            }
         }
     ],
     renderTitleBar(props) {
