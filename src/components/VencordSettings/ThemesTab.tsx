@@ -48,8 +48,8 @@ const FileInput: FileInput = findLazy(m => m.prototype?.activateUploadDialogue &
 
 const cl = classNameFactory("vc-settings-theme-");
 
-function Validator({ link }: { link: string; }) {
-    const [res, err, pending] = useAwaiter(() => fetch(link).then(res => {
+function Validator({ link, disabled }: { link: string; disabled: boolean; }) {
+    const [res, err, pending] = useAwaiter(() => disabled ? (async () => "")() : fetch(link).then(res => {
         if (res.status > 300) throw `${res.status} ${res.statusText}`;
         const contentType = res.headers.get("Content-Type");
         if (!contentType?.startsWith("text/css") && !contentType?.startsWith("text/plain"))
@@ -58,14 +58,16 @@ function Validator({ link }: { link: string; }) {
         return "Okay!";
     }));
 
-    const text = pending
-        ? "Checking..."
-        : err
-            ? `Error: ${err instanceof Error ? err.message : String(err)}`
-            : "Valid!";
+    const text = disabled ?
+        "Theme disabled" :
+        pending
+            ? "Checking..."
+            : err
+                ? `Error: ${err instanceof Error ? err.message : String(err)}`
+                : "Valid!";
 
     return <Forms.FormText style={{
-        color: pending ? "var(--text-muted)" : err ? "var(--text-danger)" : "var(--text-positive)"
+        color: pending || disabled ? "var(--text-muted)" : err ? "var(--text-danger)" : "var(--text-positive)"
     }}>{text}</Forms.FormText>;
 }
 
@@ -78,13 +80,20 @@ function Validators({ themeLinks }: { themeLinks: string[]; }) {
             <Forms.FormText>This section will tell you whether your themes can successfully be loaded</Forms.FormText>
             <div>
                 {themeLinks.map(rawLink => {
-                    const { label, enabled, link } = (() => {
-                        const match = /^@(light|dark|disabled) (.*)/.exec(rawLink);
-                        if (!match) return { label: rawLink, link: rawLink, enabled: true };
+                    const { label, disabled, link } = (() => {
+                        const match = /^(# *?)?@(light|dark|) (.*)/.exec(rawLink);
+                        if (!match) return { label: rawLink, link: rawLink, disabled: false };
 
-                        const [, mode, link] = match;
-                        if (mode === "disabled") return { label: `[Disabled] ${link}`, link, enabled: false };
-                        return { label: `[${mode} mode only] ${link}`, link, enabled: true };
+                        const [, comment, mode, link] = match;
+                        return {
+                            label: [
+                                comment && "[Disabled]",
+                                mode && `[${mode} mode only]`,
+                                link
+                            ].filter(Boolean).join(" "),
+                            link,
+                            disabled: !!comment
+                        };
                     })();
 
                     return <Card style={{
@@ -97,7 +106,7 @@ function Validators({ themeLinks }: { themeLinks: string[]; }) {
                         }}>
                             {label}
                         </Forms.FormTitle>
-                        {enabled && <Validator link={link} />}
+                        <Validator link={link} disabled={disabled} />
                     </Card>;
                 })}
             </div>
@@ -306,7 +315,7 @@ function ThemesTab() {
                     <Forms.FormTitle tag="h5">Paste links to css files here</Forms.FormTitle>
                     <Forms.FormText>One link per line</Forms.FormText>
                     <Forms.FormText>You can prefix lines with @light or @dark to toggle them based on your Discord theme</Forms.FormText>
-                    <Forms.FormText>To disable a theme, prefix the line with @disabled</Forms.FormText>
+                    <Forms.FormText>To disable a theme, prefix the line with #</Forms.FormText>
                     <Forms.FormText>Make sure to use direct links to files (raw or github.io)!</Forms.FormText>
                 </Card>
 
