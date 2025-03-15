@@ -2,12 +2,16 @@
 
 The cutest Discord client mod, now with quality of life additions and other things I find useful
 
-For more information and to support the Vencord project, see the **[upstream README](https://github.com/Vendicated/Vencord/blob/main/README.md)**
+# Relation to upstream
+
+This repository is a fork of [Vencord](https://github.com/Vendicated/Vencord).
+New contributions will not be submitted upstream, as I am distancing myself from the upstream project.
+Existing features will be maintained, and new changes from upstream will be merged in locally, albeit less frequently than before. 
 
 ## Features
 
 This is a list of features in this fork.
-Last updated 19th November 2024.
+Last updated 16th March 2025.
 
 All of these plugins have their own branch in the repository. If you want to add them to your own fork, consider adding this repository as a remote and merging the changes into your branch.
 
@@ -24,23 +28,32 @@ All of these plugins have their own branch in the repository. If you want to add
     -   Sort by frequently used instead of favourites first (originally developed by Vee)
 -   ContextMenuSelectFix
     -   Allows you to hold right click to open a context menu and then drag your mouse to the item and release to click it
+-   ForwardHere
+    -   Adds the current channel to the top of the forward menu
+    -   Optionally also adds the message author near the top of the list
+-   KeepDMsInSidebar
+    -   Pin direct messages to the guild sidebar
+    -   Can be filtered to online users/groups only
+    -   Recent messages can also be displayed
+    -   Trivia: This plugin was originally developed during the June 2024 bundler changes
+-   ModernTitlebar
+    -   Adds a thicker, more modern looking titlebar to Discord
+    -   Not compatible with Visual Refresh
+    -   Contains many useful buttons, including voice controls
+    -   Can replace ServerListIndicators
 -   PollCommands
     -   Adds a /pollyn command to create a Yes/No poll
--   PreSendModeration
-    -   Confirms that you want to send inappropriate content.
-    -   List is sourced from the list Discord uses for the client side keyword filter
+-   PopoutWindowKeyInjector
+    -   Adds the window key to popout windows as a URL fragment
+    -   Only supported and useful in browsers as a developer utility
 -   ProfileCommand
     -   Adds a /profile command to open someone's profile
 -   ScreenshareCrashFix
     -   Fixes the unknown resolution/frame rate crash when watching someone's stream
--   ServerTemplatesList
-    -   Customise the list of server templates
-    -   Imports server templates from servers you are in
-    -   Can be filtered to templates from your servers only
-    -   Option to skip the useless creation intent page
-    -   Default templates can be hidden or placed below your templates
 -   SimplifiedProfileNotes
     -   Re-adds the notes text box to profile popouts
+-   SwitchProfileButton
+    -   Moves the View Main/Server Profile button out of the overflow menu
 -   NewPluginsManager
     -   Notifies you when new plugins are added, or when plugin settings are added
     -   Enabled by default
@@ -49,6 +62,9 @@ All of these plugins have their own branch in the repository. If you want to add
     -   Removes a LOT of annoyances from Discord
     -   See the [README](https://github.com/Sqaaakoi/vc-junkCleanup/blob/main/README.md#removed-junk) for more information
     -   Available as a [userplugin](https://github.com/Sqaaakoi/vc-junkCleanup) (for easy standalone installation)
+-   ShyTyping
+    -   Prevents you from accidentally revealing that you're lurking in a channel
+    -   Available as a [userplugin](https://git.nin0.dev/Sqaaakoi-VencordUserPlugins) (for easy standalone installation)
 -   SqaaakoiForkSupport
     -   Adds a welcome/changelog modal
     -   Warns you about asking for support with my plugins in the Vencord support channel
@@ -56,14 +72,10 @@ All of these plugins have their own branch in the repository. If you want to add
 
 ### My unmaintained plugins
 
--   ResizableSidebar
-    -   Resize the sidebar on the left of your screen.
-    -   Right click the invisible handle to reset it.
-    -   Unmaintained due to breakage. Not recommended to enable
--   ShakingText
-    -   Adds a markdown rule for text that shakes around
-    -   Code taken from the 3rd party WigglyText plugin (https://github.com/nexpid/WigglyText)
-    -   Unmaintained as it's way too niche, and it's somehow incompatible with the WigglyText plugin
+-   PreSendModeration
+    -   Confirms that you want to send inappropriate content.
+    -   Lists sourced from keyword filter experiment
+    -   Unmaintained due to breakage. Do not enable. You will not be able to send messages
 
 ### Modified plugins
 
@@ -72,6 +84,9 @@ All of these plugins have their own branch in the repository. If you want to add
         -   Always showing the members page in server settings
         -   Always showing the members page in the sidebar
         -   Picker for your non-Nitro banner color in the profile editor when you have Nitro
+
+### Unmaintained modified plugins
+    
 -   ShowTimeoutDetails (modified version of ShowTimeoutDuration)
     -   Adds a popout showing more details about a timeout
         -   Remaining time
@@ -111,9 +126,9 @@ Please DO NOT ask upstream Vencord for support with installing this.
 
 ## Support
 
-There is no formal support for this fork.
+There is no Discord server for help. Please [create an issue](https://github.com/Sqaaakoi/Vencord/issues/new/choose) instead.
 
-Some support is informally offered to friends. Friends may DM me on Discord for this.
+Friends may DM me on Discord for help, but please do not expect a response.
 
 ## Disclaimer
 
