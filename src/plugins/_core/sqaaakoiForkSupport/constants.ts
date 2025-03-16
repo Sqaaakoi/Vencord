@@ -8,10 +8,10 @@ import { Devs } from "@utils/constants";
 
 export const SQAAAKOI_USER_ID = Devs.Sqaaakoi.id + "";
 
-export const CURRENT_WELCOME_NOTICE_VERSION = 5;
+export const CURRENT_WELCOME_NOTICE_VERSION = 6;
 export const WELCOME_NOTICE_VERSION_KEY = "SqaaakoiForkSupport_StartupMessageVersion";
 
-export const LAST_UPDATED_AT = new Date("2025-01-15T07:33:16.451Z");
+export const LAST_UPDATED_AT = new Date("2025-03-16T00:00:43.162Z");
 
 // friends or not
 const F = (strings: TemplateStringsArray, ...args: any[]) => [true, String.raw(strings, ...args)] as [boolean, string];
@@ -45,19 +45,16 @@ export const WELCOME_HEADER = "## 👋 Welcome to Sqaaakoi's Vencord fork!";
 export const WELCOME_BACK_HEADER = "## 👋 What's new in Sqaaakoi's Vencord fork";
 
 export const WELCOME_MESSAGE = friendsOnlyFilter`
-Happy (late) new year!
+This project is distancing itself from upstream Vencord.
 
-Despite ChannelTabs being too much of a nightmare to implement cleanly, the custom titlebar is coming back!
+## Why?
+To put it simply, Discord Drama™ and Certified Discord Moderation™
 
-**ModernTitlebar** implements a highly configurable titlebar with various useful buttons and indicators.
-It can replace the following plugins and do much more
-- CallTimer (adds a pill to the right side of the titlebar with basic information about your current call)
-- ServerListIndicators (adds these statistics to the left side of the titlebar)
-I intend to move the account panel in the bottom left corner of the app to be inside of this titlebar very soon.
+## What's changing
+The project is now much lower priority for me. I won't be updating it as often.
+New features will still be added, just not as often as in the past.
+Fixes and merging in upstream changes will still happen on a regular basis, and whenever something important breaks.
 
-## Coming ~~soon~~ eventually
-**VoiceChatTweaks** (name not final) will add the ability to automatically start watching streams
-
-If any of my plugins have an issue, please file an issue on [GitHub](https://github.com/Sqaaakoi/Vencord/issues)
-${F`${LF}-# Thank you, friends! If you have feedback on these plugins, please DM me :)`}
+If there is an issue with any feature included in this project, please file an issue on [GitHub](https://github.com/Sqaaakoi/Vencord/issues)
+${F`${LF}-# Want to know more about this announcement? You can DM me with any questions you have.`}
 `;
