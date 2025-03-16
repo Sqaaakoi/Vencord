@@ -33,7 +33,7 @@ import { onlyOnce } from "@utils/onlyOnce";
 import { makeCodeblock } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
 import { checkForUpdates, isOutdated, update } from "@utils/updater";
-import { Alerts, Button, Card, Forms, Parser, RelationshipStore, showToast, Text, Toasts, UserStore } from "@webpack/common";
+import { Alerts, Button, Card, Forms, NavigationRouter, Parser, RelationshipStore, showToast, Text, Toasts, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 import gitHash from "~git-hash";
@@ -191,7 +191,9 @@ export default definePlugin({
                             <Forms.FormText>You are using an outdated version of Vencord! Chances are, your issue is already fixed.</Forms.FormText>
                             <Forms.FormText className={Margins.top8}>
                                 Please first update before asking for support!
-                                Additionally, you should not ask for support here.
+                            </Forms.FormText>
+                            <Forms.FormText className={Margins.top8}>
+                                Additionally, you should not ask for support with this fork here. <Link href="https://github.com/Sqaaakoi/Vencord/issues/new/choose">Click here for support.</Link>
                             </Forms.FormText>
                         </div>,
                         onCancel: () => openUpdaterModal!(),
@@ -238,6 +240,7 @@ export default definePlugin({
                     confirmText: "Get Support",
                     onConfirm() {
                         window.open("https://github.com/Sqaaakoi/Vencord/issues/new/choose", "_blank");
+                        NavigationRouter.back();
                     },
                     cancelText: "Dismiss warning",
                     secondaryConfirmText: "I accept the risks, don't show this again",
