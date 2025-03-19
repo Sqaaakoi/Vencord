@@ -74,6 +74,15 @@ export default definePlugin({
                 match: /\i\.isPlatformEmbedded&&/,
                 replace: ""
             }
+        },
+
+        // Force web platform classname
+        {
+            find: "platform-web",
+            replacement: {
+                match: /="";return(?=.{0,10}isWindows)/,
+                replace: '$&"platform-web";'
+            }
         }
     ],
     renderTitleBar(props) {
