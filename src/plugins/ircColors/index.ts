@@ -87,18 +87,22 @@ export default definePlugin({
         {
             find: "#{intl::GUILD_OWNER}),children:",
             replacement: {
-                match: /(?<=\.MEMBER_LIST}\),\[\]\),)(.+?color:)null!=.{0,50}?(?=,)/,
-                replace: (_, rest) => `ircColor=$self.calculateNameColorForListContext(arguments[0]),${rest}ircColor`
+                match: /(typingIndicatorRef:.+?},)(\i=.+?)color:null!=.{0,50}?(?=,)/,
+                replace: (_, rest1, rest2) => `${rest1}ircColor=$self.calculateNameColorForListContext(arguments[0]),${rest2}color:ircColor`
             },
             predicate: () => settings.store.memberListColors
         }
     ],
 
     calculateNameColorForMessageContext(context: any) {
-        const id = context?.message?.author?.id;
+        const userId: string | undefined = context?.message?.author?.id;
         const colorString = context?.author?.colorString;
-        const color = calculateNameColorForUser(id);
+        const color = calculateNameColorForUser(userId);
         const { applyColorInDms, applyColorInServers, applyColorOnlyToUsersWithoutColor } = settings.use(["applyColorInDms", "applyColorInServers", "applyColorOnlyToUsersWithoutColor"]);
+
+        // Color preview in role settings
+        if (context?.message?.channel_id === "1337" && userId === "313337")
+            return colorString;
 
         if (!(context?.channel?.isPrivate() ? applyColorInDms : applyColorInServers)) {
             return colorString;
