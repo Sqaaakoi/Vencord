@@ -48,10 +48,10 @@ const selectors: LazyCSS[] = [
     },
     // Fixes unrelated to Discord's own titlebar height
 
-    // Modals
+    // Modals and Context menus
     {
-        classes: ["layer", "hidden"],
-        style: m => `${hoist} .${m.layer} { top: ${height}; }`
+        classes: ["layerContainer", "clickTrapContainer"],
+        style: m => `${hoist} .${m.layerContainer} { top: ${height}; }`
     },
 ];
 

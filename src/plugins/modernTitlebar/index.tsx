@@ -11,7 +11,6 @@ import definePlugin from "@utils/types";
 import TitleBar from "./components/TitleBar";
 import { settings } from "./settings";
 import { startCallTimerSubscription, stopCallTimerSubscription } from "./utils/callTimer";
-import { adjustContextMenu } from "./utils/contextMenu";
 import { disableStyles, enableStyles, injectOverrides } from "./utils/overrideCSS";
 import { keybindHandler } from "./utils/sidebar";
 
@@ -59,14 +58,6 @@ export default definePlugin({
                 replace: "$&||arguments[0]?.hidden"
             }
         },
-        // Stop context menus from going off screen
-        {
-            find: 'if("pageX"in',
-            replacement: {
-                match: /=(\i\.pageY)/,
-                replace: "=$self.adjustContextMenu($1)"
-            }
-        },
         // The New Activity Popout
         {
             find: /withTitleBar:.{0,20}?\.isPlatformEmbedded/,
@@ -90,7 +81,6 @@ export default definePlugin({
             <TitleBar {...props} />
         </ErrorBoundary>;
     },
-    adjustContextMenu,
 
     start() {
         enableStyles();
