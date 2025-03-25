@@ -13,7 +13,8 @@ interface LazyCSS {
 }
 
 const hoist = "body #app-mount";
-const height = "var(--vc-moderntitlebar-height)";
+const varname = "--vc-moderntitlebar-height";
+const height = `var(${varname})`;
 
 const selectors: LazyCSS[] = [
     // Sidebar top left corner
@@ -21,10 +22,10 @@ const selectors: LazyCSS[] = [
         classes: ["sidebar", "sidebarListRounded"],
         style: m => `${hoist} .${m.sidebar} { border-radius: 8px 0 0; overflow: hidden; }`
     },
-    // Layers
+    // Layers but exclude chat sidebar
     {
         classes: ["bg", "layer", "baseLayer"],
-        style: m => `${hoist} .${m.layer} { padding-top: ${height}; top: calc(-1 * ${height}); } ${hoist} .${m.bg} { top: calc(-1 * ${height}); }`
+        style: m => `${hoist} .${m.layer} { padding-top: ${height}; top: calc(-1 * ${height}); > * { ${varname}: 0; } } ${hoist} .${m.bg} { top: calc(-1 * ${height}); }`
     },
     // Loading screen??
     {
@@ -32,9 +33,14 @@ const selectors: LazyCSS[] = [
         style: m => `${hoist} .${m.container.split(" ")[0]} { padding-top: ${height}; top: calc(-1 * ${height}); }`
     },
 
+    // {
+    //     classes: ["standardSidebarView"],
+    //     style: m => `${hoist} > :not[data-popout-root] .${m.standardSidebarView} { top: ${height}; } ${hoist} > [data-popout-root] .${m.standardSidebarView} { top: 0; }`
+    // },
+    // Popout content for chat sidebar
     {
-        classes: ["standardSidebarView"],
-        style: m => `${hoist} > :not[data-popout-root] ${m.standardSidebarView} { top: ${height}; } ${hoist} > [data-popout-root] .${m.standardSidebarView} { top: 0; }`
+        classes: ["popout", "content"],
+        style: m => `${hoist} .${m.content} { ${varname}: 0; }`
     },
 
     {
