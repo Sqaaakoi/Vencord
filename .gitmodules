@@ -164,3 +164,12 @@
 [submodule "src/thirdpartyplugins/atSomeone"]
 	path = src/thirdpartyplugins/atSomeone
 	url = https://github.com/Masterjoona/vc-atsomeone
+[submodule "src/thirdpartyplugins/devtoolsInPopouts"]
+	path = src/thirdpartyplugins/devtoolsInPopouts
+	url = https://github.com/sadan4/vc-devtoolsInPopouts
+[submodule "src/thirdpartyplugins/sillyMaxwell"]
+	path = src/thirdpartyplugins/sillyMaxwell
+	url = https://github.com/1337isnot1337/sillyMaxwell
+[submodule "src/thirdpartyplugins/componentDemangler"]
+	path = src/thirdpartyplugins/componentDemangler
+	url = https://github.com/sadan4/vc-componentDemangler
