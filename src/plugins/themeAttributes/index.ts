@@ -63,8 +63,8 @@ export default definePlugin({
         }
     ],
 
-    getAvatarStyles(src: string) {
-        if (src.startsWith("data:")) return {};
+    getAvatarStyles(src: string | null) {
+        if (!src || src.startsWith("data:")) return {};
 
         return Object.fromEntries(
             [128, 256, 512, 1024, 2048, 4096].map(size => [
