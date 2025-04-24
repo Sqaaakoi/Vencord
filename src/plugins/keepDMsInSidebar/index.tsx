@@ -150,6 +150,16 @@ function openSettingsContextMenu(e: MouseEvent) {
     });
 }
 
+function changeRecentDMCount(e: WheelEvent) {
+    if (e.deltaY === 0 || !e.altKey) return;
+    e.stopPropagation();
+    e.preventDefault();
+    const modifier = e.deltaY < 0 ? -1 : 1;
+    const newValue = (settings.store.keepRecentDmsVisible ? settings.store.keepRecentDMCount : 0) + modifier;
+    if (newValue > 0) settings.store.keepRecentDMCount = newValue;
+    settings.store.keepRecentDmsVisible = newValue > 0;
+}
+
 const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore");
 
 const typingCache = {};
@@ -171,7 +181,7 @@ export default definePlugin({
             find: "#{intl::DISCODO_DISABLED}",
             replacement: {
                 match: /(?=onClick:\(\)=>{.{0,300}"discodo")/,
-                replace: "onContextMenu:$self.openSettingsContextMenu,"
+                replace: "onContextMenu:$self.openSettingsContextMenu,onWheel:$self.changeRecentDMCount,"
             }
         }
     ],
@@ -180,6 +190,7 @@ export default definePlugin({
         "gdm-context": contextMenuPatch,
     },
     openSettingsContextMenu,
+    changeRecentDMCount,
     flux: {
         TYPING_START({ channelId }: { channelId: string; }) {
             if (ChannelStore.getChannel(channelId)?.isPrivate())
