@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import "./style.css";
+
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
@@ -24,6 +26,7 @@ import definePlugin from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, ChannelStore, Clickable, IconUtils, RelationshipStore, ScrollerThin, useMemo, UserStore } from "@webpack/common";
 import { Channel, User } from "discord-types/general";
+import { JSX } from "react";
 
 const SelectedChannelActionCreators = findByPropsLazy("selectPrivateChannel");
 const UserUtils = findByPropsLazy("getGlobalName");
@@ -55,6 +58,7 @@ function getMutualGDMCountText(user: User) {
 function renderClickableGDMs(mutualDms: Channel[], onClose: () => void) {
     return mutualDms.map(c => (
         <Clickable
+            key={c.id}
             className={ProfileListClasses.listRow}
             onClick={() => {
                 onClose();
@@ -93,6 +97,12 @@ export default definePlugin({
                 {
                     match: /\(0,\i\.jsx\)\(\i,\{items:\i,section:(\i)/,
                     replace: "$1==='MUTUAL_GDMS'?$self.renderMutualGDMs(arguments[0]):$&"
+                },
+                // Discord adds spacing between each item which pushes our tab off screen.
+                // set the gap to zero to ensure ours stays on screen
+                {
+                    match: /className:\i\.tabBar/,
+                    replace: "$& + ' vc-mutual-gdms-tab-bar'"
                 }
             ]
         },
