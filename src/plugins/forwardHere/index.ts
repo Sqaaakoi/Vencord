@@ -28,7 +28,7 @@ export default definePlugin({
     }),
     patches: [
         {
-            find: 'location:"ForwardModal"',
+            find: ".ToastType.FORWARD",
             replacement: [
                 // top of search results
                 {
