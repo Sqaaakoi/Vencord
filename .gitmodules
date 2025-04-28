@@ -173,3 +173,12 @@
 [submodule "src/thirdpartyplugins/componentDemangler"]
 	path = src/thirdpartyplugins/componentDemangler
 	url = https://github.com/sadan4/vc-componentDemangler
+[submodule "src/thirdpartyplugins/soundTriggers"]
+	path = src/thirdpartyplugins/soundTriggers
+	url = https://github.com/777Vincent/SoundTriggers
+[submodule "src/thirdpartyplugins/forceRoleColor"]
+	path = src/thirdpartyplugins/forceRoleColor
+	url = https://github.com/surgedevs/ForceRoleColor
+[submodule "src/thirdpartyplugins/betterForwardMeta"]
+	path = src/thirdpartyplugins/betterForwardMeta
+	url = https://git.nin0.dev/userplugins/betterForwardMeta
