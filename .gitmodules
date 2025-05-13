@@ -182,3 +182,6 @@
 [submodule "src/thirdpartyplugins/betterForwardMeta"]
 	path = src/thirdpartyplugins/betterForwardMeta
 	url = https://git.nin0.dev/userplugins/betterForwardMeta
+[submodule "src/thirdpartyplugins/signature"]
+	path = src/thirdpartyplugins/signature
+	url = https://github.com/KrstlSkll69/Signature
