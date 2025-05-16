@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { copyToClipboard } from "@utils/clipboard";
 import { _resolveReady, filters, findByCodeLazy, findByPropsLazy, findLazy, mapMangledModuleLazy, waitFor } from "@webpack";
 import type { Channel } from "discord-types/general";
 
@@ -147,6 +148,13 @@ export const ApplicationAssetUtils = mapMangledModuleLazy("getAssetImage: size m
     getAssetImage: filters.byCode("getAssetImage: size must === ["),
     getAssets: filters.byCode(".assets")
 });
+
+// TODO: remove when userplugins updated :trolley: (never)
+// also the type still exists for this :wires:
+export const Clipboard: t.Clipboard = {
+    copy: copyToClipboard,
+    SUPPORTS_COPY: true
+};
 
 export const NavigationRouter: t.NavigationRouter = mapMangledModuleLazy("Transitioning to ", {
     transitionTo: filters.byCode("transitionTo -"),
