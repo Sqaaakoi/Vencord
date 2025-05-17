@@ -75,6 +75,7 @@ async function initThemes() {
 
 document.addEventListener("DOMContentLoaded", () => {
     initSystemValues();
+    initThemes();
 
     toggle(Settings.useQuickCss);
     VencordNative.quickCss.addChangeListener(css => {
