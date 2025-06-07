@@ -74,6 +74,8 @@ async function initThemes() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (IS_USERSCRIPT) return;
+
     initSystemValues();
     initThemes();
 
@@ -99,9 +101,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!popoutWindow?.document) return;
         addStylesToDocument(popoutWindow.document);
     });
-});
+
+}, { once: true });
 
 export function initQuickCssThemeStore() {
+    if (IS_USERSCRIPT) return;
+
     initThemes();
 
     let currentTheme = ThemeStore.theme;
