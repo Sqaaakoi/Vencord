@@ -101,6 +101,10 @@ const patchCsp = (headers: PolicyMap) => {
 
         for (const directive of ["style-src", "connect-src", "img-src", "font-src", "media-src", "worker-src"]) {
             pushDirective(directive, "blob:", "data:", "vencord:");
+            // :trolley:
+            // AFAIK upstream is removing this because of the potential that malicious themes could be used to log IP addresses.
+            // I am not confident about this and I also don't really care.
+            if (directive !== "worker-src") pushDirective(directive, "*");
         }
 
         for (const [host, directives] of Object.entries(CspPolicies)) {
