@@ -73,7 +73,7 @@
 	url = https://github.com/Masterjoona/vc-unreadcountbadge
 [submodule "src/thirdpartyplugins/jumpscare"]
 	path = src/thirdpartyplugins/jumpscare
-	url = https://github.com/surgedevs/VencordJumpscare
+	url = https://github.com/chloecinders/VencordJumpscare
 [submodule "src/thirdpartyplugins/messageColors"]
 	path = src/thirdpartyplugins/messageColors
 	url = https://github.com/henmalib/vc-messageColors
