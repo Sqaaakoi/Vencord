@@ -6,7 +6,7 @@ The cutest Discord client mod, now with quality of life additions and other thin
 
 This repository is a fork of [Vencord](https://github.com/Vendicated/Vencord).
 New contributions will not be submitted upstream, as I am distancing myself from the upstream project.
-Existing features will be maintained, and new changes from upstream will be merged in locally, albeit less frequently than before. 
+Existing features will be maintained, and new changes from upstream will be merged in locally, albeit less frequently than before.
 
 ## Features
 
@@ -86,7 +86,7 @@ All of these plugins have their own branch in the repository. If you want to add
         -   Picker for your non-Nitro banner color in the profile editor when you have Nitro
 
 ### Unmaintained modified plugins
-    
+
 -   ShowTimeoutDetails (modified version of ShowTimeoutDuration)
     -   Adds a popout showing more details about a timeout
         -   Remaining time
@@ -100,7 +100,7 @@ All of these plugins have their own branch in the repository. If you want to add
 ### Less notable plugin changes (where I haven't added myself to developers for these plugins)
 
 -   NoTrack
-    -   Disable Sentry in native by preventing the `@sentry/electron` package from loading 
+    -   Disable Sentry in native by preventing the `@sentry/electron` package from loading
 -   MutualGroupDMs
     -   Fix bug where mutual groups wouldn't show in DM sidebar when user has no mutual friends or servers
     -   https://github.com/Vendicated/Vencord/pull/2976
