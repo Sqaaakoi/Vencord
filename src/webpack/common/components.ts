@@ -25,7 +25,7 @@ import * as t from "./types/components";
 
 const FormTitle = waitForComponent<t.FormTitle>("FormTitle", filters.componentByCode('["defaultMargin".concat', '="h5"'));
 const FormText = waitForComponent<t.FormText>("FormText", filters.componentByCode(".SELECTABLE),", ".DISABLED:"));
-const FormSection = waitForComponent<t.FormSection>("FormSection", filters.componentByCode(".titleId)&&"));
+const FormSection = waitForComponent<t.FormSection>("FormSection", filters.componentByCode(".titleId)"));
 const FormDivider = waitForComponent<t.FormDivider>("FormDivider", filters.componentByCode(".divider,", ",style:", '"div"', /\.divider,\i\),style:/));
 
 export const Forms = {
@@ -65,6 +65,9 @@ export const Paginator = waitForComponent<t.Paginator>("Paginator", filters.comp
 export const Clickable = waitForComponent<t.Clickable>("Clickable", filters.componentByCode("this.context?this.renderNonInteractive():"));
 export const Avatar = waitForComponent<t.Avatar>("Avatar", filters.componentByCode(".size-1.375*"));
 
+export const ColorPicker = waitForComponent<t.ColorPicker>("ColorPicker", filters.componentByCode("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", "showEyeDropper"));
+
+
 export let createScroller: (scrollbarClassName: string, fadeClassName: string, customThemeClassName: string) => t.ScrollerThin;
 export let scrollerClasses: Record<string, string>;
 waitFor(filters.byCode('="ltr",orientation:', "customTheme:", "forwardRef"), m => createScroller = m);
@@ -74,7 +77,7 @@ export const ScrollerNone = LazyComponent(() => createScroller(scrollerClasses.n
 export const ScrollerThin = LazyComponent(() => createScroller(scrollerClasses.thin, scrollerClasses.fade, scrollerClasses.customTheme));
 export const ScrollerAuto = LazyComponent(() => createScroller(scrollerClasses.auto, scrollerClasses.fade, scrollerClasses.customTheme));
 
-const { FocusLock_ } = mapMangledModuleLazy("attachTo:null!==", {
+const { FocusLock_ } = mapMangledModuleLazy('document.getElementById("app-mount"))', {
     FocusLock_: filters.componentByCode(".containerRef")
 }) as {
     FocusLock_: t.FocusLock;
