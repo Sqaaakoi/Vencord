@@ -49,11 +49,11 @@ async function initThemes() {
 
     const links = themeLinks
         .map(rawLink => {
-            const match = /^@(light|dark) (.*)/.exec(rawLink);
+            const match = /^(# *?)?@(light|dark) (.*)/.exec(rawLink);
             if (!match) return rawLink;
 
-            const [, mode, link] = match;
-            return mode === activeTheme ? link : null;
+            const [, comment, mode, link] = match;
+            return mode === activeTheme && !comment ? link : null;
         })
         .filter(link => link !== null);
 
