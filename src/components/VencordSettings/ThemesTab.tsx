@@ -71,7 +71,7 @@ function Validator({ link, disabled }: { link: string; disabled: boolean; }) {
                 : "Valid!";
 
     return <Forms.FormText style={{
-        color: pending || disabled ? "var(--text-muted)" : err ? "var(--text-danger)" : "var(--text-positive)"
+        color: pending || disabled ? "var(--text-muted)" : err ? "var(--text-danger)" : "var(--status-positive)"
     }}>{text}</Forms.FormText>;
 }
 
