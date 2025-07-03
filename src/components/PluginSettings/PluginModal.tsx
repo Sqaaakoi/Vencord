@@ -37,6 +37,7 @@ import { Constructor } from "type-fest";
 import { PluginMeta } from "~plugins";
 
 import {
+    ISettingCustomElementProps,
     ISettingElementProps,
     SettingBooleanComponent,
     SettingCustomComponent,
@@ -74,7 +75,7 @@ function makeDummyUser(user: { username: string; id?: string; avatar?: string; }
     return newUser;
 }
 
-const Components: Record<OptionType, React.ComponentType<ISettingElementProps<any>>> = {
+const Components: Record<OptionType, React.ComponentType<ISettingElementProps<any> | ISettingCustomElementProps<any>>> = {
     [OptionType.STRING]: SettingTextComponent,
     [OptionType.NUMBER]: SettingNumericComponent,
     [OptionType.BIGINT]: SettingNumericComponent,
@@ -269,7 +270,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 {!!plugin.settingsAboutComponent && (
                     <div className={classes(Margins.bottom8, "vc-text-selectable")}>
                         <Forms.FormSection>
-                            <ErrorBoundary message="An error occurred while rendering this plugin's custom InfoComponent">
+                            <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">
                                 <plugin.settingsAboutComponent tempSettings={tempSettings} />
                             </ErrorBoundary>
                         </Forms.FormSection>
